@@ -1,8 +1,16 @@
 <?php
+/*
+ * 程序入口
+ * app init
+ *
+ */
 class App {
+	private $loader = null;
+	
 	function __construct() {
-		echo 'app_ini<br>';
-		$conn = mysql_connect('localhost', 'qiezi', 'qiezi123');
-		var_dump($conn);
+		$this->loader = new Loader();
+	}
+	public function loader($className = '', $path = '') {
+		echo $className.'/'.$path;
 	}
 }
