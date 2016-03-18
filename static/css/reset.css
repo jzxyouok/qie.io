@@ -1,0 +1,90 @@
+/*reset bill chen(48838096@qq.com)*/
+body, img, p, form, fieldset, h1, h2, h3, h4, h5, h6, table, ul, ol, li, dl, dt, dd, pre, hr, blockquote {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+a {
+    outline: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+img {
+    border: none;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+}
+p, td {
+    word-wrap: break-word;
+    white-space: normal;
+}
+ul {
+    list-style: none;
+}
+ol {
+    list-style: outside decimal;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+caption, th, td {
+    vertical-align: middle;
+}
+caption, th {
+    text-align: center;
+}
+caption {
+    border-bottom: none;
+}
+input {
+    -webkit-appearance: none;
+    outline:none;
+}
+hr {
+    border-bottom: 1px solid #000;
+    background: transparent;
+    height: 0;
+    overflow: hidden;
+}
+i {
+    font-style: normal;
+}
+/*一些常用的class
+不需要可以删除
+*/
+.ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.flex {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+.clearfix::after {
+    content:" ";
+    display:block;
+    clear: both;
+    height:0;
+}
+.old-ie .clearfix {
+    overflow: hidden;
+}
+.inline-block, .icon {
+    vertical-align: middle;
+    display:inline-block;
+    *zoom:1;
+    *display:inline;
+}
+.no-visible {
+    visibility:hidden;
+}
