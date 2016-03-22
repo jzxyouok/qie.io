@@ -10,6 +10,7 @@
  *
  */
 class Controller {
+	protected $user = array();
 	protected $request = null;
 	protected $paramPos = 1; //自动调用方法的参数uri位置
 	protected $processStart = ''; //控制器加载开始时间
@@ -20,7 +21,8 @@ class Controller {
 	
 	function __construct($startTime = 0) {
 		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
-		$this->request = Loader::load('Request');
+		$this->request = Loader::load('request');
+		$this->user = $this->vars['user'] = Loader::load('passport')->getUser();
 	}
 	/*
 	 * 加载view视图文件

@@ -10,7 +10,10 @@
  *
  */
 class Model {
-	function __construct() {
-		echo 'core/controller';
+	protected $error = array('code'=>0, 'msg'=>'');
+	
+	protected function error($code= 0, $msg= '') {
+		$this->error = array('code'=>(int)$code, 'msg'=> (string)$msg);
+		return $this->error;
 	}
 }

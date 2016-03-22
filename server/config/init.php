@@ -2,3 +2,19 @@
 /*
  * 定义初始化时加载的类/文件
  */
+//引用配置文件
+require_once('constant.php');
+//引用core目录下文件
+require_once(APP_PATH.'/core/App.php');
+require_once(APP_PATH.'/core/Cache.php');
+require_once(APP_PATH.'/core/Captcha.php');
+require_once(APP_PATH.'/core/Controller.php');
+require_once(APP_PATH.'/core/Crypt.php');
+require_once(APP_PATH.'/core/Loader.php');
+require_once(APP_PATH.'/core/Model.php');
+require_once(APP_PATH.'/core/Passport.php');
+require_once(APP_PATH.'/core/RegExp.php');
+require_once(APP_PATH.'/core/Request.php');
+require_once(APP_PATH.'/core/Store.php');
+require_once(APP_PATH.'/core/Util.php');
+require_once(APP_PATH.'/core/View.php');

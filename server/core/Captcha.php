@@ -50,7 +50,7 @@ class Captcha {
 		if(!function_exists("imagecreate"))
 			throw new CaptchaException('GD库不支持');
 		//验证码句柄
-		$c = ip2long(Util::getIp());
+		$c = ip2long(Util::getIP());
 		$c = $c.$_SERVER['REQUEST_TIME'].rand(10,99);
 		/*验证码内容
 		$code = '';

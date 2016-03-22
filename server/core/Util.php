@@ -156,7 +156,7 @@ class Util {
 	 *
 	 * @return string
 	 */ 
-	public static function getIp() {
+	public static function getIP() {
 		$ip = NULL;
 		if(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];

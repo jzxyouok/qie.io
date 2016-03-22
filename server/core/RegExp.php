@@ -4,7 +4,7 @@ class RegExp {
 	const EMAIL = "/^[0-9a-zA-Z._-]+@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/";
 	const TEL = "/^1[3578]\d{9}$|^0?\d{2,3}-?\d{7,8}$/";
 	const ZIP = "/^\d{6}$/";
-	const USERNAME = "/^[\$a-zA-Z0-9_-]{4,32}$/";
+	const USERNAME = "/^[\$a-zA-Z][\$a-zA-Z0-9_-]{3,32}$/";
 	const PASSWORD = "/^[\w`~!@#$%^&*()_+-={}\[\]|\\\;:'<>,.?\/\"]{6,}$/";
 	const URI = "/(https?|ftp|file):\/\/((?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6})(?:\/\w*)?/i";
 	const AT = "/@([a-zA-Z0-9\x{4e00}-\x{9fa5}]+)/u";
