@@ -11,7 +11,7 @@ class RegExp {
 	const TOPIC = "/#([\sa-zA-Z0-9\x{4e00}-\x{9fa5}]+)#/u";
 	const TAG = "/<([a-z][1-9]?)[^>]*>(.*)<\/\\1>/i";
 	const CHNWORD = "/[\x{4e00}-\x{9fa5}]+/u";
-	const CHNWORDJS = "/[\u4E00-\u9FA5]/";
+	const CHNWORD_JS = "/[\u4E00-\u9FA5]/";
 	const WORDS = "/^[\$\s_-a-zA-Z0-9\x{4e00}-\x{9fa5}]{1,}$/u";
 	const IMAGE = "/<(?:img|input)[^>]*?src=(['\"]?)(.+?)\\1[^>]*>/iu";
 	const IMAGES = '#(\'|")([a-z0-9.\-_:/?]+?\.(?:jpg|jpeg|gif|png|bmp)(?:.*?))\\1#iu';

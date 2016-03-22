@@ -6,7 +6,6 @@
  * 创建时间：2012/06/25
  * 修改时间：2012/06/25
  */
-ob_start();
 
 class CaptchaException extends Exception {}
 
@@ -72,22 +71,22 @@ class Captcha {
 		$cache->set($c, strtolower($code));
 		//生成图片
 		$im = imagecreate(80, 20);
-		$font_type = __ROOT . '/_static/font/verdanab.ttf';
+		$fontType = DOCUMENT_ROOT . '/static/font/verdanab.ttf';
 		//背景颜色
-		$backcolor = imagecolorallocate($im,190, 190, 120);
+		//$backcolor = imagecolorallocate($im,190, 190, 120);
 		//杂点背景线
-		$line_color1 = imagecolorallocate($im, 130, 220, 245);
-		$line_color2 = imagecolorallocate($im, 225, 245, 255);
+		$lineColor1 = imagecolorallocate($im, 130, 220, 245);
+		$lineColor2 = imagecolorallocate($im, 225, 245, 255);
 		for($j=3; $j<=16; $j=$j+3)
-			imageline($im, 2, $j, 83, $j, $line_color1);
+			imageline($im, 2, $j, 83, $j, $lineColor1);
 		for($j=2; $j<83; $j=$j+(mt_rand(3, 10)))
-			imageline($im, $j, 2, $j-6, 18, $line_color2);
+			imageline($im, $j, 2, $j-6, 18, $lineColor2);
 		//文字
-		$font_color = imagecolorallocate($im, 0, 0, 0);
-		if(function_exists('imagettftext') && file_exists($font_type))
-			imagettftext($im, 12, 0, 16, 16, $font_color, $font_type, $code);
+		$fontColor = imagecolorallocate($im, 0, 0, 0);
+		if(function_exists('imagettftext') && file_exists($fontType))
+			imagettftext($im, 12, 0, 16, 16, $fontColor, $fontType, $code);
 		else
-			imagestring($im, 5, 20, 2, $code, $font_color);
+			imagestring($im, 5, 20, 2, $code, $fontColor);
 			
 		header("Pragma:no-cache\r\n");
 		header("Cache-Control:no-cache\r\n");
@@ -101,8 +100,5 @@ class Captcha {
 			imagepng($im);
 		}
 		imagedestroy($im);
-	}
-	function destruct() {
-		ob_end_flush();
 	}
 }

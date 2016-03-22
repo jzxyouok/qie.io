@@ -28,7 +28,7 @@ CREATE TABLE `user_ext` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
   */
-ob_start();
+
 class PassportException extends Exception{}
 
 class Passport {

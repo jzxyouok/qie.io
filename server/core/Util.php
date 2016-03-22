@@ -37,30 +37,30 @@ class Util {
 	/*
 	 * 复制文件夹
 	 * 
-	 * @param string $old_dir 旧路径
-	 * @param string $new_dir 新路径
+	 * @param string $oldDir 旧路径
+	 * @param string $newDir 新路径
 	 * @param int $counter 计数器
 	 * @param int $mode 文件夹操作权限
 	 * @return boolean
 	 */
-	public static function copyDir($old_dir, $new_dir, $counter = 0, $mode = 0777) {
-		if(empty($old_dir) || empty($new_dir) || !is_dir(DOCUMENT_ROOT . $old_dir) || !is_dir(DOCUMENT_ROOT . $new_dir))
+	public static function copyDir($oldDir, $newDir, $counter = 0, $mode = 0777) {
+		if(empty($oldDir) || empty($newDir) || !is_dir(DOCUMENT_ROOT . $oldDir) || !is_dir(DOCUMENT_ROOT . $newDir))
 			return 0;
 		
-		$handle = opendir(DOCUMENT_ROOT.$old_dir);
+		$handle = opendir(DOCUMENT_ROOT.$oldDir);
 		
 		while(false !== ($file = readdir($handle))) {
 			if (0 === strpos($file, '.')) {
                 continue;
             }
-			if (is_dir(DOCUMENT_ROOT . $old_dir . $file)) {
-                if(!is_dir(DOCUMENT_ROOT . $new_dir . $file))
-					mkdir(DOCUMENT_ROOT . $new_dir . $file, $mode);
-				$counter += self::copyDir($old_dir.$file.'/', $new_dir.$file.'/', $counter, $mode);
+			if (is_dir(DOCUMENT_ROOT . $oldDir . $file)) {
+                if(!is_dir(DOCUMENT_ROOT . $newDir . $file))
+					mkdir(DOCUMENT_ROOT . $newDir . $file, $mode);
+				$counter += self::copyDir($oldDir.$file.'/', $newDir.$file.'/', $counter, $mode);
             } else {
-                //if(file_exists(DOCUMENT_ROOT . $new_dir . $file))
-				//	unlink(DOCUMENT_ROOT . $new_dir . $file);
-				copy(DOCUMENT_ROOT . $old_dir . $file, DOCUMENT_ROOT . $new_dir . $file);
+                //if(file_exists(DOCUMENT_ROOT . $newDir . $file))
+				//	unlink(DOCUMENT_ROOT . $newDir . $file);
+				copy(DOCUMENT_ROOT . $oldDir . $file, DOCUMENT_ROOT . $newDir . $file);
 				$counter++;
             }
 		}
@@ -70,22 +70,22 @@ class Util {
 	/*
 	 * 用iconv转换数组或者对象
 	 * 
-	 * @param string $old_charset 旧的字符编码
-	 * @param string $new_charset 新的字符编码
+	 * @param string $oldCharset 旧的字符编码
+	 * @param string $newCharset 新的字符编码
 	 * @param array/object $obj 需要转换的数组或者对象
 	 *
 	 * @return 
 	 */
-	public static function iconvPlus($old_charset, $new_charset, $obj) {
+	public static function iconvPlus($oldCharset, $newCharset, $obj) {
 		if(is_array($obj)) {//转换数组
 			foreach($obj as $k => $v) {
 				if(is_array($v))
-					$obj[$k] = self::iconvPlus($old_charset, $new_charset, $v);
+					$obj[$k] = self::iconvPlus($oldCharset, $newCharset, $v);
 				else
-					$obj[$k] = iconv($old_charset, $new_charset, (string)$v);
+					$obj[$k] = iconv($oldCharset, $newCharset, (string)$v);
 			}
 		} else
-			$obj = iconv($old_charset, $new_charset, (string)$obj);
+			$obj = iconv($oldCharset, $newCharset, (string)$obj);
 			
 		return $obj;
 	}
@@ -101,7 +101,7 @@ class Util {
 	 */
 	public static function truncate($str, $start = 0, $len = 20, $charset = 'utf-8') {
 		$counter = 0; //截取长度计数器
-		$str_arr = array();
+		$strArr = array();
 		
 		switch(strtolower($charset)) {
 			//确定中文偏移量
@@ -111,20 +111,20 @@ class Util {
 			break;
 			default: $offset = 2;
 		}
-		$str_len = strlen($str);
-		for($index = $start; $index < $str_len && $counter < 2*$len;) {
+		$strLen = strlen($str);
+		for($index = $start; $index < $strLen && $counter < 2*$len;) {
 			if(ord($str{$index}) > 127) {
-				$str_arr[] = substr($str, $index, $offset);
+				$strArr[] = substr($str, $index, $offset);
 				$index += $offset;
 				$counter += 2;
 			} else {
-				$str_arr[] = $str{$index};
+				$strArr[] = $str{$index};
 				$index++;
 				$counter++;
 			}
     	}
 		
-		return implode('', $str_arr);
+		return implode('', $strArr);
 	}
 	/*
 	 * xml转数组
@@ -367,6 +367,66 @@ class Util {
 		return $str;	
 	}
 	/*
+	 * 生成随机字符串
+	 *
+	 * @param int $len 字符串长度
+	 * @param string $char 随机字符字典
+	 */
+	public static function randCode($len = 4, $char = '') {
+		$code = '';
+		if(empty($char))
+			$char = '0123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ'; //没有字母o。
+		if(is_array($char)) {
+			//可以支持中文
+			shuffle($char);
+			$char = array_slice($char, 0, $len);
+			$code = implode('', $char);
+		} else {
+			$len_ = strlen($char);
+			for($i = 0; $i < $len; $i++)
+				$code .= $char{mt_rand(0,$len_-1)};
+		}
+		return $code;
+	}
+	/*
+	 * 按数组抽奖
+	 *
+	 * @param array $data 带数值的数组,array(0=>1,2=>99)，key为奖品类型
+	 * @return int/string 数组key
+	 */
+	public static function lottery($data = array()) {
+		if(empty($data) || !is_array($data))
+			return false;
+		$lot = false;
+		
+    	//概率数组的总概率精度 
+    	$sum = array_sum($data);
+    	//概率数组循环 
+    	foreach ($data as $key => $val) {
+			$randNum = mt_rand(1, $sum);
+			if($randNum <= $val) {
+				$lot = $key;
+				break;
+			} else {
+				$sum -= $val;
+			}
+		}
+		unset($data);
+		
+		return $lot;
+	}
+	/*
+	 * string 转数字
+	 */
+	public static function toNumeric($num = '') {
+		if(empty($num) || !is_numeric($num))
+			return 0;
+		else if(abs($num) > PHP_INT_MAX)
+			return (float)$num;
+		else
+			return (int)$num;
+	}
+	/*
 	 * 对字符串进行分词。中文字符需要传一个词组的长度，如2个字，英文字符按照空格和标点进行分词
 	 *
 	 * @param string $t 需要分词的字符串
@@ -485,66 +545,6 @@ class Util {
 		}
 	
 		return $keywords;
-	}
-	/*
-	 * 生成随机字符串
-	 *
-	 * @param int $len 字符串长度
-	 * @param string $char 随机字符字典
-	 */
-	public static function randCode($len = 4, $char = '') {
-		$code = '';
-		if(empty($char))
-			$char = '0123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ'; //没有字母o。
-		if(is_array($char)) {
-			//可以支持中文
-			shuffle($char);
-			$char = array_slice($char, 0, $len);
-			$code = implode('', $char);
-		} else {
-			$_len = strlen($char);
-			for($i = 0; $i < $len; $i++)
-				$code .= $char{mt_rand(0,$_len-1)};
-		}
-		return $code;
-	}
-	/*
-	 * 按数组抽奖
-	 *
-	 * @param array $data 带数值的数组,array(0=>1,2=>99)，key为奖品类型
-	 * @return int/string 数组key
-	 */
-	public static function lottery($data = array()) {
-		if(empty($data) || !is_array($data))
-			return false;
-		$lot = false;
-		
-    	//概率数组的总概率精度 
-    	$sum = array_sum($data);
-    	//概率数组循环 
-    	foreach ($data as $key => $val) {
-			$rand_num = mt_rand(1, $sum);
-			if($rand_num <= $val) {
-				$lot = $key;
-				break;
-			} else {
-				$sum -= $val;
-			}
-		}
-		unset($data);
-		
-		return $lot;
-	}
-	/*
-	 * string 转数字
-	 */
-	public static function toNumeric($num = '') {
-		if(empty($num) || !is_numeric($num))
-			return 0;
-		else if(abs($num) > PHP_INT_MAX)
-			return (float)$num;
-		else
-			return (int)$num;
 	}
 }
 

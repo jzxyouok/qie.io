@@ -1,5 +1,6 @@
 
 <?php
+$startTime = microtime();
 require_once('web.config.php');
 
-new App();
+new App('','',$startTime);

@@ -19,7 +19,7 @@ class Controller {
 	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf";
 	
 	function __construct($startTime = 0) {
-		$this->processStart = empty($process_start)?microtime():$process_start; //计算性能
+		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
 		$this->request = Loader::load('Request');
 	}
 	/*
@@ -29,6 +29,7 @@ class Controller {
 	public function loadView($tpl = '') {
 		if(empty($tpl))
 			return false;
+		
 		$tpl = APP_PATH.'/view/'.$tpl.'.tpl';
 		$this->view($tpl);
 	}

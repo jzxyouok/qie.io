@@ -9,26 +9,37 @@
 class DatabaseException extends Exception {}
 
 class Database {
-	private $config = ''; //配置字符串
-	private $connection = null; //数据库连接资源
-	private $db = null; //数据库字符串
+	private $db = null; //数据库连接资源
 	private $sql = ''; //sql查询语句
-	private $charset = ''; //字符编码
 	
 	/*
 	 * @param string $cfg 数据库配置字符串
-	 * @param string $charset 数据库使用字符编码
 	 */
 	function __construct($db = 'default') {
 		$db = $db or 'default';
+		//引用配置文件
 		include_once(APP_PATH . '/config/database.php');
 		
 		if(empty($DBList) || empty($DBList[$db]))
 			throw new DatabaseException('the db option is missing.');
 		
-		$this->connection = new MySQLi($DBList[$db]['host'], $DBList[$db]['user_name'], $DBList[$db]['password'], $DBList[$db]['db']);
+		$this->connect($DBList[$db]);
 	}
-	
+	public function connect($option) {
+		$this->db = new MySQLi($option['host'], $option['user'], $option['password'], $option['db'], $option['port']);
+		if($this->db->connect_errno)
+			throw new DatabaseException('mysqli connect failed:'.$this->db->connect_errno);
+		if(!empty($option['charset']))
+			$this->db->set_charset($option['charset']);
+	}
+	/*
+	 * 选择数据库
+	 *
+	 * @param string $db 数据库名称
+	 */
+	public function selectDB($db) {
+		return $this->db->select_db($db);
+	}
 	/*
 	 * 查询数据用，执行select查询工作
 	 * 
@@ -70,10 +81,6 @@ class Database {
 	 * @return int
 	 */
 	public function sum($table, $where = '') {
-		
-	}
-	
-	public function __destruct() {
 		
 	}
 }
