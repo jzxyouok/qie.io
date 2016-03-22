@@ -6,5 +6,6 @@
 </head>
 <body>
 <h1>index.php</h1>
+<p><{$elapsed_time}>&<{$memory_usage}></p>
 </body>
 </html>

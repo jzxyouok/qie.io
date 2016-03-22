@@ -7,3 +7,4 @@ define('TEST_MODE', true); //测试模式
 require_once(APP_PATH.'/core/App.php');
 require_once(APP_PATH.'/core/Loader.php');
 require_once(APP_PATH.'/core/Controller.php');
+require_once(APP_PATH.'/core/Crypt.php');

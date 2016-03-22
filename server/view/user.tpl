@@ -8,7 +8,7 @@ body {text-align:center;}
 </style>
 </head>
 <body>
-<h1><a href="http://qie.io/">qie.io</a></h1>
-<p>茄子，一个使用PHP+MYSQL的简单建站系统（CMS）。</p>
+<h1>user</h1>
+<p><{$elapsed_time}>&<{$memory_usage}></p>
 </body>
 </html>
