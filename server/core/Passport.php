@@ -26,7 +26,15 @@ CREATE TABLE `user_ext` (
   `profile` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD UNIQUE KEY `nick` (`nick`),
+  ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE `user_ext`
+  ADD PRIMARY KEY (`user_id`);
+ALTER TABLE `user`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
   */
 
 class PassportException extends Exception{}
