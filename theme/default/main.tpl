@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>index.php</h1>
+<a href="/index.php/user/">用户登录</a>
 <p><{$elapsed_time}>&<{$memory_usage}></p>
 </body>
 </html>

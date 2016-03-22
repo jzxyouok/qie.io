@@ -15,7 +15,7 @@ class Controller {
 	protected $processStart = ''; //控制器加载开始时间
 	protected $vars = array(); //页面模板需要的变量
 	protected $funcs = array(); //页面模板需要的函数
-	protected $classes = array(); //页面模板需要的函数
+	protected $classes = array(); //页面模板需要的类
 	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf";
 	
 	function __construct($startTime = 0) {
@@ -26,7 +26,7 @@ class Controller {
 	 * 加载view视图文件
 	 * 
 	 */
-	protected function loadView($tpl = '') {
+	public function loadView($tpl = '') {
 		if(empty($tpl))
 			return false;
 		$tpl = APP_PATH.'/view/'.$tpl.'.tpl';
@@ -36,13 +36,13 @@ class Controller {
 	 * 加载theme视图(用户主题)文件
 	 * 
 	 */
-	protected function loadTheme($tpl = '') {
+	public function loadTheme($tpl = '') {
 		if(empty($tpl))
 			return false;
 		
 		//确定用户主题文件夹
 		$this->vars['theme'] = 'default';
-		if($_COOKIE['theme'] && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
+		if(!empty($_COOKIE['theme']) && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
 			$this->vars['theme'] = $_COOKIE['theme'];
 		
 		$tpl = DOCUMENT_ROOT.'/theme/'.$this->vars['theme'].'/'.$tpl.'.tpl';
