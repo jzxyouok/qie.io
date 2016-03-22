@@ -10,7 +10,13 @@
  *
  */
 class Controller {
-	function __construct() {
-		echo 'core/controller';
+	function __construct($startTime = 0) {
+		echo $startTime;
+	}
+	protected function loadView() {
+		
+	}
+	protected function loadTheme() {
+		
 	}
 }

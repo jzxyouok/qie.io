@@ -30,7 +30,7 @@ class App {
 			}
 			$obj{0} = strtoupper($obj{0});
 			$obj = $prefix . $obj;
-			$obj = Loader::load("controller/{$obj}Ctrl", array($process_start));
+			$obj = Loader::load("controller/{$obj}Ctrl", array($process_start), false);
 			if(!$obj)
 				$this->error('系统找不到对象', $this->request);
 			

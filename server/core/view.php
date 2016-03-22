@@ -10,9 +10,6 @@
  *
  */
 class View {
-	function __construct() {
-		echo 'core/view';
-	}
 	public function load() {
 		
 	}

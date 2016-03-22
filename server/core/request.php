@@ -45,10 +45,10 @@ class Request {
 		} else
 			return false;
 		
-		$uri = preg_replace($this->route['regexp'], $this->route['replace'], $uri);
-		
-		if(!empty($uri))
+		if(!empty($uri)) {
+			$uri = preg_replace($this->route['regexp'], $this->route['replace'], $uri);
 			$this->uri = explode('/', $uri);
+		}
 	}
 	/*
 	 * 获取uri片段值
@@ -58,6 +58,6 @@ class Request {
 	 * @return string
 	 */
 	public function uri($pos = 0) {
-		return $this->uri[$pos];
+		return !empty($this->uri[$pos])?$this->uri[$pos]:'';
 	}
 }
