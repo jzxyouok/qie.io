@@ -1,6 +1,6 @@
 <?php
 /* 
- * 文件系统存储类
+ * 服务端数据存储类
  * 作者：陈贵标
  * 邮箱：48838096@qq.com
  * 创建时间：2012/06/25
@@ -35,7 +35,7 @@ class Store {
 		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, '/') === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
 		if(!$fp = fopen($path, "w+"))
 			throw new StoreException('打开文件失败');
-		$value = "<?php\r\nexit();\r\n".$value;
+		$value = "<?php\r\n".$value;
 		do {
 			$counter++;
 			if(!flock($fp, LOCK_EX|LOCK_NB)) {
@@ -72,7 +72,7 @@ class Store {
 		$res = file_get_contents($path);
 		if(!empty($res)) {
 			$res = explode("\r\n", $res);
-			$res = unserialize($res[2]);
+			$res = unserialize($res[1]);
 		}
 		return $res;
 	}

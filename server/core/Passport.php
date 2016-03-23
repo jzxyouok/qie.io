@@ -21,7 +21,7 @@ CREATE TABLE `user` (
   `login_ip` varchar(100) DEFAULT NULL,
   `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `user_ext` (
+CREATE TABLE `user_profile` (
   `user_id` int(11) NOT NULL,
   `profile` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1'
@@ -31,7 +31,7 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `name` (`name`),
   ADD UNIQUE KEY `nick` (`nick`),
   ADD UNIQUE KEY `email` (`email`);
-ALTER TABLE `user_ext`
+ALTER TABLE `user_profile`
   ADD PRIMARY KEY (`user_id`);
 ALTER TABLE `user`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;

@@ -12,10 +12,10 @@ class Cache {
 	private $expire = 60;
 	private $isMemcache = false;
 	private $memcache = null;
+	private $store = null;
 	private $memcacheFlag = 0;
 	const PREFIX = 'c_';
-	const EXP = '.php';
-	const DIR = APP_PATH.'/user_files/cache/';
+	const DIR = DOCUMENT_ROOT.'/user_files/cache/';
 	/*
 	 * 
 	 */
@@ -30,8 +30,10 @@ class Cache {
 				$this->memcacheFlag = $flag;
 			} else
 				$this->isMemcache = false;
-		} else if(!is_dir(self::DIR))
-			Util::makeDir(self::DIR);
+		}
+		
+		Util::makeDir(self::DIR);
+		$this->store = Loader::load('store');
 	}
 	/* 设置缓存过期时间
 	 *
@@ -63,7 +65,6 @@ class Cache {
 			 $this->isMemcache = false;
 			 $this->memcacheFlag = $flag;
 		 }
-		 
 	}
 	/*
 	 * 设置缓存
@@ -75,10 +76,12 @@ class Cache {
 	 */
 	public function set($key, $value) {
 		//$isNew = false;
-		if(!isset($value) || (!is_int($value) && !is_string($value)) || !($path = $this->getPath($key)))
+		if(empty($value) || !($path = $this->getPath($key)))
 			return false;
 		
 		if($this->isMemcache) {
+			if(!is_string($value))
+				$value = serialize($value);
 			$res = $this->memcache->add($key, $value, $this->memcacheFlag, $this->expire);
 		} else {
 			$res = false;
@@ -86,22 +89,8 @@ class Cache {
 			
 			//写文件
 			$data = array('create_time'=>$_SERVER['REQUEST_TIME'],'update_time'=>$_SERVER['REQUEST_TIME'],'expire'=>$this->expire,'value'=>$value);
-			$data = serialize($data);
-			$data = "<?php\r\n".$data;
-			if(!$fp = fopen($path, "w+"))
-				return false;
-			do {
-				$counter++;
-				if(!flock($fp, LOCK_EX|LOCK_NB)) {
-					usleep(1000);
-					continue;
-				}
-				$res = fwrite($fp, $data);
-				flock($fp, LOCK_UN);
-				break;
-			} while($counter < 6);
-			fclose($fp);
-			unset($fp);
+			
+			$res = $this->store->write($path, $data);
 		}
 		return $res;
 	}
@@ -119,12 +108,8 @@ class Cache {
 		if($this->isMemcache) {
 			return $this->memcache->get($key, $this->memcacheFlag);
 		} else {
-			if(!file_exists($path))
-				return false;
-			$res = file_get_contents($path);
+			$res = $this->store->read($path, $data);
 			if(!empty($res)) {
-				$res = explode("\r\n", $res);
-				$res = unserialize($res[1]);
 				if((int)$res['create_time']+$this->expire < $_SERVER['REQUEST_TIME']) {
 					//删除过期文件
 					unlink($path);
@@ -149,41 +134,17 @@ class Cache {
 			return false;
 		
 		if($this->isMemcache) {
-			if(is_array($value))
+			if(!is_string($value))
 				$value = serialize($value);
-			else
-				$value = (string)$value;
 			$res = $this->memcache->replace($key, $value, $this->memcacheFlag, $this->expire);
 		} else {
-			if(!file_exists($path))
-				return false;
-			$res = false;
-		
-			$res = file_get_contents($path);
-		
-			$counter = 0; //如果加锁6次失败，就不尝试了
-			$res = explode("\r\n", (string)$res);
-			//$res = unserialize($res[1]);
-		
-			$res['value'] = $value;
-			$res['update_time'] = $_SERVER['REQUEST_TIME'];
-			$res['expire'] = $this->expire;
-			$res = serialize($res);
-			$res = "<?php\r\n".$res;
-			if(!$fp = fopen($path, "w+"))
-				return false;
-			do {
-				$counter++;
-				if(!flock($fp, LOCK_EX|LOCK_NB)) {
-					usleep(1000);
-					continue;
-				}
-				$res = fwrite($fp, $res);
-				flock($fp, LOCK_UN);
-				break;
-			} while($counter < 6);
-			fclose($fp);
-			unset($fp);
+			if($res = $this->store->read($path)) {
+				$res['value'] = $value;
+				$res['update_time'] = $_SERVER['REQUEST_TIME'];
+				$res['expire'] = $this->expire;
+			
+				$res = $this->store->write($path, $res);
+			}
 		}
 		
 		if($res)
@@ -204,8 +165,9 @@ class Cache {
 			
 		if($this->isMemcache)
 			return $this->memcache->delete($key);
-		else
-			return unlink($path);
+		else {
+			return $this->store->delete($path);
+		}
 	}
 	/*
 	 * 清理过期的缓存
@@ -220,7 +182,7 @@ class Cache {
 				$tmp = file_get_contents(self::DIR . $res);
 				$tmp = explode("\r\n", $tmp);
 				$tmp = unserialize($tmp[1]);
-				if((int)$tmp['create_time'] + $this->expire < $_SERVER['REQUEST_TIME'])
+				if((int)$tmp['create_time'] + (int)$tmp['expire'] < $_SERVER['REQUEST_TIME'])
 					//删除过期缓存文件
 					unlink(self::DIR . $res);
 			}
@@ -276,7 +238,7 @@ class Cache {
 		$key = self::PREFIX . strtolower($key);
 		if(250 < strlen($key))
 			$key = substr($key, 0, 250);
-		$path = self::DIR . $key . self::EXP;
+		$path = self::DIR . $key;
 		return $path;
 	}
 	/*

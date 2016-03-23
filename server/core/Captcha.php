@@ -68,7 +68,7 @@ class Captcha {
 		setcookie('c_code', $c, time()+360, '/');
 		$cache = Loader::load('Cache');
 		$cache->setExpire($this->expire);
-		$cache->set($c, strtolower($code));
+		$res = $cache->set($c, strtolower($code));
 		//生成图片
 		$im = imagecreate(80, 20);
 		$fontType = DOCUMENT_ROOT . '/static/font/verdanab.ttf';
