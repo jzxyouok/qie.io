@@ -55,7 +55,6 @@ class Captcha {
 		if(!function_exists("imagecreate"))
 			throw new CaptchaException('GD库不支持');
 		
-		ob_start();
 		//验证码句柄
 		$c = ip2long(Util::getIP());
 		$c = $c.$_SERVER['REQUEST_TIME'].rand(10,99);
@@ -66,7 +65,6 @@ class Captcha {
 		$cache = Loader::load('Cache');
 		$cache->setExpire($this->expire);
 		$res = $cache->set($c, strtolower($code));
-		$res = $cache->get($c);
 		//生成图片
 		$im = imagecreate(80, 20);
 		$fontType = DOCUMENT_ROOT . '/static/font/verdanab.ttf';
@@ -98,6 +96,5 @@ class Captcha {
 			imagepng($im);
 		}
 		imagedestroy($im);
-		ob_end_flush();
 	}
 }

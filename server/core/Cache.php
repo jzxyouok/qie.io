@@ -178,7 +178,7 @@ class Cache {
 		$count = 0;
 		if($handle = opendir(self::DIR)) {
 			while(false !== ($res = readdir($handle))) {
-				if($res === '.' || $res === '..' || is_dir(self::DIR . $res)) continue;
+				if(0 === strpos($res, '.') || is_dir(self::DIR . $res)) continue;
 				
 				$tmp = file_get_contents(self::DIR . $res);
 				$tmp = explode("\r\n", $tmp);
@@ -203,7 +203,7 @@ class Cache {
 		$count = 0;
 		if($handle = opendir(self::DIR)) {
 			while(false !== ($res = readdir($handle))) {
-				if($res === '.' || $res === '..' || is_dir(self::DIR . $res)) continue;
+				if(0 === strpos($res, '.') || is_dir(self::DIR . $res)) continue;
 				if(unlink(self::DIR . $res)) $count++;
 			}
 			closedir($handle);
