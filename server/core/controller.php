@@ -18,11 +18,17 @@ class Controller {
 	protected $funcs = array(); //页面模板需要的函数
 	protected $classes = array(); //页面模板需要的类
 	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf";
+	protected $profile = array(); //网站配置(title,keywords,js,css...)
 	
 	function __construct($startTime = 0) {
 		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
 		$this->request = Loader::load('request');
-		$this->user = $this->vars['user'] = Loader::load('passport')->getUser();
+		$this->user = Loader::load('passport')->getUser();
+		
+		//初始化网站配置
+		$this->profile['theme'] = 'default';
+		$this->profile['css'] = array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">');
+		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script>');
 	}
 	/*
 	 * 加载view视图文件
@@ -44,11 +50,13 @@ class Controller {
 			return false;
 		
 		//确定用户主题文件夹
-		$this->vars['theme'] = 'default';
 		if(!empty($_COOKIE['theme']) && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
-			$this->vars['theme'] = $_COOKIE['theme'];
+			$this->profile['theme'] = $_COOKIE['theme'];
+		//引入js和css
+		array_push($this->profile['css'] , '<link type="text/css" rel="stylesheet" href="/theme/'.$this->profile['theme'].'/css/style.css">');
+		array_push($this->profile['js'] , '<script src="/theme/'.$this->profile['theme'].'/js/common.js"></script>');
 		
-		$tpl = DOCUMENT_ROOT.'/theme/'.$this->vars['theme'].'/'.$tpl.'.tpl';
+		$tpl = DOCUMENT_ROOT.'/theme/'.$this->profile['theme'].'/'.$tpl.'.tpl';
 		$this->view($tpl);
 	}
 	/*
@@ -59,8 +67,15 @@ class Controller {
 		if(!file_exists($tpl))
 			return false;
 		
+		
 		$view = Loader::load('view');
+		
 		//assign变量
+		$this->vars['theme'] = $this->profile['theme'];
+		$this->vars['js'] = implode('', $this->profile['js']);
+		$this->vars['css'] = implode('', $this->profile['css']);
+		$this->vars['user'] = $this->user;
+		
 		foreach($this->vars as $k => $v)
 			$view->assign($k, $v);
 		//assign函数

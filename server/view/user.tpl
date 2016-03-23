@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>qie.io</title>
+<{$css}>
 <style>
 body {text-align:center;}
 </style>
@@ -18,5 +19,6 @@ body {text-align:center;}
 <input type="submit" value="登录">
 </form>
 <p><{$elapsed_time}>&<{$memory_usage}></p>
+<{$js}>
 </body>
 </html>

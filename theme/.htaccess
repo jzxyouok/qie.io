@@ -1,1 +1,7 @@
-Deny from all
+#================================================================
+# 禁止的内容
+#================================================================
+<FilesMatch "\.(htaccess|php|htpasswd|bak|inc|lib|sh|tpl|lbi|dwt)$">
+    order deny,allow
+    deny from all
+</FilesMatch>
