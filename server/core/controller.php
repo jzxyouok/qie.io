@@ -98,8 +98,7 @@ class Controller {
 		$view->display($tpl);
 	}
 	protected function loadConfig($name) {
-		include_once(APP_PATH."/config/{$name}.php");
-		$this->config[$name] = ${$name};
+		$this->config[$name] = Loader::loadConfig($name);
 	}
 	/*
 	 * 设置自动调用方法的参数uri位置

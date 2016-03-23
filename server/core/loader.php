@@ -11,7 +11,9 @@
 
 class Loader {
 	private static $objects = array(); //生成的对象数组
-	
+	/*
+	 * 加载对象
+	 */
 	public static function load($class = '', $args = array(), $key = 0) {
 		if(empty($class))
 			return false;
@@ -52,5 +54,12 @@ class Loader {
 		if($key !== false)
 			self::$objects[$class][$key] = $obj;
 		return $obj;
+	}
+	/*
+	 * 加载配置文件
+	 */
+	public static function loadConfig($name) {
+		include_once(APP_PATH."/config/{$name}.php");
+		return ${$name};
 	}
 }

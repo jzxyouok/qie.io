@@ -8,7 +8,7 @@
  */
 class DatabaseException extends Exception {}
 
-class Database {
+class Database extends Model {
 	private $db = null; //数据库连接资源
 	private $sql = ''; //sql查询语句
 	
@@ -18,8 +18,7 @@ class Database {
 	function __construct($db = 'default') {
 		$db = $db or 'default';
 		//引用配置文件
-		include_once(APP_PATH . '/config/database.php');
-		
+		$DBList = Loader::loadConfig('database');
 		if(empty($DBList) || empty($DBList[$db]))
 			throw new DatabaseException('the db option is missing.');
 		

@@ -3,7 +3,7 @@
  * 数据库配置文件
  */
 
- $DBList = array('default'=>array('user'=>'qie',
+ $database = array('default'=>array('user'=>'qie',
 					'password'=>'qiezi123',
 					'host'=>'localhost', //如果为localhost，可以留空
 					'db'=>'qiezi',
