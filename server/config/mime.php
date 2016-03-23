@@ -1,6 +1,6 @@
 <?php
 /*
- * 自定义文件mime
+ * 鑷畾涔夋枃浠秏ime
  */
  
 $mime = array();

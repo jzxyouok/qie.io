@@ -1,6 +1,6 @@
 <?php
 /*
- * ÓÃ»§×Ô¶¨Òå³£Á¿
+ * ç”¨æˆ·è‡ªå®šä¹‰å¸¸é‡
  */
 define('DOMAIN', 'qie.io');
 define('DATE_FORMAT', 'Y-m-d H:i:s');

@@ -1,10 +1,10 @@
 <?php
 /*
- * ¶¨Òå³õÊ¼»¯Ê±¼ÓÔØµÄÀà/ÎÄ¼þ
+ * å®šä¹‰åˆå§‹åŒ–æ—¶åŠ è½½çš„ç±»/æ–‡ä»¶
  */
-//ÒýÓÃÅäÖÃÎÄ¼þ
+//å¼•ç”¨é…ç½®æ–‡ä»¶
 require_once('constant.php');
-//ÒýÓÃcoreÄ¿Â¼ÏÂÎÄ¼þ
+//å¼•ç”¨coreç›®å½•ä¸‹æ–‡ä»¶
 require_once(APP_PATH.'/core/App.php');
 require_once(APP_PATH.'/core/Cache.php');
 require_once(APP_PATH.'/core/Captcha.php');

@@ -82,6 +82,10 @@ class Controller {
 		
 		//assign变量
 		$this->vars['theme'] = $this->profile['theme'];
+		$this->vars['title'] = $this->config['profile']['title'];
+		$this->vars['meta'] = $this->config['profile']['meta'];
+		$this->vars['icp'] = $this->config['profile']['icp'];
+		$this->vars['analytics'] = $this->config['profile']['analytics'];
 		$this->vars['js'] = implode('', $this->profile['js']);
 		$this->vars['css'] = implode('', $this->profile['css']);
 		$this->vars['user'] = $this->user;
