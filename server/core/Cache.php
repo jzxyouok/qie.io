@@ -175,6 +175,7 @@ class Cache {
 	 * @return boolean
 	 */
 	public function clear() {
+		$count = 0;
 		if($handle = opendir(self::DIR)) {
 			while(false !== ($res = readdir($handle))) {
 				if($res === '.' || $res === '..' || is_dir(self::DIR . $res)) continue;
@@ -182,13 +183,16 @@ class Cache {
 				$tmp = file_get_contents(self::DIR . $res);
 				$tmp = explode("\r\n", $tmp);
 				$tmp = unserialize($tmp[1]);
-				if((int)$tmp['create_time'] + (int)$tmp['expire'] < $_SERVER['REQUEST_TIME'])
+				if(((int)$tmp['create_time'] + (int)$tmp['expire'] < $_SERVER['REQUEST_TIME']) && unlink(self::DIR . $res)) {
 					//删除过期缓存文件
-					unlink(self::DIR . $res);
+					$count++;
+				}
+					
 			}
 			closedir($handle);
 			unset($handle);
 		}
+		return $count;
 	}
 	/*
 	 * 清理所有缓存
@@ -196,14 +200,16 @@ class Cache {
 	 * @return boolean
 	 */
 	public function flush() {
+		$count = 0;
 		if($handle = opendir(self::DIR)) {
 			while(false !== ($res = readdir($handle))) {
 				if($res === '.' || $res === '..' || is_dir(self::DIR . $res)) continue;
-				unlink(self::DIR . $res);
+				if(unlink(self::DIR . $res)) $count++;
 			}
 			closedir($handle);
 			unset($handle);
 		}
+		return $count;
 	}
 	/*
 	 * 获取缓存文件数量

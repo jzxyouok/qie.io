@@ -6,7 +6,12 @@
  * 创建时间：2012/06/25
  * 修改时间：2012/06/25
  */
-
+/*
+ * require list
+ *
+ * Cache.php
+ * Util.php
+ */
 class CaptchaException extends Exception {}
 
 class Captcha {
@@ -49,26 +54,19 @@ class Captcha {
 	public function createImage() {
 		if(!function_exists("imagecreate"))
 			throw new CaptchaException('GD库不支持');
+		
+		ob_start();
 		//验证码句柄
 		$c = ip2long(Util::getIP());
 		$c = $c.$_SERVER['REQUEST_TIME'].rand(10,99);
-		/*验证码内容
-		$code = '';
-		for ($i=0; $i<2; $i++)
-			$code .= chr(mt_rand(48,57));
-		for ($i=0; $i<2; $i++)
-			$code .= chr(mt_rand(65,90));
-		$strs = str_split($code);
-		shuffle($strs);
-		$code = '';
-		while(list(, $str) = each($strs))
-			$code .= $str;*/
+		//验证码内容
 		$code = Util::randCode(4, '1234567890qwertyuipasdfghjklzxcvbnm'); //去掉O
 		//把验证码写入cookie和缓存
 		setcookie('c_code', $c, time()+360, '/');
 		$cache = Loader::load('Cache');
 		$cache->setExpire($this->expire);
 		$res = $cache->set($c, strtolower($code));
+		$res = $cache->get($c);
 		//生成图片
 		$im = imagecreate(80, 20);
 		$fontType = DOCUMENT_ROOT . '/static/font/verdanab.ttf';
@@ -100,5 +98,6 @@ class Captcha {
 			imagepng($im);
 		}
 		imagedestroy($im);
+		ob_end_flush();
 	}
 }
