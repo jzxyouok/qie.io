@@ -43,7 +43,6 @@ caption {
     border-bottom: none;
 }
 input {
-    -webkit-appearance: none;
     outline:none;
 }
 hr {

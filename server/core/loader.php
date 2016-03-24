@@ -58,8 +58,17 @@ class Loader {
 	/*
 	 * 加载配置文件
 	 */
-	public static function loadConfig($name) {
-		include_once(APP_PATH."/config/{$name}.php");
+	public static function loadVar($path, $name = '') {
+		include_once($path);
+		if(empty($name)) {
+			/*
+			if(false === ($pos = strrpos($path, '/')))
+				$pos = 0;
+			else
+				$pos++;
+			$name = substr($path, $pos, strrpos($path, '.')-$pos);*/
+			$name = pathinfo($path)['filename'];
+		}
 		return ${$name};
 	}
 }

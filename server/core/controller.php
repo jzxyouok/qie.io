@@ -28,7 +28,7 @@ class Controller {
 		
 		//初始化网站配置
 		$this->profile['css'] = array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">');
-		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script>');
+		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script><script src="/static/js/util.js"></script>');
 		//加载网站配置文件
 		$this->loadConfig('profile');
 		$this->profile['theme'] = $this->config['profile']['theme'];
@@ -89,7 +89,7 @@ class Controller {
 		$this->vars['js'] = implode('', $this->profile['js']);
 		$this->vars['css'] = implode('', $this->profile['css']);
 		$this->vars['user'] = $this->user;
-		$view->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
+		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
 		
 		foreach($this->vars as $k => $v)
 			$view->assign($k, $v);
@@ -102,7 +102,7 @@ class Controller {
 		$view->display($tpl);
 	}
 	protected function loadConfig($name) {
-		$this->config[$name] = Loader::loadConfig($name);
+		$this->config[$name] = Loader::loadVar(APP_PATH.'/config/'.$name.'.php');
 	}
 	/*
 	 * 设置自动调用方法的参数uri位置
@@ -119,7 +119,56 @@ class Controller {
 	public function getParamPos() {
 		return $this->paramPos;
 	}
-	public function error($msg = '') {
+	/*
+	 * 校验验证码
+	 *
+	 * @param int $status 状态码
+	 *
+	 * @return int 返回值>=0
+	 */
+	/*
+	 * 检查安全性
+	 * @param string $code 加密的字符串
+	 * @param string $timeout 过期时间
+	 */
+	public function verify($timeout = 0) {
+		if(empty($timeout))
+			return true;
 		
+		$token = $_POST['token'] or $token = $_GET['token'];
+		if(isset($token))
+			$timestamp = substr($token, 0, 10);
+		else
+			return false;
+		
+		$token = substr($token, 10);
+		
+		$token_ = Crypt::encrypt($timestamp, $this->dynamicCode);
+		if($token_ === $token) {
+			if(empty($timeout))
+				return true;
+			else if((time() - $timestamp) <= $timeout)
+				return true;
+			else
+				return false;
+		} else
+			return false;
+	}
+	/*
+	 * 前后端数据交换
+	 *
+	 * @param int $status 状态码
+	 * @param mix $result 结果
+	 * @param string $error 错误代码
+	 *
+	 * @return void
+	 */
+	public function message($status, $result = '', $error = '') {
+		if(empty($_GET['jsoncallback'])) {
+			if(isset($_GET['x']))
+				echo '<script>document.domain = "'.$_SERVER['HTTP_HOST'].'";</script>'; //javascript cross domain
+			exit(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error)));
+		} else
+			exit($_GET['jsoncallback'].'('.(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error))).')');
 	}
 }

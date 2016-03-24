@@ -6,7 +6,7 @@
 */
 
 (function(window){
-    //"use strict";
+    "use strict";
     var document = window.document;
     //console debug
     window.console = window.console || {log:function(){alert(Array.prototype.join.call(arguments, ','));},info:function(){alert(Array.prototype.join.call(arguments, ','));}};
@@ -58,6 +58,7 @@
     util.bind = function(context, fn) {
         return function() {fn.apply(context, arguments)}
     };
+    //addEventListener和removeEventListener
     util.event = window.addEventListener? {
         add: function(dom, type, fn, cap){dom.addEventListener(type, fn, cap);},
         remove: function(dom, type, fn, cap){dom.removeEventListener(type, fn, cap);}
@@ -68,7 +69,46 @@
         add: function(dom, type, fn){dom.attachEvent('on'+type, fn)},
         remove: function(dom, type, fn){dom['on'+type]= null}
     });
+    //trim
+    util.trim = function(str) {
+        return str.replace(/(?:^\s*|\s*$)/gm, '');
+    };
+    //gerFormValues
+    util.getFormValues = function(form) {
+        var data = {}, types = 'text,password,textarea,select-one,checkbox,radio,select-multiple,email,hidden', type;
+        for(var i = 0, len = form.length; i < len; i++) {
+            type = form[i].type;
+            if(types.indexOf(type)>-1) {
+                switch(type) {
+                    case 'checkbox': ;
+                    case 'select-multiple': {
+                        if(!data[form[i].name]) {
+                            data[form[i].name] = new Array();
+                        }
+                        if(type == 'select-multiple'){
+                            for(var j = 0; j< form[i].options.length;j++) {
+                                if(form[i].options[j].selected)
+                                    data[form[i].name].push(form[i].options[j].value);
+                            }
+                        } else if(form[i].checked) {
+                            data[form[i].name].push(form[i].value);
+                        }
+                    }
+                        break;
+                    case 'radio': {
+                        if(form[i].checked)
+                            data[form[i].name] = form[i].value;
+                    }
+                        break;
+                    default: {
+                        data[form[i].name] = form[i].value;
+                    }
+                }
+            }
+        }
 
+        return data;
+    }
 
     /*
      * html5和css3检测和兼容
@@ -137,12 +177,13 @@
             html5Test.transform3d = true;
         }
 
+        //清理
         tmpDiv = null;
+        style = null;
     } else if(window.attachEvent) {
         cssPrefix = util.cssPrefix = 'ms';
         classList.add(document.documentElement, 'old-ie'); //ie9以下
     }
-
     //写class
     for(var key in html5Test) {
         //console.log(key,';',html5Test[key]);
@@ -168,6 +209,9 @@
         }
     }
 
+    //清理
+    classList = null;
+    html5Test = null;
     //console.info(util);
     window.$u = util;
 })(window);
