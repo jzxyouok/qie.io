@@ -152,8 +152,46 @@ class Passport extends Model {
 	 *
 	 * @return array/boolean 返回用户数组或者false
 	 */
-	public function reg($name = '', $email = '', $nick = '', $password = '') {
+	public function reg($name = '', $password = '', $email = '', $nick = '') {
+		//检查用户名格式
+		//if(is_numeric($name))
+		//	throw new PassportException('用户名不能全为数字');
+		if(!preg_match(RegExp::USERNAME, $name))
+			return $this->error(1, '用户名不能包含特殊符号,只能包含:字母|数字|_|-');
+		//检查邮箱格式
+		if(!preg_match(RegExp::EMAIL, $email))
+			return $this->error(2, '邮箱格式错误');
+		//检查密码
+		$password = trim($password);
+		if(!preg_match(RegExp::PASSWORD, $password))
+			return $this->error(3, '密码不能少于6个字符');
+		//处理昵称
+		if(empty($nick)) {
+			$nick = Util::randCode(6, 'qwertyuiopasdfghjklzxcvbnm').$_SERVER['REQUEST_TIME'];
+		} else
+			$nick = addslashes(mb_substr(strip_tags(trim($nick)), 0, 64, 'utf-8'));
 		
+		$name = strtolower($name);
+		$email = strtolower($email);
+		//过滤不合法字符
+		if($this->filter($name) || $this->filter($nick))
+			return $this->error(3, '用户名或者昵称不允许使用');
+		
+		$db = Loader::load('database');
+		$sql = "INSERT INTO `user` (`name`,`email`,`password`,`nick`,`create_time`,`login_time`,`login_ip`) VALUES ('{$name}','{$email}','".$this->encode($password)."','{$nick}','".date(DATE_FORMAT, $this->loginTime)."','".date(DATE_FORMAT, $this->loginTime)."','{$this->loginIp}')";
+		$res = $db->execute($sql);
+		if($res > 0) {
+			//注册成功
+			$this->user['id'] = $res;
+			$this->user['name'] = $name;
+			$this->user['nick'] = $nick;
+			$this->user['face'] = self::getFace($res);
+			$this->setAuth();
+			$this->setCookie();
+			
+			return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick'], 'face'=>$this->user['face'], 'auth'=>$this->auth);
+		}
+		return false;
 	}
 	/*
 	 * 用户退出
@@ -335,5 +373,16 @@ class Passport extends Model {
 			} else
 				return false;
 		}
+	}
+	/*
+	 * 关键词过滤
+	 *
+	 * @param string $word 要过滤的词
+	 *
+	 * @return string
+	 */
+	public function filter($word) {
+		$sensitiveWords = Loader::loadVar(APP_PATH.'/config/words.php', 'sensitiveWords');
+		return in_array($word, $sensitiveWords);
 	}
 }

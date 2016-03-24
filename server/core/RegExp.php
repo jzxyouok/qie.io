@@ -1,7 +1,7 @@
 <?php
 //常用正则表达式
 class RegExp {
-	const EMAIL = "/^[0-9a-zA-Z._-]+@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/";
+	const EMAIL = "/^[0-9a-z._-]+@[0-9a-z-]+(?:\.+[a-z]{2,6})+$/i";
 	const TEL = "/^1[3578]\d{9}$|^0?\d{2,3}-?\d{7,8}$/";
 	const ZIP = "/^\d{6}$/";
 	const USERNAME = "/^[\$a-zA-Z][\$a-zA-Z0-9_-]{3,32}$/";

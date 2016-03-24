@@ -15,6 +15,8 @@ body {text-align:center;}
 <div class="form-row"><label>用 户 名:<input type="text" name="user_name"></label></div>
 <div class="form-row"><label>密&nbsp; &nbsp;码:<input type="password" name="pwd"></label></div>
 <div class="form-row"><label>确认密码:<input type="password" name="confirm_pwd"></label></div>
+<div class="form-row"><label>昵&nbsp; &nbsp;称:<input type="text" name="nick"></label></div>
+<div class="form-row"><label>电子邮箱:<input type="text" name="email"></label></div>
 <div class="form-row img"><label>验 证 码:<input type="text" name="captcha"><img src="/index.php/captcha/" alt="验证码" id="captcha_img"></label></div>
 </fieldset>
 <input type="hidden" name="token" value="<{$token}>">
