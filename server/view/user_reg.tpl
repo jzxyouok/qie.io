@@ -25,9 +25,10 @@ body {text-align:center;}
 <p><{$elapsed_time}>&<{$memory_usage}></p>
 <{$js}>
 <script>
-$('#captcha_img').on('click', function(){
-	$(this).removeAttr('src').attr('src', '/index.php/captcha/?v='+new Date().getTime());
-});
+function refreshImg() {
+	$('#captcha_img').removeAttr('src').attr('src', '/index.php/captcha/?v='+new Date().getTime());
+}
+$('#captcha_img').on('click', refreshImg);
 $('#login_form').on('submit', function(){
 	var data = $u.getFormValues(this);
 	
@@ -56,7 +57,12 @@ $('#login_form').on('submit', function(){
 			method: this.method,
 			data: data,
 			dataType: 'json',
-			success: function(data){console.log(data); alert(data.result);},
+			success: function(data){console.log(data); 
+									if(data.status< 1) {
+										refreshImg();
+									} else {
+										alert(data.result.id);
+									}},
 			error: function(xhr, data) {}
 	})
 	return false;

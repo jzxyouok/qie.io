@@ -65,6 +65,9 @@ class Passport extends Model {
 			$nick = $user['nick'];
 			$auth = $user['auth'];
 		}
+		$this->loginTime = $_SERVER['REQUEST_TIME'];
+		$this->loginIp = ip2long(Util::getIP());
+		
 		//已登陆情况下，初始化用户信息
 		if($id) {
 			if($res = $this->verify($id, $name, $auth)) {
@@ -77,8 +80,6 @@ class Passport extends Model {
 				$this->logout();
 			}
 		}
-		$this->loginTime = $_SERVER['REQUEST_TIME'];
-		$this->loginIp = ip2long(Util::getIP());
 	}
 	/*
 	 * 用户登陆
@@ -185,11 +186,10 @@ class Passport extends Model {
 			$this->user['id'] = $res;
 			$this->user['name'] = $name;
 			$this->user['nick'] = $nick;
-			$this->user['face'] = self::getFace($res);
 			$this->setAuth();
 			$this->setCookie();
 			
-			return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick'], 'face'=>$this->user['face'], 'auth'=>$this->auth);
+			return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick'], 'auth'=>$this->auth);
 		}
 		return false;
 	}

@@ -58,7 +58,20 @@ class Database extends Model {
 	 * @return bool(int) 操作成功，返回1或者id，操作失败返回false
 	 */
 	public function execute($sql) {
-		
+		if(!empty($sql) && ($res = $this->db->query($sql, MYSQLI_USE_RESULT))) {
+			$res = $this->db->affected_rows;
+			if(0 < $res) {
+				if(0 === stripos($sql, 'insert')) {
+					$id = $this->db->insert_id;
+					if(!empty($id))
+						return $id;
+					else
+						return $res;
+				} else return $res;
+			} else
+				return false;
+		} else
+			return false;
 	}
 	/*
 	 * 执行一个事务

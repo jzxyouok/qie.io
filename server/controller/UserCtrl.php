@@ -3,12 +3,24 @@
  * 用户管理
  */
 class UserCtrl extends Controller {
+	/*
+	 * 页面
+	 */
 	function index() {
 		$this->loadView('user');
 	}
 	public function reg() {
+		if(!empty($this->user))
+			header('Location: /index.php/user/center/');
+		
 		$this->loadView('user_reg');
 	}
+	public function center() {
+		$this->loadView('user_center');
+	}
+	/*
+	 * 接口
+	 */
 	public function login() {
 		
 	}
@@ -32,16 +44,19 @@ class UserCtrl extends Controller {
 		if(empty($_POST['pwd'])) {
 			$this->message(-1, '请输入密码', 5);
 		}
-		if(empty($_POST['nick']) || empty($_POST['email'])) {
+		if(empty($_POST['email'])) {
 			$this->message(-1, '请输入昵称和邮箱', 5);
 		}
 		if(!empty($this->user)) {
 			$this->message(-1, '请不要重复注册', 6);
 		}
 		$psp = Loader::load('passport');
-		$res = $psp->reg($_POST['user_name'], $_POST['pwd'], $_POST['email'], '');
+		$res = $psp->reg($_POST['user_name'], $_POST['pwd'], $_POST['email'], $_POST['nick']);
 		if($res['code']) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
+		}
+		if(empty($res['code'])) {
+			$this->message(1, array('id'=>$res['id'], 'user_name'=>$res['name'], 'nick'=>$res['nick']));
 		}
 		$this->message(1, '请求成功');
 	}
