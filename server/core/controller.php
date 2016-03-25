@@ -102,6 +102,9 @@ class Controller {
 		$view->display($tpl);
 	}
 	protected function loadConfig($name) {
+		if(!$this->config[$name])
+			return $this->config[$name];
+		
 		$this->config[$name] = Loader::loadVar(APP_PATH.'/config/'.$name.'.php');
 	}
 	/*
