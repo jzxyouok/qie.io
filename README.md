@@ -4,7 +4,7 @@
 
 <h3>文件夹结构</h3>
 
-html ┈ 存放生成的静态html
+<pre>html ┈ 存放生成的静态html
 manage ┈ 内容（设置项）管理后台
 server ┈ 后端（接口）php目录
 ├ config ┈ 配置文件
@@ -27,4 +27,4 @@ user_files ┈ 存放运行时文件
 ├ cache ┈ cache数据
 ├ log ┈ 系统log
 ├ template_c ┈ smarty编译文件
-└ upload ┈ 用户上传文件
+└ upload ┈ 用户上传文件</pre>
