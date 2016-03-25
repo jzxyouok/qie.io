@@ -13,7 +13,7 @@
 CREATE TABLE `user` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` char(36) NOT NULL,
-  `password` char(32) NOT NULL,
+  `password` char(33) NOT NULL,
   `nick` char(64) NOT NULL DEFAULT 'q',
   `email` varchar(100) NOT NULL DEFAULT '',
   `create_time` datetime NOT NULL DEFAULT '1982-10-21 00:00:00',
@@ -116,7 +116,6 @@ class Passport extends Model {
 		//如果查询为空
 		if(empty($res))
 			return $this->error(4, '用户名或者密码错误');
-		
 		if($res[0]['password'] !== $this->encode($password, substr($res[0]['password'], 0, 1)))
 			return $this->error(5, '用户名或者密码错误');
 		
@@ -199,7 +198,20 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function logout() {
-		
+		//如果用户没登陆
+		if(empty($_COOKIE['u_id']) && empty($_COOKIE['u_auth']))
+			return true;
+			
+		$this->auth = '';
+		$this->user = array();
+		if(defined('DOMAIN'))
+			$domain = DOMAIN;
+		else
+			$domain = $_SERVER['SERVER_NAME'];
+		if(setcookie('u_id', '', ($this->loginTime - 60), '/', '.'.$domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', '.'.$domain, 0))
+			return true;
+		else
+			return false;
 	}
 	/*
 	 * 验证合法性
@@ -230,7 +242,7 @@ class Passport extends Model {
 		if(empty($password))
 			return false;
 			
-		$new_password = '';
+		$newPassword = '';
 		$len = strlen($password);
 		if(100 < $len) {
 			//密码最长只支持100位
@@ -245,15 +257,14 @@ class Passport extends Model {
 			$index = 9; //保证密码是33位
 		}
 		if($index === 0) {
-			$new_password = self::SALT.$password;
+			$newPassword = self::SALT.$password;
 		} else if($index === $len) {
 			//$index不可能>$len
-			$new_password = $password.self::SALT;
+			$newPassword = $password.self::SALT;
 		} else {
-			$new_password = substr($password, 0, $index).self::SALT.substr($password, $index);
+			$newPassword = substr($password, 0, $index).self::SALT.substr($password, $index);
 		}
-		
-		return $index.md5($new_password);
+		return $index.md5($newPassword);
 	}
 	/*
 	 * 设置用户授权验证

@@ -57,7 +57,7 @@ $('#login_form').on('submit', function(){
 			method: this.method,
 			data: data,
 			dataType: 'json',
-			success: function(data){console.log(data); 
+			success: function(data){
 									if(data.status< 1) {
 										refreshImg();
 									} else {

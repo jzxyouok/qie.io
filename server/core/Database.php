@@ -47,8 +47,31 @@ class Database extends Model {
 	 *
 	 * @return array
 	 */
-	public function query($sql, $type = 'assoc') { //查询语句
+	public function query($sql, $type = 'assoc') {
+		$data = array();
 		
+		if(!empty($sql) && ($res = $this->db->query($sql))) {
+			if($res->num_rows<1)
+				return $data;
+			
+			switch($type) {
+				case 'assoc' : {
+					while($tmp = $res->fetch_assoc())
+						$data[] = $tmp;
+				}
+				break;
+				case 'array' : {
+					while($tmp = $res->fetch_array())
+						$data[] = $tmp;	
+				}
+				break;
+				case 'row' : {
+					while($tmp = $res->fetch_row())
+						$data[] = $tmp;
+				}
+			}
+		}
+		return $data;
 	}
 	/*
 	 * 执行数据库更改操作，如insert，update，delete
