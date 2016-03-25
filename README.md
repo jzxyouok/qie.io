@@ -24,7 +24,7 @@
 ├ theme ┈ 显示主题（view）
 │  └ default ┈ 默认主题
 └ user_files ┈ 存放运行时文件
-    ├ cache ┈ cache数据
-    ├ log ┈ 系统log
-    ├ template_c ┈ smarty编译文件
-    └ upload ┈ 用户上传文件</pre>
+　 ├ cache ┈ cache数据
+　 ├ log ┈ 系统log
+　 ├ template_c ┈ smarty编译文件
+　 └ upload ┈ 用户上传文件</pre>
