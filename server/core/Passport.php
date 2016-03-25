@@ -214,6 +214,91 @@ class Passport extends Model {
 			return false;
 	}
 	/*
+	 * 用户授权信息修改
+	 *
+	 * @param string $name 用户名
+	 * @param string $email 用户邮箱
+	 * @param string $nick 用户昵称
+	 * @param string $password 新用户密码
+	 * @param string $old_password 旧用户密码，如果修改密码就需要
+	 * @param string $setCookie 是否记录cookie
+	 *
+	 * @return boolean
+	 */
+	public function modify($cfg = array()){
+		if(!empty($cfg['name'])) {
+			//过滤用户名
+			$cfg['name'] = strtolower(trim($cfg['name']));
+			if($cfg['name'] == $this->user['name'] || $this->filter($cfg['name']))
+				unset($cfg['name']);
+			
+			if($cfg['name'] && !preg_match(RegExp::USERNAME, $cfg['name']))
+				return $this->error(1, '用户名不能包含特殊符号,只能包含:字母|数字|_|-');
+		}
+		if(!empty($cfg['email'])) {
+			//过滤邮箱
+			$cfg['email'] = strtolower(trim($cfg['email']));
+			if(!preg_match(RegExp::EMAIL, $cfg['email']))
+				return $this->error(2, '邮箱格式错误');
+		}
+		if(!empty($cfg['nick'])) {
+			//过滤昵称
+			$cfg['nick'] = addslashes(mb_substr(strip_tags(trim($cfg['nick'])), 0, 64, 'utf-8'));
+			if($cfg['nick'] == $this->user['nick'] || $this->filter($cfg['nick']))
+				unset($cfg['nick']);
+		}
+		
+		$cfg['old_password'] = trim($cfg['old_password']);
+		$cfg['password'] = trim($cfg['password']);
+		if(!empty($cfg['old_password']) && !empty($cfg['password']) && $cfg['old_password'] != $cfg['password'] && preg_match(RegExp::PASSWORD, $cfg['password'])) {
+			//过滤密码
+		} else {
+			unset($cfg['old_password']);
+			unset($cfg['password']);
+		}
+		if(empty($cfg['password']) && empty($cfg['name']) && empty($cfg['email']) && empty($cfg['nick'])){
+			//没有做任何修改的
+			return false;
+		}
+			
+		$db = Loader::load('database');
+		//查询新用户名或者新邮箱是否已经被其他人使用
+		$sql = "SELECT (".($cfg['password'] ? "SELECT `password` FROM `user` WHERE `id`=".$this->user['id']." LIMIT 1" : "NULL").") AS `password`,(".(!empty($cfg['name']) ? "SELECT `name` FROM `user` WHERE `name`='{$cfg['name']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `name`,(".(!empty($cfg['email']) ? "SELECT `email` FROM `user` WHERE `email`='{$cfg['email']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `email`,(".(!empty($cfg['nick']) ? "SELECT `nick` FROM `user` WHERE `nick`='{$cfg['nick']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `nick`";
+		$res = $db->query($sql);
+		
+		//查询旧密码是否正确
+		if((!empty($cfg['old_password'])) && !empty($res[0]['password']) && $res[0]['password'] !== $this->encode($cfg['old_password'], substr($res[0]['password'], 0, 1)))
+			return $this->error(3, '原密码错误');
+		//查询用户名是否被占用
+		if(!empty($cfg['name']) && !empty($res[0]['name']))
+			return $this->error(4, '用户名已经被占用');
+		//查询邮箱是否被占用
+		if(!empty($cfg['email']) && !empty($res[0]['email']))
+			return $this->error(5, '邮箱已经被占用');
+		//查询邮箱是否被占用
+		if(!empty($cfg['nick']) && !empty($res[0]['nick']))
+			return $this->error(6, '昵称已经被占用');
+			
+		//更新信息
+		$sql = "UPDATE `user` SET ".(!empty($cfg['name']) ? "`name`='{$cfg['name']}'," : "").(!empty($cfg['email']) ? "`email`='{$cfg['email']}'," : "").(!empty($cfg['nick']) ? "`nick`='{$cfg['nick']}'," : "").(empty($cfg['password']) ? "" : "`password`='".$this->encode($cfg['password'])."',")."`tm`=NOW() WHERE `id`=".$this->user['id']." LIMIT 1";
+		$res = $db->execute($sql);
+		
+		if($res > 0) {
+			if($cfg['name'] || $cfg['nick']) {
+				//如果修改了用户名或者昵称
+				if($cfg['name'])
+					$this->user['name'] = $cfg['name'];
+				else
+					$this->user['nick'] = $cfg['nick'];
+				$this->auth = '';
+				$this->setAuth();
+				$this->setCookie();
+			}
+			return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick'], 'auth'=>$this->auth);
+		}
+		return false;
+	}
+	/*
 	 * 验证合法性
 	 *
 	 * @param string $id 用户id

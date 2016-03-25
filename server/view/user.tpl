@@ -47,8 +47,9 @@ $('#login_form').on('submit', function(){
 			success: function(data){
 				if(data.status< 1) {
 					refreshImg();
+					alert(data.result);
 				} else {
-					alert(data.result.id);
+					location.href = '/index.php/user/center/';
 				}
 			},
 			error: function(xhr, data) {}

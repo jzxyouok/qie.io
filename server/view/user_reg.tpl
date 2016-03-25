@@ -10,7 +10,7 @@ body {text-align:center;}
 </head>
 <body>
 <h1>user</h1>
-<form id="login_form" action="/index.php/user/insert/" method="post">
+<form id="reg_form" action="/index.php/user/insert/" method="post">
 <fieldset>
 <div class="form-row"><label>用 户 名:<input type="text" name="user_name"></label></div>
 <div class="form-row"><label>密&nbsp; &nbsp;码:<input type="password" name="pwd"></label></div>
@@ -29,7 +29,7 @@ function refreshImg() {
 	$('#captcha_img').removeAttr('src').attr('src', '/index.php/captcha/?v='+new Date().getTime());
 }
 $('#captcha_img').on('click', refreshImg);
-$('#login_form').on('submit', function(){
+$('#reg_form').on('submit', function(){
 	var data = $u.getFormValues(this);
 	
 	if(!data.user_name) {
@@ -60,8 +60,9 @@ $('#login_form').on('submit', function(){
 			success: function(data){
 									if(data.status< 1) {
 										refreshImg();
+										alert(data.result);
 									} else {
-										alert(data.result.id);
+										location.href = '/index.php/user/center/';
 									}},
 			error: function(xhr, data) {}
 	})
