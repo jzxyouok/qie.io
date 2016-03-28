@@ -17,13 +17,13 @@ class App {
 	 */
 	function __construct($prefix = '', $route = array(), $process_start = 0) {
 		try {
-			$this->request = Loader::load('Request', $route);
+			$request = Loader::load('Request', $route);
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$obj = NULL; //自动调用的控制器
 			$method = ''; //自动调用的控制器方法
 			$param = $position+2; //调用方法是用的参数的uri参数位置为3
 			//按照访问路径加载控制器
-			if(!$obj = strtolower($this->request->uri($position))) {
+			if(!$obj = strtolower($request->uri($position))) {
 				$obj = 'main'; //默认控制器，也就是网站首页
 				$method = 'index';
 				$param = -1;
@@ -32,20 +32,20 @@ class App {
 			$obj = $prefix . $obj;
 			$obj = Loader::load("controller/{$obj}Ctrl", array($process_start), false);
 			if(!$obj)
-				$this->error('系统找不到对象', $this->request);
+				$this->error('系统找不到对象', $request);
 			
-			if(empty($method) && !($method = $this->request->uri($position+1))) {
+			if(empty($method) && !($method = $request->uri($position+1))) {
 				$method = 'index'; //尝试加载默认方法
 				$param = -1;
 			}
 			if(!method_exists($obj, $method)) {
 				$method = 'index';
 				if(!method_exists($obj, $method))
-					$this->error('系统找不到对应的处理过程', array($this->request, $obj)); //错误处理，找不到对象方法。
+					$this->error('系统找不到对应的处理过程', array($request, $obj)); //错误处理，找不到对象方法。
 				$param = $position + 1;
 			}
 			$obj->setParamPos($param);
-			if($param != -1 && NULL !== ($param = $this->request->uri($param)))
+			if($param != -1 && NULL !== ($param = $request->uri($param)))
 				$obj->$method($param);
 			else
 				$obj->$method();
