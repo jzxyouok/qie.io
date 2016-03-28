@@ -15,7 +15,7 @@ class Cache {
 	private $store = null;
 	private $memcacheFlag = 0;
 	const PREFIX = 'c_';
-	const DIR = DOCUMENT_ROOT.'/user_files/cache/';
+	const DIR = '/user_files/cache/';
 	/*
 	 * 
 	 */
@@ -32,7 +32,7 @@ class Cache {
 				$this->isMemcache = false;
 		}
 		
-		Util::makeDir(self::DIR);
+		Util::makeDir(DOCUMENT_ROOT.self::DIR);
 		$this->store = Loader::load('store');
 	}
 	/* 设置缓存过期时间
@@ -176,14 +176,14 @@ class Cache {
 	 */
 	public function clear() {
 		$count = 0;
-		if($handle = opendir(self::DIR)) {
+		if($handle = opendir(DOCUMENT_ROOT.self::DIR)) {
 			while(false !== ($res = readdir($handle))) {
-				if(0 === strpos($res, '.') || is_dir(self::DIR . $res)) continue;
+				if(0 === strpos($res, '.') || is_dir(DOCUMENT_ROOT.self::DIR . $res)) continue;
 				
-				$tmp = file_get_contents(self::DIR . $res);
+				$tmp = file_get_contents(DOCUMENT_ROOT.self::DIR . $res);
 				$tmp = explode("\r\n", $tmp);
 				$tmp = unserialize($tmp[1]);
-				if(((int)$tmp['create_time'] + (int)$tmp['expire'] < $_SERVER['REQUEST_TIME']) && unlink(self::DIR . $res)) {
+				if(((int)$tmp['create_time'] + (int)$tmp['expire'] < $_SERVER['REQUEST_TIME']) && unlink(DOCUMENT_ROOT.self::DIR . $res)) {
 					//删除过期缓存文件
 					$count++;
 				}
@@ -201,10 +201,10 @@ class Cache {
 	 */
 	public function flush() {
 		$count = 0;
-		if($handle = opendir(self::DIR)) {
+		if($handle = opendir(DOCUMENT_ROOT.self::DIR)) {
 			while(false !== ($res = readdir($handle))) {
-				if(0 === strpos($res, '.') || is_dir(self::DIR . $res)) continue;
-				if(unlink(self::DIR . $res)) $count++;
+				if(0 === strpos($res, '.') || is_dir(DOCUMENT_ROOT.self::DIR . $res)) continue;
+				if(unlink(DOCUMENT_ROOT.self::DIR . $res)) $count++;
 			}
 			closedir($handle);
 			unset($handle);
@@ -218,9 +218,9 @@ class Cache {
 	 */
 	public function sum() {
 		$c = 0;
-		if($handle = opendir(self::DIR)) {
+		if($handle = opendir(DOCUMENT_ROOT.self::DIR)) {
 			while(false !== ($res = readdir($handle))) {
-				if($res === '.' || $res === '..' || is_dir(self::DIR . $res)) continue;
+				if($res === '.' || $res === '..' || is_dir(DOCUMENT_ROOT.self::DIR . $res)) continue;
 				$c++;
 			}
 			closedir($handle);
@@ -244,7 +244,7 @@ class Cache {
 		$key = self::PREFIX . strtolower($key);
 		if(250 < strlen($key))
 			$key = substr($key, 0, 250);
-		$path = self::DIR . $key;
+		$path = DOCUMENT_ROOT.self::DIR . $key;
 		return $path;
 	}
 	/*
