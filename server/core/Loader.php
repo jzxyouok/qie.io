@@ -67,7 +67,8 @@ class Loader {
 			else
 				$pos++;
 			$name = substr($path, $pos, strrpos($path, '.')-$pos);*/
-			$name = pathinfo($path)['filename'];
+			$info = pathinfo($path);
+			$name = $info['filename'];
 		}
 		return ${$name};
 	}
