@@ -5,7 +5,7 @@
 class CaptchaCtrl extends Controller {
 	function index() {
 		try {
-			$captcha = Loader::load('captcha');
+			$captcha = Loader::load('Captcha');
 			$captcha->createImage();
 		} catch(Exception $e) {
 			exit('Exception:'.$e->getMessage());

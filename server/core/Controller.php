@@ -23,8 +23,8 @@ class Controller {
 	
 	function __construct($startTime = 0) {
 		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
-		$this->request = Loader::load('request');
-		$this->user = Loader::load('passport')->getUser();
+		$this->request = Loader::load('Request');
+		$this->user = Loader::load('Passport')->getUser();
 		
 		//初始化网站配置
 		$this->profile['css'] = array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">');
@@ -71,7 +71,7 @@ class Controller {
 			return false;
 		
 		
-		$view = Loader::load('view');
+		$view = Loader::load('View');
 		
 		//assign函数
 		foreach($this->funcs as $k => $v)

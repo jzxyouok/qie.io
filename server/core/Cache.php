@@ -33,7 +33,7 @@ class Cache {
 		}
 		
 		Util::makeDir(DOCUMENT_ROOT.self::DIR);
-		$this->store = Loader::load('store');
+		$this->store = Loader::load('Store');
 	}
 	/* 设置缓存过期时间
 	 *

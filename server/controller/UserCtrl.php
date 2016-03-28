@@ -38,7 +38,7 @@ class UserCtrl extends Controller {
 		if(empty($_POST['captcha'])) {
 			$this->message(-1, '请输入验证码', 1);
 		}
-		$captcha = Loader::load('captcha');
+		$captcha = Loader::load('Captcha');
 		if(!$captcha->verify($_POST['captcha'])) {
 			$this->message(-1, '验证码错误', 2);
 		}
@@ -51,7 +51,7 @@ class UserCtrl extends Controller {
 		if(empty($_POST['pwd'])) {
 			$this->message(-1, '请输入密码', 5);
 		}
-		$psp = Loader::load('passport');
+		$psp = Loader::load('Passport');
 		$res = $psp->login($_POST['user_name'], $_POST['pwd']);
 		
 		if(!empty($res['code'])) {
@@ -67,7 +67,7 @@ class UserCtrl extends Controller {
 	}
 	//退出
 	public function logout() {
-		$psp = Loader::load('passport');
+		$psp = Loader::load('Passport');
 		if($psp->logout()) {
 			if($_GET['url'])
 				header("Location: {$_GET['url']}");
@@ -80,7 +80,7 @@ class UserCtrl extends Controller {
 		if(empty($_POST['captcha'])) {
 			$this->message(-1, '请输入验证码', 1);
 		}
-		$captcha = Loader::load('captcha');
+		$captcha = Loader::load('Captcha');
 		if(!$captcha->verify($_POST['captcha'])) {
 			$this->message(-1, '验证码错误', 2);
 		}
@@ -99,7 +99,7 @@ class UserCtrl extends Controller {
 		if(!empty($this->user)) {
 			$this->message(-1, '请不要重复注册', 6);
 		}
-		$psp = Loader::load('passport');
+		$psp = Loader::load('Passport');
 		$res = $psp->reg($_POST['user_name'], $_POST['pwd'], $_POST['email'], $_POST['nick']);
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
@@ -127,7 +127,7 @@ class UserCtrl extends Controller {
 		if(!empty($_POST['nick']))
 			$data['nick'] = $_POST['nick'];
 		
-		$psp = Loader::load('passport');
+		$psp = Loader::load('Passport');
 		$res = $psp->modify(array('old_password'=>$data['old_pwd'], 'password'=>$data['pwd'], 'email'=>$data['email'], 'nick'=>$data['nick']));
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);

@@ -111,7 +111,7 @@ class Passport extends Model {
 		else
 			return $this->error(3, '用户名或者邮箱格式错误');
 		
-		$db = Loader::load('database');
+		$db = Loader::load('Database');
 		$res = $db->query($sql);
 		//如果查询为空
 		if(empty($res))
@@ -177,7 +177,7 @@ class Passport extends Model {
 		if($this->filter($name) || $this->filter($nick))
 			return $this->error(3, '用户名或者昵称不允许使用');
 		
-		$db = Loader::load('database');
+		$db = Loader::load('Database');
 		$sql = "INSERT INTO `user` (`name`,`email`,`password`,`nick`,`create_time`,`login_time`,`login_ip`) VALUES ('{$name}','{$email}','".$this->encode($password)."','{$nick}','".date(DATE_FORMAT, $this->loginTime)."','".date(DATE_FORMAT, $this->loginTime)."','{$this->loginIp}')";
 		$res = $db->execute($sql);
 		if($res > 0) {
@@ -261,7 +261,7 @@ class Passport extends Model {
 			return false;
 		}
 			
-		$db = Loader::load('database');
+		$db = Loader::load('Database');
 		//查询新用户名或者新邮箱是否已经被其他人使用
 		$sql = "SELECT (".($cfg['password'] ? "SELECT `password` FROM `user` WHERE `id`=".$this->user['id']." LIMIT 1" : "NULL").") AS `password`,(".(!empty($cfg['name']) ? "SELECT `name` FROM `user` WHERE `name`='{$cfg['name']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `name`,(".(!empty($cfg['email']) ? "SELECT `email` FROM `user` WHERE `email`='{$cfg['email']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `email`,(".(!empty($cfg['nick']) ? "SELECT `nick` FROM `user` WHERE `nick`='{$cfg['nick']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `nick`";
 		$res = $db->query($sql);
@@ -460,7 +460,7 @@ class Passport extends Model {
 			}
 			
 			//查询其他用户	
-			$db = Loader::load('database');
+			$db = Loader::load('Database');
 			$res = $db->query($sql);
 			
 			if($res[0]) {
