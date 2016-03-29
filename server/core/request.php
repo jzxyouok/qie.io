@@ -14,6 +14,8 @@
  */
 
 class Request {
+	private $dir = '';
+	private $path = '';
 	private $uri = array();
 	private $route = array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
 							'replace'=>array('/', ''));
@@ -36,19 +38,11 @@ class Request {
 				$this->route['replace'][] = (string)$route['replace'];
 		}
 		$info = pathinfo($_SERVER['SCRIPT_NAME']);
-		var_dump($info['dirname']);
-		//$this->uri[0] = $info['dirname']?;
-		//分析请求路径
-		if(!empty($_SERVER['PATH_INFO'])) {
-			$uri = substr($_SERVER['PATH_INFO'], 1);
-		} else if(!empty($_GET['c'])){
-			//c=controller,m=method,p=param
-			$uri = $_GET['c'].'/'.$_GET['m'].'/'.$_GET['p'];
-		} else
-			return false;
+		$this->dir = substr($info['dirname'], 1);
+		$this->path = !empty($_SERVER['PATH_INFO'])?substr($_SERVER['PATH_INFO'], 1):$_GET['c'].'/'.$_GET['m'].'/'.$_GET['p'];
 		
-		if(!empty($uri)) {
-			$uri = preg_replace($this->route['regexp'], $this->route['replace'], $uri);
+		if(!empty($this->path)) {
+			$uri = preg_replace($this->route['regexp'], $this->route['replace'], $this->path);
 			$this->uri = explode('/', $uri);
 		}
 	}
@@ -61,5 +55,8 @@ class Request {
 	 */
 	public function uri($pos = 0) {
 		return !empty($this->uri[$pos])?$this->uri[$pos]:'';
+	}
+	public function dir() {
+		return $this->dir;
 	}
 }

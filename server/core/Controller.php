@@ -41,7 +41,7 @@ class Controller {
 		if(empty($tpl))
 			return false;
 		
-		$tpl = APP_PATH.'/view/'.$tpl.'.tpl';
+		$tpl = APP_PATH.'/view/'.$this->request->dir().'/'.$tpl.'.tpl';
 		$this->view($tpl);
 	}
 	/*
@@ -69,7 +69,6 @@ class Controller {
 	protected function view($tpl = '') {
 		if(!file_exists($tpl))
 			return false;
-		
 		
 		$view = Loader::load('View');
 		

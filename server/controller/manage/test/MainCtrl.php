@@ -2,6 +2,6 @@
 
 class MainCtrl extends Controller {
 	function index() {
-		echo 'manage test';
+		$this->loadView('main');
 	}
 }
