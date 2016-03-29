@@ -9,7 +9,7 @@
  * 更新时间：2016/03/21
  *
  */
-require_once(APP_PATH . '/third_party/smarty/Smarty.class.php');
+require(APP_PATH . '/third_party/smarty/Smarty.class.php');
 
 class View extends Smarty {
 	function __construct() {//构造函数

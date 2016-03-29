@@ -11,6 +11,7 @@
 
 class Loader {
 	private static $objects = array(); //生成的对象数组
+	private static $vars = array();
 	/*
 	 * 加载对象
 	 */
@@ -59,17 +60,16 @@ class Loader {
 	 * 加载配置文件
 	 */
 	public static function loadVar($path, $name = '') {
-		include_once($path);
+		if(isset(self::$vars[$path])) {
+			return self::$vars[$path];
+		}
+		
+		include($path);
 		if(empty($name)) {
-			/*
-			if(false === ($pos = strrpos($path, '/')))
-				$pos = 0;
-			else
-				$pos++;
-			$name = substr($path, $pos, strrpos($path, '.')-$pos);*/
 			$info = pathinfo($path);
 			$name = $info['filename'];
 		}
-		return ${$name};
+		self::$vars[$path] = ${$name};
+		return self::$vars[$path];
 	}
 }

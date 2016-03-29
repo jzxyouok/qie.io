@@ -1,6 +1,6 @@
 <?php
 $startTime = microtime();
-require_once('web.config.php');
-require_once(APP_PATH.'/config/require.php');
+require('web.config.php');
+require(APP_PATH.'/config/require.php');
 
 new App('','',$startTime);

@@ -18,7 +18,7 @@ class App {
 	function __construct($prefix = '', $route = array(), $process_start = 0) {
 		try {
 			if(!class_exists('Loader'))
-				require_once(APP_PATH.'/core/Loader.php');
+				require(APP_PATH.'/core/Loader.php');
 			$request = Loader::load('Request', $route);
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$obj = NULL; //自动调用的控制器
