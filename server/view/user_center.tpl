@@ -16,7 +16,7 @@ body {text-align:center;}
 <div class="form-row"><label>原 密 码:<input type="password" name="old_pwd"></label></div>
 <div class="form-row"><label>密&nbsp; &nbsp;码:<input type="password" name="pwd"></label></div>
 <div class="form-row"><label>确认密码:<input type="password" name="confirm_pwd"></label></div>
-<div class="form-row"><label>昵&nbsp; &nbsp;称:<input type="text" name="nick"></label></div>
+<div class="form-row"><label>昵&nbsp; &nbsp;称:<input type="text" name="nick" value="<{$smarty.cookies.u_nick}>"></label></div>
 <div class="form-row"><label>电子邮箱:<input type="text" name="email"></label></div>
 </fieldset>
 <input type="hidden" name="token" value="<{$token}>">

@@ -206,11 +206,9 @@ class Passport extends Model {
 			
 		$this->auth = '';
 		$this->user = array();
-		if(defined('DOMAIN'))
-			$domain = DOMAIN;
-		else
-			$domain = $_SERVER['SERVER_NAME'];
-		if(setcookie('u_id', '', ($this->loginTime - 60), '/', '.'.$domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', '.'.$domain, 0))
+		$domain = '.'.(defined('DOMAIN') && !empty(DOMAIN)?DOMAIN:$_SERVER['SERVER_NAME']);
+		
+		if(setcookie('u_id', '', ($this->loginTime - 60), '/', $domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', $domain, 0))
 			return true;
 		else
 			return false;
@@ -262,7 +260,7 @@ class Passport extends Model {
 			//没有做任何修改的
 			return false;
 		}
-			
+		
 		$db = Loader::load('Database');
 		//查询新用户名或者新邮箱是否已经被其他人使用
 		$sql = "SELECT (".($cfg['password'] ? "SELECT `password` FROM `user` WHERE `id`=".$this->user['id']." LIMIT 1" : "NULL").") AS `password`,(".(!empty($cfg['name']) ? "SELECT `name` FROM `user` WHERE `name`='{$cfg['name']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `name`,(".(!empty($cfg['email']) ? "SELECT `email` FROM `user` WHERE `email`='{$cfg['email']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `email`,(".(!empty($cfg['nick']) ? "SELECT `nick` FROM `user` WHERE `nick`='{$cfg['nick']}' AND `id`!=".$this->user['id']." LIMIT 1" : "NULL").") AS `nick`";
@@ -383,13 +381,10 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function setCookie() {
-		if(defined('DOMAIN'))
-			$domain = DOMAIN;
-		else
-			$domain = $_SERVER['SERVER_NAME'];
+		$domain = '.'.(defined('DOMAIN') && !empty(DOMAIN)?DOMAIN:$_SERVER['SERVER_NAME']);
 		
 		$e = $this->expire !== 0 ? $this->loginTime + $this->expire : 0;
-		if(setcookie('u_id', $this->user['id'], $e, '/', '.'.$domain, 0, true) && setcookie('u_name', $this->user['name'], ($e === 0 ? $this->loginTime: $e) + 604800, '/', '.'.$domain, 0) && setcookie('u_nick', $this->user['nick'], ($e === 0 ? $this->loginTime: $e) + 604800, '/', '.'.$domain, 0) && setcookie('u_auth', $this->auth, $e, '/', '.'.$domain, 0, true))
+		if(setcookie('u_id', $this->user['id'], $e, '/', $domain, 0, true) && setcookie('u_name', $this->user['name'], ($e === 0 ? $this->loginTime: $e) + 604800, '/', $domain, 0) && setcookie('u_nick', $this->user['nick'], ($e === 0 ? $this->loginTime: $e) + 604800, '/', $domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $domain, 0, true))
 			return true;
 		else
 			return false;
