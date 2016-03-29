@@ -20,12 +20,14 @@ class Controller {
 	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf";
 	protected $profile = array(); //网站配置(title,keywords,js,css...)
 	protected $config = array();
+	protected $dir = '';
 	
 	function __construct($startTime = 0) {
 		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
 		$this->request = Loader::load('Request');
 		$this->user = Loader::load('Passport')->getUser();
 		
+		$this->dir = $this->request->dir();
 		//初始化网站配置
 		$this->profile['css'] = array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">');
 		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script><script src="/static/js/util.js"></script>');
@@ -41,7 +43,9 @@ class Controller {
 		if(empty($tpl))
 			return false;
 		
-		$tpl = APP_PATH.'/view/'.$this->request->dir().'/'.$tpl.'.tpl';
+		$this->vars['dir'] = $this->dir;
+		
+		$tpl = APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl';
 		$this->view($tpl);
 	}
 	/*
@@ -59,7 +63,14 @@ class Controller {
 		$this->profile['css'] = array_merge($this->profile['css'] , $this->config['profile']['css']);
 		$this->profile['js'] = array_merge($this->profile['js'] , $this->config['profile']['js']);
 		
+		$this->vars['theme'] = $this->profile['theme'];
+		$this->vars['title'] = $this->config['profile']['title'];
+		$this->vars['meta'] = $this->config['profile']['meta'];
+		$this->vars['icp'] = $this->config['profile']['icp'];
+		$this->vars['analytics'] = $this->config['profile']['analytics'];
+		
 		$tpl = DOCUMENT_ROOT.'/theme/'.$this->profile['theme'].'/'.$tpl.'.tpl';
+
 		$this->view($tpl);
 	}
 	/*
@@ -80,11 +91,6 @@ class Controller {
 			$view->registerClass($k, $v);
 		
 		//assign变量
-		$this->vars['theme'] = $this->profile['theme'];
-		$this->vars['title'] = $this->config['profile']['title'];
-		$this->vars['meta'] = $this->config['profile']['meta'];
-		$this->vars['icp'] = $this->config['profile']['icp'];
-		$this->vars['analytics'] = $this->config['profile']['analytics'];
 		$this->vars['js'] = implode('', $this->profile['js']);
 		$this->vars['css'] = implode('', $this->profile['css']);
 		$this->vars['user'] = $this->user;

@@ -491,4 +491,57 @@ class Passport extends Model {
 		$sensitiveWords = Loader::loadVar(APP_PATH.'/config/words.php', 'sensitiveWords');
 		return in_array($word, $sensitiveWords);
 	}
+	/*
+	 * 管理后台登录
+	 *
+	 * @param string $password 密码
+	 *
+	 * @return boolean
+	 */
+	public function adminLogin($password = 0) {
+		if(empty($password))
+			return $this->error(1, '密码不能为空');
+		if(empty($this->user))
+			return $this->error(1, '请先登录前端页面');
+		$password = addslashes(trim($password));
+		
+		$db = Loader::load('Database');
+		$sql = "SELECT `code`,`grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} AND `password`=MD5(CONCAT(`code`,'{$password}')) LIMIT 1";
+		$res = $db->query($sql);
+		if(empty($res))
+			return false;
+		else if(setcookie('a_code', $res[0]['code'], 0, '/') && setcookie('a_verify', md5($this->user['id'].self::SALT.$res[0]['code'].$res[0]['grade']), 0, '/', NULL, 0, true) && setcookie('a_grade', (int)$res[0]['grade'], 0, '/')){
+			$this->admin = array('grade' => $res[0]['grade'], 'code' => $res[0]['code']);
+			return true;
+		}
+		
+		return true;
+	}
+	/*
+	 * 管理后台退出
+	 *
+	 * @return boolean
+	 */
+	public function adminLogout() {
+		return setcookie('a_code', '', time()-600, '/') && setcookie('a_verify', '', time()-600, '/') && setcookie('a_grade', '', time()-600, '/');
+	}
+	/*
+	 * 修改后台密码
+	 *
+	 * @return boolean
+	 */
+	public function adminModify($password = 0) {
+		
+	}
+	/*
+	 * 获取管理员信息
+	 *
+	 * @return boolean
+	 */
+	public function getAdmin() {
+		if(!empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].self::SALT.$_COOKIE['a_code'].$_COOKIE['a_grade'])) {
+			return array('grade' => $_COOKIE['a_grade'], 'code' => $_COOKIE['a_code']);
+		} else
+			return false;
+	}
 }

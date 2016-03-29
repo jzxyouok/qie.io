@@ -32,7 +32,7 @@ class App {
 				$param = -1;
 			}
 			$obj{0} = strtoupper($obj{0});
-			$ctrlObj = Loader::load('controller/'.$request->dir().'/'.$obj.'Ctrl', array($process_start), false);
+			$ctrlObj = Loader::load('controller'.$request->dir().'/'.$obj.'Ctrl', array($process_start), false);
 			if(!$ctrlObj)
 				$this->error('系统找不到对象', $request);
 			

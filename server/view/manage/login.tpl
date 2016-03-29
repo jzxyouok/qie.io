@@ -10,7 +10,14 @@ body {text-align:center;}
 </head>
 <body>
 <h1>manage</h1>
-<a href="<{$dir}>/index.php/main/logout/">退出</a>
+<form id="login_form" action="<{$dir}>/index.php/main/login/" method="post">
+<fieldset>
+<div class="form-row"><label>密&nbsp; &nbsp;码:<input type="password" name="pwd"></label></div>
+<div class="form-row img"><label>验 证 码:<input type="text" name="captcha"><img src="/index.php/captcha/" alt="验证码" id="captcha_img"></label></div>
+</fieldset>
+<input type="submit" value="登录">
+<input type="hidden" name="token" value="<{$token}>">
+</form>
 <p><{$elapsed_time}>&<{$memory_usage}></p>
 <{$js}>
 <script>

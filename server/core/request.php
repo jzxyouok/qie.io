@@ -38,7 +38,7 @@ class Request {
 				$this->route['replace'][] = (string)$route['replace'];
 		}
 		$info = pathinfo($_SERVER['SCRIPT_NAME']);
-		$this->dir = substr($info['dirname'], 1);
+		$this->dir = $info['dirname'];
 		$this->path = !empty($_SERVER['PATH_INFO'])?substr($_SERVER['PATH_INFO'], 1):$_GET['c'].'/'.$_GET['m'].'/'.$_GET['p'];
 		
 		if(!empty($this->path)) {
