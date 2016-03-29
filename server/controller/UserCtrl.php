@@ -40,10 +40,10 @@ class UserCtrl extends Controller {
 		}
 		$captcha = Loader::load('Captcha');
 		if(!$captcha->verify($_POST['captcha'])) {
-			$this->message(-1, '验证码错误', 2);
+			$this->message(-1, '验证码错误或者过期', 2);
 		}
 		if(!$this->verify(300)) {
-			$this->message(-1, '页面已经过期', 3);
+			$this->message(-1, '页面已经过期，请尝试刷新', 3);
 		}
 		if(empty($_POST['user_name'])) {
 			$this->message(-1, '请输入用户名', 4);
@@ -83,10 +83,10 @@ class UserCtrl extends Controller {
 		}
 		$captcha = Loader::load('Captcha');
 		if(!$captcha->verify($_POST['captcha'])) {
-			$this->message(-1, '验证码错误', 2);
+			$this->message(-1, '验证码错误或者过期', 2);
 		}
 		if(!$this->verify(300)) {
-			$this->message(-1, '页面已经过期', 3);
+			$this->message(-1, '页面已经过期，请尝试刷新', 3);
 		}
 		if(empty($_POST['user_name'])) {
 			$this->message(-1, '请输入用户名', 4);
