@@ -10,15 +10,14 @@
 class App {
 	/*
 	 *
-	 * @param string $prefix 控制器对象名称默认前缀
-	 * @param array $route 增加路由规则，array('regexp'=>array(),'replace'=>array())
 	 * @param int $process_start 系统开始时间
 	 *
 	 */
-	function __construct($prefix = '', $route = array(), $process_start = 0) {
+	function __construct($process_start = 0) {
 		try {
 			if(!class_exists('Loader'))
 				require(APP_PATH.'/core/Loader.php');
+			$route = Loader::loadVar(APP_PATH.'/config/route.php');
 			$request = Loader::load('Request', $route);
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$obj = NULL; //自动调用的控制器
@@ -31,7 +30,7 @@ class App {
 				$param = -1;
 			}
 			$obj{0} = strtoupper($obj{0});
-			$obj = $prefix . $obj;
+			$obj = $obj;
 			$obj = Loader::load("controller/{$obj}Ctrl", array($process_start), false);
 			if(!$obj)
 				$this->error('系统找不到对象', $request);

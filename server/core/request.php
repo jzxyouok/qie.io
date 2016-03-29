@@ -35,7 +35,9 @@ class Request {
 			else
 				$this->route['replace'][] = (string)$route['replace'];
 		}
-		
+		$info = pathinfo($_SERVER['SCRIPT_NAME']);
+		var_dump($info['dirname']);
+		//$this->uri[0] = $info['dirname']?;
 		//分析请求路径
 		if(!empty($_SERVER['PATH_INFO'])) {
 			$uri = substr($_SERVER['PATH_INFO'], 1);
