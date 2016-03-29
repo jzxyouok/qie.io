@@ -42,10 +42,10 @@ class PassportException extends Exception{}
 class Passport extends Model {
 	private $user = array(); //用户数组
 	public static $users = array();
-	private $expire = 604800; //cookie过期时间
+	private $expire = 0; //cookie过期时间
 	private $auth = ''; //授权信息
 	private $loginTime = null;
-	private $loginIp = null;
+	private $loginIP = null;
 	const MINIMUM_USER_ID = 1; //最小用户id
 	const EXPIRE_MAX = 1209600; //cookie过期最长时间为一个星期，14*24*60*60
 	const SALT = '!@#qie.$%^io&*()';
@@ -66,12 +66,14 @@ class Passport extends Model {
 			$auth = $user['auth'];
 		}
 		$this->loginTime = $_SERVER['REQUEST_TIME'];
-		$this->loginIp = ip2long(Util::getIP());
+		$this->loginIP = ip2long(Util::getIP());
 		
+		//$this->expire = 10;
 		//已登陆情况下，初始化用户信息
 		if($id) {
 			if($res = $this->verify($id, $name, $auth)) {
-				$this->auth = $res;
+				$this->auth = $res[0];
+				$this->expire = $res[2];
 				$this->user['id'] = $id;
 				$this->user['name'] = $name;
 				$this->user['nick'] = $nick;
@@ -129,9 +131,9 @@ class Passport extends Model {
 		//存储最近5个登陆ip
 		$res = explode(',', $res[0]['login_ip']);
 		if(empty($res[0]))
-			$res[0] = $this->loginIp;
+			$res[0] = $this->loginIP;
 		else
-			array_push($res, $this->loginIp);
+			array_push($res, $this->loginIP);
 		if(count($res) > 5)
 			array_shift($res);
 		$ip = implode(',', $res);
@@ -178,7 +180,7 @@ class Passport extends Model {
 			return $this->error(3, '用户名或者昵称不允许使用');
 		
 		$db = Loader::load('Database');
-		$sql = "INSERT INTO `user` (`name`,`email`,`password`,`nick`,`create_time`,`login_time`,`login_ip`) VALUES ('{$name}','{$email}','".$this->encode($password)."','{$nick}','".date(DATE_FORMAT, $this->loginTime)."','".date(DATE_FORMAT, $this->loginTime)."','{$this->loginIp}')";
+		$sql = "INSERT INTO `user` (`name`,`email`,`password`,`nick`,`create_time`,`login_time`,`login_ip`) VALUES ('{$name}','{$email}','".$this->encode($password)."','{$nick}','".date(DATE_FORMAT, $this->loginTime)."','".date(DATE_FORMAT, $this->loginTime)."','{$this->loginIP}')";
 		$res = $db->execute($sql);
 		if($res > 0) {
 			//注册成功
@@ -311,12 +313,14 @@ class Passport extends Model {
 		if(empty($id) || !is_numeric($id) || self::MINIMUM_USER_ID > $id || empty($name) || !preg_match(RegExp::USERNAME, $name) || empty($auth))
 			return false;
 		
+		//[0]:auth,[1]:loginTime,[2]:expire,[3]:loginIP
 		$authArr = explode('_', $auth);
-		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name.$authArr[1]))) {
-			if($this->loginTime < ($authArr[1]-120) || $this->loginTime > ($authArr[1] + $this->expire))
+		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
+			//$this->expire>0时，可以实现强制重新登录
+			if($this->loginTime < ($authArr[1]-120) || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2])))
 				return false;
 			else
-				return $authArr[0];
+				return $authArr;
 		} else
 			return false;
 	}
@@ -360,7 +364,7 @@ class Passport extends Model {
 		if(!empty($this->auth))
 			return true;
 		else if(!empty($this->user)) {
-			$this->auth = md5(Crypt::encrypt($this->user['id'] . $this->user['name'] . $this->loginTime)) . '_' . $this->loginTime . '_'.$this->loginIp;
+			$this->auth = md5(Crypt::encrypt($this->user['id'] . $this->user['name']) . $this->loginTime . $this->expire) . '_' . $this->loginTime . '_' . $this->expire . '_'.$this->loginIP;
 			return true;
 		} else
 			return false;
@@ -469,6 +473,17 @@ class Passport extends Model {
 			} else
 				return false;
 		}
+	}
+	/*
+	 * 设置用户登陆cookie过期时间
+	 *
+	 * @param string $expire cookie失效时间，可以传入负数
+	 */
+	public function setExpire($expire = 0) {
+		if(!is_int($expire))
+			return false;
+		
+		$this->expire = $expire;
 	}
 	/*
 	 * 关键词过滤

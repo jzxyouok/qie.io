@@ -52,6 +52,7 @@ class UserCtrl extends Controller {
 			$this->message(-1, '请输入密码', 5);
 		}
 		$psp = Loader::load('Passport');
+		$psp->setExpire(!empty($_POST['expire'])?(int)$_POST['expire']:604800);
 		$res = $psp->login($_POST['user_name'], $_POST['pwd']);
 		
 		if(!empty($res['code'])) {
