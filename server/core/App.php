@@ -19,9 +19,10 @@ class App {
 				require(APP_PATH.'/core/Loader.php');
 			$route = Loader::loadVar(APP_PATH.'/config/route.php');
 			$request = Loader::load('Request', $route);
+			
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
-			$obj = ''; //自动调用的控制器
 			$ctrlObj = null; //自动调用的控制器
+			$obj = ''; //自动调用的控制器名称
 			$method = ''; //自动调用的控制器方法
 			$param = $position+2; //调用方法是用的参数的uri参数位置为3
 			//按照访问路径加载控制器
