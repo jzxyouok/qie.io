@@ -27,7 +27,8 @@ class Controller {
 		
 		//初始化网站配置
 		$this->profile['css'] = array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">');
-		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script><script src="/static/js/util.js"></script>');
+		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script>',
+									'<script src="/static/js/util.js"></script>');
 		//加载网站配置文件
 		$this->loadConfig('profile');
 		$this->profile['theme'] = $this->config['profile']['theme'];
@@ -41,6 +42,9 @@ class Controller {
 			return false;
 		
 		$this->vars['dir'] = $this->dir;
+		
+		$this->profile['css'] = array_merge($this->profile['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">'));
+		//$this->profile['js'] = array_merge($this->profile['js'] , array());
 		
 		$tpl = APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl';
 		$this->view($tpl);

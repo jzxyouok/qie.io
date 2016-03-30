@@ -67,7 +67,7 @@ class Captcha {
 		$res = $cache->set($c, strtolower($code));
 		//生成图片
 		$im = imagecreate(80, 20);
-		$fontType = DOCUMENT_ROOT . '/static/font/verdanab.ttf';
+		$fontType = DOCUMENT_ROOT . '/static/fonts/verdanab.ttf';
 		//背景颜色
 		//$backcolor = imagecolorallocate($im,190, 190, 120);
 		//杂点背景线
