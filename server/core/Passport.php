@@ -518,6 +518,28 @@ class Passport extends Model {
 		return true;
 	}
 	/*
+	 * 添加后台管理员
+	 *
+	 * @param string $password 密码
+	 *
+	 * @return boolean
+	 */
+	public function adminAdd($userId, $password = 0, $grade = 1) {
+		if(empty($password))
+			return $this->error(1, '密码不能为空');
+		$userId = (int)$userId;
+		$password = addslashes(trim($password));
+		
+		$grade = (int)$grade;
+		
+		if($grade < $this->admin['grade'])
+			$grade = $this->admin['grade'];
+		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
+		$db = Loader::load('Database');
+		$sql = "INSERT `user_admin` (`user_id`,`password`,`code`,`grade`) VALUES ((SELECT `id` FROM `user` WHERE `id`={$userId} LIMIT 1),MD5(CONCAT('{$code}{$password}')),'{$code}',{$grade})";
+		return $db->execute($sql);
+	}
+	/*
 	 * 管理后台退出
 	 *
 	 * @return boolean
@@ -528,10 +550,24 @@ class Passport extends Model {
 	/*
 	 * 修改后台密码
 	 *
+	 * @param string $password 密码
+	 * @param string $oldPassword 旧密码
+	 *
 	 * @return boolean
 	 */
-	public function adminModify($password = 0) {
+	public function adminModify($password = '', $oldPassword = '') {
+		if(empty($this->user))
+			return $this->error(1, '请先登录前端页面');
 		
+		$password = addslashes(trim($password));
+		$oldPassword = addslashes(trim($oldPassword));
+		if($password == $oldPassword)
+			return $this->error(2, '2次密码一致');
+		
+		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
+		$sql = "UPDATE `user_admin` SET `code`='{$code}',`password`=MD5('{$code}{$password}') WHERE `user_id`={$this->user['id']} AND EXISTS (SELECT * FROM (SELECT `code` FROM `user_admin` WHERE `user_id`={$this->user['id']} AND `password`=MD5('{$_COOKIE['a_code']}{$oldPassword}') LIMIT 1) AS `tmp`) LIMIT 1";
+		$db = Loader::load('Database');
+		return $db->execute($sql);
 	}
 	/*
 	 * 获取管理员信息

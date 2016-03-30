@@ -20,7 +20,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `user` (`id`, `name`, `password`, `nick`, `email`, `create_time`, `login_time`, `login_ip`, `tm`) VALUES
-(1, 'admin', '9494262b91f91137dcdc6571c5a6d1329', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-03-29 10:16:36', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-03-29 08:16:36');
+(1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-03-30 10:07:06', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-03-30 08:07:06');
 
 CREATE TABLE `user_admin` (
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -28,6 +28,9 @@ CREATE TABLE `user_admin` (
   `password` char(32) NOT NULL DEFAULT '',
   `grade` tinyint(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `user_admin` (`user_id`, `code`, `password`, `grade`) VALUES
+(1, 'qA-J', 'fc94e9c8f72e14941b962c2ec9eaad67', 0);
 
 CREATE TABLE `user_profile` (
   `user_id` int(11) NOT NULL,

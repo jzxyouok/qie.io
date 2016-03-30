@@ -37,9 +37,15 @@ class Request {
 			else
 				$this->route['replace'][] = (string)$route['replace'];
 		}
-		$info = pathinfo($_SERVER['SCRIPT_NAME']);
-		$this->dir = $info['dirname'];
-		$this->path = !empty($_SERVER['PATH_INFO'])?substr($_SERVER['PATH_INFO'], 1):$_GET['c'].'/'.$_GET['m'].'/'.$_GET['p'];
+		
+		$this->dir = (pathinfo($_SERVER['SCRIPT_NAME']))['dirname'];
+		if(!empty($_SERVER['PATH_INFO']) && false)
+			$this->path = substr($_SERVER['PATH_INFO'], 1);
+		else {
+			$this->path = substr($_SERVER['REQUEST_URI'], strlen($_SERVER['SCRIPT_NAME'])+1);
+			if(empty($this->path))
+				$this->path = $_GET['c'].'/'.$_GET['m'].'/'.$_GET['p'];
+		}
 		
 		if(!empty($this->path)) {
 			$uri = preg_replace($this->route['regexp'], $this->route['replace'], $this->path);
@@ -56,7 +62,10 @@ class Request {
 	public function uri($pos = 0) {
 		return !empty($this->uri[$pos])?$this->uri[$pos]:'';
 	}
-	public function dir() {
+	public function getDir() {
 		return $this->dir;
+	}
+	public function getPath() {
+		return $this->path;
 	}
 }

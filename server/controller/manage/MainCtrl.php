@@ -45,4 +45,20 @@ class MainCtrl extends Controller {
 		else
 			$this->message(0,'登录失败');
 	}
+	public function update() {
+		if(empty($_POST['old_pwd']))
+			$this->message(-1, '请输入旧密码', 1);
+		if(empty($_POST['pwd']))
+			$this->message(-1, '请输入新密码', 1);
+		
+		$res = $this->passport->adminModify($_POST['pwd'], $_POST['old_pwd']);
+		
+		if(!empty($res['code'])) {
+			$this->message(-1, $res['msg'], 10+$res['code']);
+		} else if(!$res) {
+			$this->message(0,'修改失败');
+		} else {
+			$this->message(1);
+		}
+	}
 }

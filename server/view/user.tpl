@@ -12,9 +12,9 @@ body {text-align:center;}
 <h1>user</h1>
 <form id="login_form" action="/index.php/user/login/" method="post">
 <fieldset>
-<div class="form-row"><label>用户名:<input type="text" name="user_name"></label></div>
-<div class="form-row"><label>密&nbsp; &nbsp;码:<input type="password" name="pwd"></label></div>
-<div class="form-row img"><label>验 证 码:<input type="text" name="captcha"><img src="/index.php/captcha/" alt="验证码" id="captcha_img"></label></div>
+<div class="form-row"><label>用户名:<input type="text" name="user_name" value="<{$smarty.cookies.u_name}>" placeholder="请输入用户名"></label></div>
+<div class="form-row"><label>密&nbsp; &nbsp;码:<input type="password" name="pwd" placeholder="请输入密码"></label></div>
+<div class="form-row img"><label>验 证 码:<input type="text" name="captcha" placeholder="请输入验证码"><img src="/index.php/captcha/" alt="验证码" id="captcha_img"></label></div>
 </fieldset>
 <input type="submit" value="登录"> <a href="/index.php/user/reg/" title="注册">注册</a>
 <input type="hidden" name="token" value="<{$token}>">

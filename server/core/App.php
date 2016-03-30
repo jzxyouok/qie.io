@@ -20,6 +20,7 @@ class App {
 			
 			$route = Loader::loadVar(APP_PATH.'/config/route.php');
 			$request = Loader::load('Request', $route);
+			$dir = $request->getDir();
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$objName = ''; //自动调用的控制器名称
 			$object = null; //自动调用的控制器
@@ -33,11 +34,11 @@ class App {
 				$param = -1;
 			}
 			$objName{0} = strtoupper($objName{0});
-			$object = Loader::load('controller'.$request->dir().'/'.$objName.'Ctrl', array($process_start), false);
+			$object = Loader::load('controller'.$dir.'/'.$objName.'Ctrl', array($process_start), false);
 			if(!$object)
 				$this->error('找不到对象::object not found', $request);
 			
-			$object->setDir($request->dir());
+			$object->setDir($dir);
 			if(empty($method) && !($method = $request->uri($position+1))) {
 				$method = 'index'; //尝试加载默认方法
 				$param = -1;
