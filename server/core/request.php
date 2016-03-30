@@ -14,8 +14,8 @@
  */
 
 class Request {
-	private $dir = '';
-	private $path = '';
+	private $dir = ''; //物理路径
+	private $path = ''; //REQUEST_URI,path_info
 	private $uri = array();
 	private $route = array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
 							'replace'=>array('/', ''));

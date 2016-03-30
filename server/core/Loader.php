@@ -39,8 +39,7 @@ class Loader {
 				return false;
 		}
 		
-		$obj = new ReflectionClass($class);
-		$obj = $obj->newInstanceArgs(is_array($args)?$args:array());
+		$obj = new ReflectionClass($class)->newInstanceArgs(is_array($args)?$args:array());
 		/* eval方法 
 		$argString = '';
 		if(!empty($args)) { //设置对象参数
