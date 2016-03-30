@@ -206,7 +206,7 @@ class Passport extends Model {
 			
 		$this->auth = '';
 		$this->user = array();
-		$domain = '.'.(defined('DOMAIN') && !empty(DOMAIN)?DOMAIN:$_SERVER['SERVER_NAME']);
+		$domain = '.'.(defined('DOMAIN') && DOMAIN != ''?DOMAIN:$_SERVER['SERVER_NAME']);
 		
 		if(setcookie('u_id', '', ($this->loginTime - 60), '/', $domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', $domain, 0))
 			return true;
@@ -381,7 +381,7 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function setCookie() {
-		$domain = '.'.(defined('DOMAIN') && !empty(DOMAIN)?DOMAIN:$_SERVER['SERVER_NAME']);
+		$domain = '.'.(defined('DOMAIN') && DOMAIN != ''?DOMAIN:$_SERVER['SERVER_NAME']);
 		
 		$e = $this->expire !== 0 ? $this->loginTime + $this->expire : 0;
 		if(setcookie('u_id', $this->user['id'], $e, '/', $domain, 0, true) && setcookie('u_name', $this->user['name'], ($e === 0 ? $this->loginTime: $e) + 604800, '/', $domain, 0) && setcookie('u_nick', $this->user['nick'], ($e === 0 ? $this->loginTime: $e) + 604800, '/', $domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $domain, 0, true))
