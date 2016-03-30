@@ -38,7 +38,8 @@ class Request {
 				$this->route['replace'][] = (string)$route['replace'];
 		}
 		
-		$this->dir = (pathinfo($_SERVER['SCRIPT_NAME']))['dirname'];
+		$info = pathinfo($_SERVER['SCRIPT_NAME']);
+		$this->dir = $info['dirname'];
 		if(!empty($_SERVER['PATH_INFO']) && false)
 			$this->path = substr($_SERVER['PATH_INFO'], 1);
 		else {
