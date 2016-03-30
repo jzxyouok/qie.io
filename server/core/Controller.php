@@ -11,7 +11,6 @@
  */
 class Controller {
 	protected $user = array();
-	protected $request = null;
 	protected $paramPos = 1; //自动调用方法的参数uri位置
 	protected $processStart = ''; //控制器加载开始时间
 	protected $vars = array(); //页面模板需要的变量
@@ -19,15 +18,13 @@ class Controller {
 	protected $classes = array(); //页面模板需要的类
 	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf";
 	protected $profile = array(); //网站配置(title,keywords,js,css...)
-	protected $config = array();
-	protected $dir = '';
+	protected $config = array(); //config
+	protected $dir = ''; //访问地址的物理路径
 	
 	function __construct($startTime = 0) {
 		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
-		$this->request = Loader::load('Request');
 		$this->user = Loader::load('Passport')->getUser();
 		
-		$this->dir = $this->request->dir();
 		//初始化网站配置
 		$this->profile['css'] = array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">');
 		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script><script src="/static/js/util.js"></script>');
@@ -106,11 +103,16 @@ class Controller {
 		//显示模板
 		$view->display($tpl);
 	}
+	/*
+	 * 加载配置文件
+	 *
+	 * @param string $name 配置名称
+	 */
 	protected function loadConfig($name) {
 		if(!empty($this->config[$name]))
 			return $this->config[$name];
 		
-		$this->config[$name] = Loader::loadVar(APP_PATH.'/config/'.$name.'.php');
+		$this->config[$name] = Loader::loadVar(APP_PATH.'/config/'.$name.'.php', $name);
 	}
 	/*
 	 * 设置自动调用方法的参数uri位置
@@ -128,16 +130,11 @@ class Controller {
 		return $this->paramPos;
 	}
 	/*
-	 * 校验验证码
-	 *
-	 * @param int $status 状态码
-	 *
-	 * @return int 返回值>=0
-	 */
-	/*
 	 * 检查安全性
-	 * @param string $code 加密的字符串
+	 * 
 	 * @param string $timeout 过期时间
+	 *
+	 * @return boolean true:pass,false:fail
 	 */
 	public function verify($timeout = 0) {
 		if(empty($timeout))
@@ -178,5 +175,12 @@ class Controller {
 			exit(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error)));
 		} else
 			exit($_GET['jsoncallback'].'('.(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error))).')');
+	}
+	/*
+	 * 设置dir属性
+	 *
+	 */
+	public function setDir($dir) {
+		$this->dir = (string)$dir;
 	}
 }

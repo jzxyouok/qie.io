@@ -20,7 +20,6 @@ class App {
 			
 			$route = Loader::loadVar(APP_PATH.'/config/route.php');
 			$request = Loader::load('Request', $route);
-			
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$objName = ''; //自动调用的控制器名称
 			$object = null; //自动调用的控制器
@@ -38,6 +37,7 @@ class App {
 			if(!$object)
 				$this->error('找不到对象::object not found', $request);
 			
+			$object->setDir($request->dir());
 			if(empty($method) && !($method = $request->uri($position+1))) {
 				$method = 'index'; //尝试加载默认方法
 				$param = -1;
