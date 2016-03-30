@@ -43,7 +43,8 @@ class Controller {
 		
 		$this->vars['dir'] = $this->dir;
 		
-		$this->profile['css'] = array_merge($this->profile['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">'));
+		$this->profile['css'] = array_merge($this->profile['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">',
+																		'<link type="text/css" rel="stylesheet" href="/static/css/manage.css">'));
 		//$this->profile['js'] = array_merge($this->profile['js'] , array());
 		
 		$tpl = APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl';
