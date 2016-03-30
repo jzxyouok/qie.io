@@ -39,7 +39,8 @@ class Loader {
 				return false;
 		}
 		
-		$obj = (new ReflectionClass($class))->newInstanceArgs(is_array($args)?$args:array());
+		$ref = new ReflectionClass($class);
+		$obj = $ref->newInstanceArgs(is_array($args)?$args:array());
 		/* eval方法 
 		$argString = '';
 		if(!empty($args)) { //设置对象参数
@@ -65,7 +66,8 @@ class Loader {
 		
 		include($path);
 		if(empty($name)) {
-			$name = (pathinfo($path))['filename'];
+			$info = pathinfo($path);
+			$name = $info['filename'];
 		}
 		self::$vars[$path] = ${$name};
 		return self::$vars[$path];
