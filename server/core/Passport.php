@@ -65,7 +65,7 @@ class Passport extends Model {
 			$nick = $user['nick'];
 			$auth = $user['auth'];
 		}
-		$this->loginTime = $_SERVER['REQUEST_TIME'];
+		$this->loginTime = (int)$_SERVER['REQUEST_TIME'];
 		$this->loginIP = ip2long(Util::getIP());
 		
 		//$this->expire = 10;
@@ -141,7 +141,7 @@ class Passport extends Model {
 		$sql = "UPDATE `user` SET `login_ip`='{$ip}',`login_time`='".date(DATE_FORMAT, $this->loginTime)."' WHERE `id`={$this->user['id']} LIMIT 1";
 		$db->execute($sql);
 		
-		return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick'], 'auth'=>$this->auth);
+		return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick']);
 	}
 	/*
 	 * 用户注册
@@ -190,7 +190,7 @@ class Passport extends Model {
 			$this->setAuth();
 			$this->setCookie();
 			
-			return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick'], 'auth'=>$this->auth);
+			return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick']);
 		}
 		return false;
 	}
@@ -315,7 +315,7 @@ class Passport extends Model {
 		$authArr = explode('_', $auth);
 		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
 			//$this->expire>0时，可以实现强制重新登录
-			if($this->loginTime < ($authArr[1]-120) || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2])))
+			if($authArr[2] > 0 && ($this->loginTime < ($authArr[1]-60) || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
 				return false;
 			else
 				return $authArr;
@@ -383,8 +383,8 @@ class Passport extends Model {
 	public function setCookie() {
 		$domain = '.'.(defined('DOMAIN') && DOMAIN != ''?DOMAIN:$_SERVER['SERVER_NAME']);
 		
-		$e = $this->expire !== 0 ? $this->loginTime + $this->expire : 0;
-		if(setcookie('u_id', $this->user['id'], $e, '/', $domain, 0, true) && setcookie('u_name', $this->user['name'], ($e === 0 ? $this->loginTime: $e) + 604800, '/', $domain, 0) && setcookie('u_nick', $this->user['nick'], ($e === 0 ? $this->loginTime: $e) + 604800, '/', $domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $domain, 0, true))
+		$e = $this->expire > 0 ? $this->loginTime + $this->expire : 0;
+		if(setcookie('u_id', $this->user['id'], $e, '/', $domain, 0, true) && setcookie('u_name', $this->user['name'], $this->loginTime + $this->expire + 604800 , '/', $domain, 0) && setcookie('u_nick', $this->user['nick'], $this->loginTime + $this->expire + 604800, '/', $domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $domain, 0, true))
 			return true;
 		else
 			return false;

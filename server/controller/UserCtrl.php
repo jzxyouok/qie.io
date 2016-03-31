@@ -101,6 +101,7 @@ class UserCtrl extends Controller {
 			$this->message(-1, '请不要重复注册', 6);
 		}
 		$psp = Loader::load('Passport');
+		$psp->setExpire(!empty($_POST['expire'])?(int)$_POST['expire']:604800);
 		$res = $psp->reg($_POST['user_name'], $_POST['pwd'], $_POST['email'], $_POST['nick']);
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
