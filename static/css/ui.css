@@ -11,20 +11,53 @@ body {
     line-height: 1.42857143;
     color: #333;
 }
+/*form*/
 form {
     text-align: center;
 }
 form fieldset {
     text-align: left;
-    margin-bottom: 15px;
 }
 form fieldset input {
-    padding:6px 12px;
+    padding:5px 12px;
+}
+form button, form .button {
+    display: inline-block;
+    padding: 6px 18px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+form button[type=submit] {
+    padding:6px 36px;
+}
+form button:hover, form .button:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
 }
 /*类*/
 .wrap {
     margin:0 auto;
     text-align: left;
+}
+.wrap-middle {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .panel {
     border-radius: 4px;
@@ -47,24 +80,68 @@ form fieldset input {
 /*form*/
 .form-group {
     margin-bottom: 15px;
+    font-size: 0;
 }
-.form-group .control {
+.form-group .title {
+    font-size: 14px;
+}
+.form-group input {
     box-sizing: border-box;
+    width: 100%;
+    height: 34px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
-/*login*/
-.login-form {
-    width:360px;
-    margin-top:25%;
+/*default-form*/
+.default-form {
     border-color:#ddd;
 }
-.login-form>.header {
+.default-form>.header {
     color: #333;
     background-color: #f5f5f5;
     border-color: #ddd;
 }
-.login-form .title {
+.default-form .title {
     width:20%;
 }
-.login-form .control {
+.default-form input {
     width:80%;
+}
+.default-form .form-group input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+.default-form .form-group.img, .default-form .form-group.img label {
+    position: relative;
+}
+.default-form .form-group.img img {
+    position: absolute;
+    right:1px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 0 4px 4px 0;
+}
+.default-form button, .default-form .button {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+/*login-form*/
+.login-form {
+    width:360px;
+}
+.footer {
+    margin-top: 60px;
 }

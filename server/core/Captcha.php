@@ -51,7 +51,7 @@ class Captcha {
 	 *
 	 * @return string
 	 */
-	public function createImage() {
+	public function createImage($width = 80, $height = 20) {
 		if(!function_exists("imagecreate"))
 			throw new CaptchaException('GD库不支持');
 		
@@ -66,23 +66,28 @@ class Captcha {
 		$cache->setExpire($this->expire);
 		$res = $cache->set($c, strtolower($code));
 		//生成图片
-		$im = imagecreate(80, 20);
+		$width = (int)$width;
+		$height = (int)$height;
+		if($width < 10)
+			$width = 80;
+		if($height < 10)
+			$height = 20;
+		
+		$im = imagecreate($width, $height);
 		$fontType = DOCUMENT_ROOT . '/static/fonts/verdanab.ttf';
 		//背景颜色
 		//$backcolor = imagecolorallocate($im,190, 190, 120);
 		//杂点背景线
-		$lineColor1 = imagecolorallocate($im, 130, 220, 245);
-		$lineColor2 = imagecolorallocate($im, 225, 245, 255);
-		for($j=3; $j<=16; $j=$j+3)
-			imageline($im, 2, $j, 83, $j, $lineColor1);
-		for($j=2; $j<83; $j=$j+(mt_rand(3, 10)))
-			imageline($im, $j, 2, $j-6, 18, $lineColor2);
+		for($j=3; $j<=$height; $j=$j+3)
+			imageline($im, 2, $j, $width, $j, imagecolorallocate($im, 130, 220, 245));
+		for($j=2; $j<$width; $j=$j+(mt_rand(3, 10)))
+			imageline($im, $j, 2, $j-6, $height, imagecolorallocate($im, 225, 245, 255));
 		//文字
 		$fontColor = imagecolorallocate($im, 0, 0, 0);
 		if(function_exists('imagettftext') && file_exists($fontType))
-			imagettftext($im, 12, 0, 16, 16, $fontColor, $fontType, $code);
+			imagettftext($im, 12, 0, ($width-40)/2, ($height+12)/2, $fontColor, $fontType, $code); //x轴按一个字10px计算
 		else
-			imagestring($im, 5, 20, 2, $code, $fontColor);
+			imagestring($im, 12, ($width-40)/2, ($height-12)/2, $code, $fontColor);
 			
 		header("Pragma:no-cache\r\n");
 		header("Cache-Control:no-cache\r\n");

@@ -2,31 +2,62 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>qie.io</title>
+<title>用户注册-<{$title}></title>
 <{$css}>
-<style>
-body {text-align:center;}
-</style>
 </head>
-<body>
-<h1>user</h1>
-<form id="reg_form" action="/index.php/user/insert/" method="post">
-<fieldset>
-<div class="form-row"><label>用 户 名:<input type="text" name="user_name"></label></div>
-<div class="form-row"><label>密&nbsp; &nbsp;码:<input type="password" name="pwd"></label></div>
-<div class="form-row"><label>确认密码:<input type="password" name="confirm_pwd"></label></div>
-<div class="form-row"><label>昵&nbsp; &nbsp;称:<input type="text" name="nick"></label></div>
-<div class="form-row"><label>电子邮箱:<input type="text" name="email"></label></div>
-<div class="form-row img"><label>验 证 码:<input type="text" name="captcha"><img src="/index.php/captcha/" alt="验证码" id="captcha_img"></label></div>
-</fieldset>
-<input type="hidden" name="token" value="<{$token}>">
-<input type="submit" value="注册">
-</form>
-<p><{$elapsed_time}>&<{$memory_usage}></p>
-<{$js}>
+<body class="user-reg">
+<{include file="/theme/`$theme`/header.tpl"}>
+<div class="wrap-middle">
+  <div class="wrap panel default-form login-form">
+    <h2 class="header">用户注册</h2>
+    <form class="body" id="reg_form" action="/index.php/user/insert/" method="post">
+      <fieldset>
+        <div class="form-group">
+          <label>
+          <div class="title inline-block">用 户 名:</div>
+          <input type="text" name="user_name" placeholder="请输入用户名" required>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+          <div class="title inline-block">密&nbsp; &nbsp; &nbsp; 码:</div>
+          <input type="password" name="pwd" required>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+          <div class="title inline-block">确认密码:</div>
+          <input type="password" name="confirm_pwd" required>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+          <div class="title inline-block">电子邮箱:</div>
+          <input type="text" name="email" required>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+          <div class="title inline-block">昵&nbsp; &nbsp; &nbsp; 称:</div>
+          <input type="text" name="nick">
+          </label>
+        </div>
+        <div class="form-group img">
+          <label>
+          <div class="title inline-block">验 证 码:</div>
+          <input type="text" name="captcha" required>
+          </label>
+          <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
+      </fieldset>
+      <button type="submit">注册</button>
+      <a class="button" href="/index.php/user/" title="登录">登录</a>
+      <input type="hidden" name="token" value="<{$token}>">
+    </form>
+  </div>
+  <{include file="/theme/`$theme`/footer.tpl"}></div>
 <script>
 function refreshImg() {
-	$('#captcha_img').removeAttr('src').attr('src', '/index.php/captcha/?v='+new Date().getTime());
+	$('#captcha_img').removeAttr('src').attr('src', '/index.php/captcha/?w=80&h=32&v='+new Date().getTime());
 }
 $('#captcha_img').on('click', refreshImg);
 $('#reg_form').on('submit', function(){

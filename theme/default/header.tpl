@@ -1,1 +1,1 @@
-<div class="header"><h1><{$title}></h1></div>
+<div class="header"><h1><{$title}></h1><p>hello, <{$user.nick}> . <a href="/index.php/user/logout/?url=/">退出</a></p></div>

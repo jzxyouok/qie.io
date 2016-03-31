@@ -2,28 +2,47 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>qie.io</title>
+<title>用户中心-<{$title}></title>
 <{$css}>
-<style>
-body {text-align:center;}
-</style>
 </head>
-<body>
-<h1>user</h1>
-<p>hello, <{$user.nick}> . <a href="/index.php/user/logout/?url=/">退出</a></p>
-<form id="modify_form" action="/index.php/user/update/" method="post">
-<fieldset>
-<div class="form-row"><label>原 密 码:<input type="password" name="old_pwd"></label></div>
-<div class="form-row"><label>密&nbsp; &nbsp;码:<input type="password" name="pwd"></label></div>
-<div class="form-row"><label>确认密码:<input type="password" name="confirm_pwd"></label></div>
-<div class="form-row"><label>昵&nbsp; &nbsp;称:<input type="text" name="nick" value="<{$smarty.cookies.u_nick}>"></label></div>
-<div class="form-row"><label>电子邮箱:<input type="text" name="email"></label></div>
-</fieldset>
-<input type="hidden" name="token" value="<{$token}>">
-<input type="submit" value="修改">
-</form>
-<p><{$elapsed_time}>&<{$memory_usage}></p>
-<{$js}>
+<body class="user-center">
+<{include file="/theme/`$theme`/header.tpl"}>
+<div class="wrap-middle">
+  <div class="wrap panel default-form login-form">
+    <h2 class="header">用户中心</h2>
+    <form class="body" id="modify_form" action="/index.php/user/update/" method="post">
+      <fieldset>
+        <div class="form-group">
+          <label><div class="title inline-block">原 密 码 :</div>
+            <input type="password" name="old_pwd">
+          </label>
+        </div>
+        <div class="form-group">
+          <label><div class="title inline-block">密&nbsp; &nbsp; &nbsp; 码:</div>
+            <input type="password" name="pwd">
+          </label>
+        </div>
+        <div class="form-group">
+          <label><div class="title inline-block">确认密码:</div>
+            <input type="password" name="confirm_pwd">
+          </label>
+        </div>
+        <div class="form-group">
+          <label><div class="title inline-block">电子邮箱:</div>
+            <input type="text" name="email">
+          </label>
+        </div>
+        <div class="form-group">
+          <label><div class="title inline-block">昵&nbsp; &nbsp; &nbsp; 称:</div>
+            <input type="text" name="nick" value="<{$smarty.cookies.u_nick}>">
+          </label>
+        </div>
+      </fieldset>
+      <input type="hidden" name="token" value="<{$token}>">
+      <button type="submit">修改</button>
+    </form>
+  </div>
+  <{include file="/theme/`$theme`/footer.tpl"}> </div>
 <script>
 $('#modify_form').on('submit', function(){
 	var data = $u.getFormValues(this);
