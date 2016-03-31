@@ -68,7 +68,7 @@ $('#login_form').on('submit', function(){
 					refreshImg();
 					alert(data.result);
 				} else {
-					location.href = '/index.php/user/center/';
+					location.href = '<{$smarty.get.url|default:($smarty.server.HTTP_REFERER|default:'/index.php/user/center/')}>';
 				}
 			},
 			error: function(xhr, data) {}
