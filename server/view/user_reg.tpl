@@ -21,19 +21,19 @@
         <div class="form-group">
           <label>
           <div class="title inline-block">密&nbsp; &nbsp; &nbsp; 码:</div>
-          <input type="password" name="pwd" required>
+          <input type="password" name="pwd" placeholder="请输入密码" required>
           </label>
         </div>
         <div class="form-group">
           <label>
           <div class="title inline-block">确认密码:</div>
-          <input type="password" name="confirm_pwd" required>
+          <input type="password" name="confirm_pwd" placeholder="请再次输入密码" required>
           </label>
         </div>
         <div class="form-group">
           <label>
           <div class="title inline-block">电子邮箱:</div>
-          <input type="text" name="email" required>
+          <input type="text" name="email" placeholder="请输入电子邮箱" required>
           </label>
         </div>
         <div class="form-group">
@@ -45,7 +45,7 @@
         <div class="form-group img">
           <label>
           <div class="title inline-block">验 证 码:</div>
-          <input type="text" name="captcha" required>
+          <input type="text" name="captcha" maxlength="4" placeholder="请输入验证码" required>
           </label>
           <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
       </fieldset>
@@ -57,7 +57,11 @@
   <{include file="/theme/`$theme`/footer.tpl"}></div>
 <script>
 function refreshImg() {
-	$('#captcha_img').removeAttr('src').attr('src', '/index.php/captcha/?w=80&h=32&v='+new Date().getTime());
+	var img = new Image();
+	img.onload = function(){
+		$('#captcha_img').removeAttr('src').attr('src', this.src);
+	}
+	img.src = '/index.php/captcha/?w=80&h=32&v='+new Date().getTime();
 }
 $('#captcha_img').on('click', refreshImg);
 $('#reg_form').on('submit', function(){

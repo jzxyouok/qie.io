@@ -94,7 +94,7 @@ class Passport extends Model {
 	 */
 	public function login($name_or_email = '', $password = '') {
 		if($this->user['id'])
-			return true;
+			return $this->user;
 		$password = trim($password);
 		$name_or_email = strtolower(trim($name_or_email));
 		if(empty($name_or_email) || empty($password))
@@ -159,7 +159,7 @@ class Passport extends Model {
 		//if(is_numeric($name))
 		//	throw new PassportException('用户名不能全为数字');
 		if(!preg_match(RegExp::USERNAME, $name))
-			return $this->error(1, '用户名不能包含特殊符号,只能包含:字母|数字|_|-');
+			return $this->error(1, '用户名只能使用[ 字母 数字 _ $ ]，并且只能以字母或$开头。');
 		//检查邮箱格式
 		if(!preg_match(RegExp::EMAIL, $email))
 			return $this->error(2, '邮箱格式错误');

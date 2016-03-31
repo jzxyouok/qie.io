@@ -63,7 +63,7 @@ class UserCtrl extends Controller {
 				exit;
 			}
 				
-			$this->message(1, array('id'=>$res['id'], 'user_name'=>$res['name'], 'nick'=>$res['nick']));
+			$this->message(1, array('id'=>$res['id'], 'name'=>$res['name'], 'nick'=>$res['nick']));
 		}
 	}
 	//退出
@@ -106,7 +106,7 @@ class UserCtrl extends Controller {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res === false) {
 			//数据库保存失败
-			$this->message(0);
+			$this->message(0, '注册失败');
 		} else {
 			if($_GET['url']) {
 				header("Location: {$_GET['url']}");

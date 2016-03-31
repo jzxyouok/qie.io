@@ -15,19 +15,19 @@
         <div class="form-group">
           <label>
           <div class="title inline-block">用户名:</div>
-          <input type="text" name="user_name" value="<{$smarty.cookies.u_name}>" placeholder="请输入用户名">
+          <input type="text" name="user_name" value="<{$smarty.cookies.u_name}>" placeholder="请输入用户名" required>
           </label>
         </div>
         <div class="form-group">
           <label>
           <div class="title inline-block">密&nbsp; &nbsp;码:</div>
-          <input type="password" name="pwd" placeholder="请输入密码">
+          <input type="password" name="pwd" placeholder="请输入密码" required>
           </label>
         </div>
         <div class="form-group img">
           <label>
           <div class="title inline-block">验证码:</div>
-          <input type="text" maxlength="4" name="captcha" placeholder="请输入验证码">
+          <input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
           </label>
           <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
       </fieldset>
@@ -39,9 +39,12 @@
   <{include file="/theme/`$theme`/footer.tpl"}> </div>
 <script>
 function refreshImg() {
-	$('#captcha_img').removeAttr('src').attr('src', '/index.php/captcha/?w=80&h=32&v='+new Date().getTime());
+	var img = new Image();
+	img.onload = function(){
+		$('#captcha_img').removeAttr('src').attr('src', this.src);
+	}
+	img.src = '/index.php/captcha/?w=80&h=32&v='+new Date().getTime();
 }
-
 $('#captcha_img').on('click', refreshImg);
 $('#login_form').on('submit', function(){
 	var data = $u.getFormValues(this);
