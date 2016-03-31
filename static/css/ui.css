@@ -1,0 +1,70 @@
+/*reset bill chen(48838096@qq.com)*/
+/*元素*/
+html,body {
+    height: 100%
+}
+body {
+    text-align:center;
+    background-color: #f8f8f8;
+    font-family: \5FAE\8F6F\96C5\9ED1,sans-serif,Arial;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+}
+form {
+    text-align: center;
+}
+form fieldset {
+    text-align: left;
+    margin-bottom: 15px;
+}
+form fieldset input {
+    padding:6px 12px;
+}
+/*类*/
+.wrap {
+    margin:0 auto;
+    text-align: left;
+}
+.panel {
+    border-radius: 4px;
+    border: 1px solid transparent;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-sizing: border-box;
+}
+.panel>.header {
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    font-size:16px;
+    border-radius:3px 3px 0 0;
+    line-height: 1;
+}
+.panel>.body {
+    padding: 15px;
+    background-color:white;
+    border-radius: 0 0 3px 3px;
+}
+/*form*/
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group .control {
+    box-sizing: border-box;
+}
+/*login*/
+.login-form {
+    width:360px;
+    margin-top:25%;
+    border-color:#ddd;
+}
+.login-form>.header {
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+.login-form .title {
+    width:20%;
+}
+.login-form .control {
+    width:80%;
+}

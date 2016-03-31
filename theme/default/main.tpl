@@ -8,10 +8,8 @@
 <{$css}>
 </head>
 <body>
-<h1>index.php</h1>
+<{include file="/theme/`$theme`/header.tpl"}>
 <a href="/index.php/user/">用户登录</a>
-<p><{$elapsed_time}>&<{$memory_usage}>&<{$icp}></p>
-<{$js}>
-<{$analytics}>
+<{include file="/theme/`$theme`/footer.tpl"}>
 </body>
 </html>

@@ -44,7 +44,7 @@ class Controller {
 		$this->vars['dir'] = $this->dir;
 		
 		$this->profile['css'] = array_merge($this->profile['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">',
-																		'<link type="text/css" rel="stylesheet" href="/static/css/manage.css">'));
+																		'<link type="text/css" rel="stylesheet" href="/static/css/ui.css">'));
 		//$this->profile['js'] = array_merge($this->profile['js'] , array());
 		
 		$tpl = APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl';
@@ -61,15 +61,12 @@ class Controller {
 		//确定用户主题文件夹
 		if(!empty($_COOKIE['theme']) && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
 			$this->profile['theme'] = $_COOKIE['theme'];
+		
+		$this->vars['icp'] = $this->config['profile']['icp'];
+		$this->vars['analytics'] = $this->config['profile']['analytics'];
 		//引入js和css
 		$this->profile['css'] = array_merge($this->profile['css'] , $this->config['profile']['css']);
 		$this->profile['js'] = array_merge($this->profile['js'] , $this->config['profile']['js']);
-		
-		$this->vars['theme'] = $this->profile['theme'];
-		$this->vars['title'] = $this->config['profile']['title'];
-		$this->vars['meta'] = $this->config['profile']['meta'];
-		$this->vars['icp'] = $this->config['profile']['icp'];
-		$this->vars['analytics'] = $this->config['profile']['analytics'];
 		
 		$tpl = DOCUMENT_ROOT.'/theme/'.$this->profile['theme'].'/'.$tpl.'.tpl';
 
@@ -93,6 +90,9 @@ class Controller {
 			$view->registerClass($k, $v);
 		
 		//assign变量
+		$this->vars['theme'] = $this->profile['theme'];
+		$this->vars['title'] = $this->config['profile']['title'];
+		$this->vars['meta'] = $this->config['profile']['meta'];
 		$this->vars['js'] = implode('', $this->profile['js']);
 		$this->vars['css'] = implode('', $this->profile['css']);
 		$this->vars['user'] = $this->user;
