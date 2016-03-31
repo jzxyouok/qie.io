@@ -65,7 +65,7 @@ class Passport extends Model {
 			$nick = $user['nick'];
 			$auth = $user['auth'];
 		}
-		$this->loginTime = (int)$_SERVER['REQUEST_TIME'];
+		$this->loginTime = $_SERVER['REQUEST_TIME'];
 		$this->loginIP = ip2long(Util::getIP());
 		
 		//$this->expire = 10;
@@ -315,7 +315,7 @@ class Passport extends Model {
 		$authArr = explode('_', $auth);
 		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
 			//$this->expire>0时，可以实现强制重新登录
-			if($authArr[2] > 0 && ($this->loginTime < ($authArr[1]-60) || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
+			if($authArr[2] > 0 && ($this->loginTime < $authArr[1] || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
 				return false;
 			else
 				return $authArr;
