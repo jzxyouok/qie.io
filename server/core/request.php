@@ -24,26 +24,15 @@ class Request {
 	 * @param array $route 增加路由规则。单条：array('regexp'=>'','replace'=>'')；多条：array('regexp'=>array(),'replace'=>array())
 	 */
 	function __construct($route = array()) {
-		//处理路由
-		if(!empty($route['regexp'])) {
-			if(is_array($route['regexp']))
-				$this->route['regexp'] = array_merge($this->route['regexp'], $route['regexp']);
-			else
-				$this->route['regexp'][] = (string)$route['regexp'];
-		}
-		if(!empty($route['replace'])) {
-			if(is_array($route['replace']))
-				$this->route['replace'] = array_merge($this->route['replace'], $route['replace']);
-			else
-				$this->route['replace'][] = (string)$route['replace'];
-		}
+		//TODO:处理路由
 		
 		$info = pathinfo($_SERVER['SCRIPT_NAME']);
 		$this->dir = $info['dirname'];
-		if(!empty($_SERVER['PATH_INFO']) && false)
+		
+		if(!empty($_SERVER['PATH_INFO']))
 			$this->path = substr($_SERVER['PATH_INFO'], 1);
 		else {
-			$this->path = substr($_SERVER['REQUEST_URI'], strlen($_SERVER['SCRIPT_NAME'])+1);
+			$this->path = substr($_SERVER['QUERY_STRING']?str_replace('?'.$_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']):$_SERVER['REQUEST_URI'], strlen($_SERVER['SCRIPT_NAME'])+1);
 			if(empty($this->path))
 				$this->path = $_GET['c'].'/'.$_GET['m'].'/'.$_GET['p'];
 		}
