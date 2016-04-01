@@ -21,7 +21,7 @@ form fieldset {
 form fieldset input {
     padding:5px 12px;
 }
-form button, form .button {
+form button, form .button, form input[type=submit],form input[type=reset], form input[type=button] {
     display: inline-block;
     padding: 6px 18px;
     font-size: 14px;
@@ -40,11 +40,13 @@ form button, form .button {
     background-image: none;
     border: 1px solid transparent;
     border-radius: 4px;
+    background-color:white;
+    border-color:rgb(204, 204, 204);
 }
-form button[type=submit] {
+form button[type=submit], form input[type=submit] {
     padding:6px 36px;
 }
-form button:hover, form .button:hover {
+form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, form input[type=button]:hover, form .button:hover {
     color: #333;
     background-color: #e6e6e6;
     border-color: #adadad;
@@ -89,6 +91,8 @@ form button:hover, form .button:hover {
 .form-group {
     margin-bottom: 15px;
     font-size: 0;
+    height: 34px;
+    line-height: 34px;
 }
 .form-group .title {
     font-size: 14px;
@@ -96,7 +100,7 @@ form button:hover, form .button:hover {
 .form-group input {
     box-sizing: border-box;
     width: 100%;
-    height: 34px;
+    height: 100%;
     font-size: 14px;
     line-height: 1.42857143;
     color: #555;
@@ -110,6 +114,34 @@ form button:hover, form .button:hover {
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+.form-group .input-addon {
+    font-size: 14px;
+    box-sizing:border-box;
+    height: 100%;
+    vertical-align: top;
+    text-align: center;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #ccc;
+    border-right:none;
+    background-color:#eee;
+}
+.form-group .input-addon .icon {
+    vertical-align: middle;
+}
+.has-addon .input-addon {
+    width:15%;
+}
+.has-addon .form-group input {
+    border-radius: 0 4px 4px 0;
+    width:85%;
+}
+.two-collumn .title {
+    width:20%;
+    vertical-align: top;
+}
+.two-collumn .form-group input {
+    width:80%;
+}
 /*default-form*/
 .default-form {
     border-color:#ddd;
@@ -118,12 +150,6 @@ form button:hover, form .button:hover {
     color: #333;
     background-color: #f5f5f5;
     border-color: #ddd;
-}
-.default-form .title {
-    width:20%;
-}
-.default-form input {
-    width:80%;
 }
 .default-form .form-group input:focus {
     border-color: #66afe9;
@@ -148,7 +174,7 @@ form button:hover, form .button:hover {
 }
 /*page*/
 /*login page,reg page, user-center page*/
-body.user .default-form {
+body.user .default-form, body.manage .default-form {
     width:360px;
 }
 /*error page*/

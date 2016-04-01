@@ -2,36 +2,43 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>后台管理系统</title>
+<title>后台管理系统-<{$title}></title>
 <{$css}>
 </head>
-<body class="login">
-<div class="wrap">
-  <h1>manage</h1>
-  <form id="login_form" action="<{$dir}>/index.php/main/login/" method="post">
-    <fieldset>
-      <div class="form-row">
-        <label>密&nbsp; &nbsp;码:
-          <input type="password" name="pwd">
-        </label>
-      </div>
-      <div class="form-row img">
-        <label>验 证 码:
-          <input type="text" name="captcha"></label>
-          <img src="/index.php/captcha/" alt="验证码" id="captcha_img">
-      </div>
-    </fieldset>
-    <input type="submit" value="登录">
-    <input type="hidden" name="token" value="<{$token}>">
-  </form>
-  <p><{$elapsed_time}>&<{$memory_usage}></p>
+<body class="manage manage-login">
+<div class="middle">
+  <div class="wrap panel default-form">
+    <h2 class="header">后台管理系统</h2>
+    <div class="body">
+    <form class="has-addon" id="login_form" action="<{$dir}>/index.php/main/login/" method="post">
+      <fieldset>
+        <div class="form-group">
+          <label><span class="inline-block input-addon"><i class="icon fa fa-key"></i></span>
+            <input type="password" name="pwd" required>
+          </label>
+        </div>
+        <div class="form-group img">
+          <label><span class="inline-block input-addon"><i class="icon fa fa-image"></i></span>
+            <input type="text" name="captcha" maxlength="4" required>
+          </label>
+          <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
+      </fieldset>
+      <button type="submit" value="">登录</button>
+      <input type="hidden" name="token" value="<{$token}>">
+    </form>
+    <p><{$elapsed_time}>&<{$memory_usage}></p>
+    </div>
+  </div>
 </div>
 <{$js}> 
 <script>
 function refreshImg() {
-	$('#captcha_img').removeAttr('src').attr('src', '/index.php/captcha/?v='+new Date().getTime());
+	var img = new Image();
+	img.onload = function(){
+		$('#captcha_img').removeAttr('src').attr('src', this.src);
+	}
+	img.src = '/index.php/captcha/?w=80&h=32&v='+new Date().getTime();
 }
-
 $('#captcha_img').on('click', refreshImg);
 $('#login_form').on('submit', function(){
 	var data = $u.getFormValues(this);

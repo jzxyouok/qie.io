@@ -10,7 +10,7 @@
 <div class="middle">
   <div class="wrap panel default-form">
     <h2 class="header">用户登录</h2>
-    <form class="body" id="login_form" action="/index.php/user/login/" method="post">
+    <form class="body two-collumn" id="login_form" action="/index.php/user/login/" method="post">
       <fieldset>
         <div class="form-group">
           <label>

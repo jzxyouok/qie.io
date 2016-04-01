@@ -10,7 +10,7 @@
 <div class="middle">
   <div class="wrap panel default-form">
     <h2 class="header">用户中心</h2>
-    <form class="body" id="modify_form" action="/index.php/user/update/" method="post">
+    <form class="body two-collumn" id="modify_form" action="/index.php/user/update/" method="post">
       <fieldset>
         <div class="form-group">
           <label><div class="title inline-block">原 密 码 :</div>
