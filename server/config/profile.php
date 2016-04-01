@@ -3,6 +3,7 @@
  * 网站配置
  */
 
+$profile['domain'] = '';
 //主题名称
 $profile['theme'] = 'default';
 //主题需要的静态文件

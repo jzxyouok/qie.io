@@ -31,7 +31,10 @@ class Controller {
 									'<script src="/static/js/util.js"></script>');
 		//加载网站配置文件
 		$this->loadConfig('profile');
-		$this->profile['theme'] = $this->config['profile']['theme'];
+		if(!empty($this->config['profile']['domain']))
+			define('DOMAIN', $this->config['profile']['domain']);
+		//前端默认主题
+		$this->profile['theme'] = $this->config['profile']['theme']?$this->config['profile']['theme']:'default';
 	}
 	/*
 	 * 加载view视图文件
@@ -91,7 +94,7 @@ class Controller {
 		
 		//assign变量
 		$this->vars['theme'] = $this->profile['theme'];
-		$this->vars['title'] = $this->config['profile']['title'];
+		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
 		$this->vars['meta'] = $this->config['profile']['meta'];
 		$this->vars['js'] = implode('', $this->profile['js']);
 		$this->vars['css'] = implode('', $this->profile['css']);
