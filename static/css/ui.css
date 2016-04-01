@@ -1,5 +1,5 @@
 /*reset bill chen(48838096@qq.com)*/
-/*元素*/
+/*html,body*/
 html,body {
     height: 100%
 }
@@ -49,15 +49,22 @@ form button:hover, form .button:hover {
     background-color: #e6e6e6;
     border-color: #adadad;
 }
-/*类*/
+/*normal class*/
 .wrap {
     margin:0 auto;
     text-align: left;
 }
-.wrap-middle {
+.middle {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+}
+/*ui layout*/
+.header, .footer {
+    width: 100%;
+}
+.footer {
+    margin-top: 60px;
 }
 .panel {
     border-radius: 4px;
@@ -71,13 +78,14 @@ form button:hover, form .button:hover {
     font-size:16px;
     border-radius:3px 3px 0 0;
     line-height: 1;
+    width: auto;
 }
 .panel>.body {
     padding: 15px;
     background-color:white;
     border-radius: 0 0 3px 3px;
 }
-/*form*/
+/*form style*/
 .form-group {
     margin-bottom: 15px;
     font-size: 0;
@@ -138,10 +146,12 @@ form button:hover, form .button:hover {
     background-color: #fff;
     border-color: #ccc;
 }
-/*login-form*/
-.login-form {
+/*page*/
+/*login page,reg page, user-center page*/
+body.user .default-form {
     width:360px;
 }
-.footer {
-    margin-top: 60px;
-}
+/*error page*/
+body.error .panel {width:758px;}
+body.error .msg {margin-bottom:15px;}
+body.error .footer {position:fixed; bottom:0;}

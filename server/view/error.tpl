@@ -2,15 +2,27 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>qie.io</title>
+<title>error-<{$title}></title>
 <{$css}>
-<style>
-body {text-align:center;}
-</style>
 </head>
-<body>
-<h1>error</h1>
-<p><{$msg}></p>
-<{$js}>
+<body class="error">
+<{include file="/theme/`$theme`/header.tpl"}>
+<div class="middle">
+  <div class="wrap panel default-form">
+    <h2 class="header">出错了</h2>
+    <div class="body">
+      <div class="msg"><{$msg}></div>
+      <div class="ggad"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- parked -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-2828706807674059"
+     data-ad-slot="8957450803"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+    </div>
+  </div></div>
+  <{include file="/theme/`$theme`/footer.tpl"}>
 </body>
 </html>

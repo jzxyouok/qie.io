@@ -9,7 +9,7 @@
 </head>
 <body>
 <{include file="/theme/`$theme`/header.tpl"}>
-<a href="/index.php/user/">用户登录</a>
+<a href="/index.php/user/">用户中心</a>
 <{include file="/theme/`$theme`/footer.tpl"}>
 </body>
 </html>

@@ -5,10 +5,10 @@
 <title>用户中心-<{$title}></title>
 <{$css}>
 </head>
-<body class="user-center">
+<body class="user user-center">
 <{include file="/theme/`$theme`/header.tpl"}>
-<div class="wrap-middle">
-  <div class="wrap panel default-form login-form">
+<div class="middle">
+  <div class="wrap panel default-form">
     <h2 class="header">用户中心</h2>
     <form class="body" id="modify_form" action="/index.php/user/update/" method="post">
       <fieldset>

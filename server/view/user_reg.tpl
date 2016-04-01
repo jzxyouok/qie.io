@@ -5,10 +5,10 @@
 <title>用户注册-<{$title}></title>
 <{$css}>
 </head>
-<body class="user-reg">
+<body class="user user-reg">
 <{include file="/theme/`$theme`/header.tpl"}>
-<div class="wrap-middle">
-  <div class="wrap panel default-form login-form">
+<div class="middle">
+  <div class="wrap panel default-form">
     <h2 class="header">用户注册</h2>
     <form class="body" id="reg_form" action="/index.php/user/insert/" method="post">
       <fieldset>

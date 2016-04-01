@@ -7,8 +7,8 @@
 </head>
 <body class="user">
 <{include file="/theme/`$theme`/header.tpl"}>
-<div class="wrap-middle">
-  <div class="wrap panel default-form login-form">
+<div class="middle">
+  <div class="wrap panel default-form">
     <h2 class="header">用户登录</h2>
     <form class="body" id="login_form" action="/index.php/user/login/" method="post">
       <fieldset>
