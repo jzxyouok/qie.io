@@ -20,6 +20,7 @@ class Controller {
 	protected $profile = array(); //网站配置(title,keywords,js,css...)
 	protected $config = array(); //config
 	protected $dir = ''; //访问地址的物理路径
+	protected $manageVerify = false; //
 	
 	function __construct($startTime = 0) {
 		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能

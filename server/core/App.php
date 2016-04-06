@@ -28,7 +28,7 @@ class App {
 			$param = $position+2; //调用方法是用的参数的uri参数位置为3
 			
 			//按照访问路径加载控制器
-			if(!$objName = strtolower($request->uri($position))) {
+			if(!$objName = strtolower($request->segment($position))) {
 				$objName = 'main'; //默认控制器，也就是网站首页
 				$method = 'index';
 				$param = -1;
@@ -39,7 +39,7 @@ class App {
 				$this->error('找不到对象::object not found', $request);
 			
 			$object->setDir($dir);
-			if(empty($method) && !($method = $request->uri($position+1))) {
+			if(empty($method) && !($method = $request->segment($position+1))) {
 				$method = 'index'; //尝试加载默认方法
 				$param = -1;
 			}
@@ -50,7 +50,7 @@ class App {
 				$param = $position + 1;
 			}
 			$object->setParamPos($param);
-			if($param != -1 && NULL !== ($param = $request->uri($param)))
+			if($param != -1 && NULL !== ($param = $request->segment($param)))
 				$object->$method($param);
 			else
 				$object->$method();

@@ -15,8 +15,8 @@
 
 class Request {
 	private $dir = ''; //物理路径
-	private $path = ''; //REQUEST_URI,path_info
-	private $uri = array();
+	private $path = ''; //index.php后面部分。REQUEST_URI,path_info
+	private $segments = array();
 	private $route = array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
 							'replace'=>array('/', ''));
 	
@@ -34,12 +34,11 @@ class Request {
 		else {
 			$this->path = substr($_SERVER['QUERY_STRING']?str_replace('?'.$_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']):$_SERVER['REQUEST_URI'], strlen($_SERVER['SCRIPT_NAME'])+1);
 			if(empty($this->path))
-				$this->path = $_GET['c'].'/'.$_GET['m'].'/'.$_GET['p'];
+				$this->path = $_GET['c'].'/'.$_GET['m'].'/'.$_GET['p']; //controller,method,param
 		}
 		
 		if(!empty($this->path)) {
-			$uri = preg_replace($this->route['regexp'], $this->route['replace'], $this->path);
-			$this->uri = explode('/', $uri);
+			$this->segments = explode('/', preg_replace($this->route['regexp'], $this->route['replace'], $this->path));
 		}
 	}
 	/*
@@ -49,8 +48,8 @@ class Request {
 	 *
 	 * @return string
 	 */
-	public function uri($pos = 0) {
-		return !empty($this->uri[$pos])?$this->uri[$pos]:'';
+	public function segment($pos = 0) {
+		return !empty($this->segments[$pos])?$this->segments[$pos]:'';
 	}
 	public function getDir() {
 		return $this->dir;
