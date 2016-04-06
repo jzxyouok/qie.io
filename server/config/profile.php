@@ -1,11 +1,11 @@
 <?php
 /*
- * 网站配置
+ * 网站配置文件
  */
 //网站域名
 $profile['domain'] = '';
 //管理后台二次登录
-$profile['manage_relogin'] = true;
+$profile['admin_relogin'] = true;
 //主题名称
 $profile['theme'] = 'default';
 //前端静态文件

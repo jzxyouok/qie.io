@@ -88,7 +88,6 @@ class Passport extends Model {
 	 *
 	 * @param string $name_or_email 用户名或者邮箱地址
 	 * @param string $password 用户密码
-	 * @param string $setCookie 是否记录cookie
 	 *
 	 * @return array/boolean 返回用户数组或者false
 	 */
@@ -147,10 +146,9 @@ class Passport extends Model {
 	 * 用户注册
 	 *
 	 * @param string $name 用户名
-	 * @param string $email 用户邮箱地址
 	 * @param string $password 用户密码
+	 * @param string $email 用户邮箱地址
 	 * @param string $nick 用户昵称
-	 * @param string $setCookie 是否记录cookie
 	 *
 	 * @return array/boolean 返回用户数组或者false
 	 */
@@ -570,14 +568,11 @@ class Passport extends Model {
 		return $db->execute($sql);
 	}
 	/*
-	 * 获取管理员信息
+	 * 判断是否为管理员
 	 *
 	 * @return boolean
 	 */
-	public function getAdmin() {
-		if(!empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].self::SALT.$_COOKIE['a_code'].$_COOKIE['a_grade'])) {
-			return array('grade' => $_COOKIE['a_grade'], 'code' => $_COOKIE['a_code']);
-		} else
-			return false;
+	public function isAdmin() {
+		return !empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].self::SALT.$_COOKIE['a_code'].$_COOKIE['a_grade']);
 	}
 }

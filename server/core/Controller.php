@@ -20,7 +20,7 @@ class Controller {
 	protected $profile = array(); //网站配置(title,keywords,js,css...)
 	protected $config = array(); //config
 	protected $dir = ''; //访问地址的物理路径
-	protected $manageVerify = false; //
+	protected $autoload = array(); //自动执行
 	
 	function __construct($startTime = 0) {
 		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
@@ -36,10 +36,12 @@ class Controller {
 			define('DOMAIN', $this->config['profile']['domain']);
 		//前端默认主题
 		$this->profile['theme'] = $this->config['profile']['theme']?$this->config['profile']['theme']:'default';
+		$this->profile['admin_relogin'] = (boolean)$this->config['profile']['admin_relogin'];
 	}
 	/*
 	 * 加载view视图文件
-	 * 
+	 *
+	 * @param string $tpl 视图文件地址 
 	 */
 	public function loadView($tpl = '') {
 		if(empty($tpl))
@@ -57,6 +59,7 @@ class Controller {
 	/*
 	 * 加载theme视图(用户主题)文件
 	 * 
+	 * @param string $tpl 视图文件地址 
 	 */
 	public function loadTheme($tpl = '') {
 		if(empty($tpl))
@@ -77,8 +80,9 @@ class Controller {
 		$this->view($tpl);
 	}
 	/*
-	 * 加载theme视图(用户主题)文件
+	 * 加载视图文件
 	 * 
+	 * @param string $tpl 视图文件地址 
 	 */
 	protected function view($tpl = '') {
 		if(!file_exists($tpl))
@@ -188,8 +192,17 @@ class Controller {
 	/*
 	 * 设置dir属性
 	 *
+	 * @param string $dir 物理路径
 	 */
 	public function setDir($dir) {
 		$this->dir = (string)$dir;
+	}
+	/*
+	 * 判断是否为管理员
+	 *
+	 * @return boolean
+	 */
+	public function isAdmin() {
+		return $this->profile['admin_relogin'] ? Loader::load('Passport')->isAdmin() : !empty($this->user);
 	}
 }

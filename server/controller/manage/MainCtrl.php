@@ -12,7 +12,7 @@ class MainCtrl extends Controller {
 		if(empty($this->user))
 			header('Location: /index.php/user/');
 		
-		if($this->passport->getAdmin())
+		if($this->isAdmin())
 			$this->loadView('main');
 		else
 			$this->loadView('login');
