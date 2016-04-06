@@ -66,7 +66,7 @@ form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, fo
     width: 100%;
 }
 .footer {
-    margin-top: 60px;
+    padding-top: 60px;
 }
 .panel {
     border-radius: 4px;
@@ -171,6 +171,65 @@ form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, fo
     color: #333;
     background-color: #fff;
     border-color: #ccc;
+}
+/*manage ui*/
+.manage a {
+    color:#337ab7;
+}
+.manage>.header, .manage>.sidebar {
+    position: absolute;
+    background-color:#f8f8f8;
+    left: 0;
+    top: 0;
+}
+.manage>.header {
+    height:50px;
+    line-height: 50px;
+    border-bottom:1px solid #e7e7e7;
+    z-index: 3;
+}
+.manage>.header::after {
+    content:" ";
+    display: inline-block;
+    clear: both;
+}
+.manage>.header>.title {
+    float:left;
+    padding-left: 20px;
+}
+.manage>.header>.control-panel {
+    float:right;
+    padding-right: 20px;
+}
+.manage>.sidebar {
+    width:300px;
+    border-right:1px solid #e7e7e7;
+    height: 100%;
+    z-index: 2;
+}
+.manage>.sidebar>.wrap {
+    padding-top:51px;
+}
+.manage>.sidebar .user-info {
+    text-align:center;
+    line-height: 60px;
+    height: 60px;
+    padding:0 20px;
+}
+.manage>.sidebar .user-info span {
+    margin-right:1em;
+}
+.manage>.sidebar .user-info i {
+    margin-right:.5em;
+}
+.manage>.content {
+    background-color:white;
+    width: 100%;
+    height: 100%;
+}
+.manage>.content>.wrap {
+    padding:51px 0 0 301px;
+    text-align: center;
 }
 /*page*/
 /*login page,reg page, user-center page*/

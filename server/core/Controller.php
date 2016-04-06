@@ -48,7 +48,6 @@ class Controller {
 			return false;
 		
 		$this->vars['dir'] = $this->dir;
-		
 		$this->profile['css'] = array_merge($this->profile['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">',
 																		'<link type="text/css" rel="stylesheet" href="/static/css/ui.css">'));
 		//$this->profile['js'] = array_merge($this->profile['js'] , array());
