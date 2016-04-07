@@ -173,63 +173,112 @@ form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, fo
     border-color: #ccc;
 }
 /*manage ui*/
-.manage a {
+body.manage a {
     color:#337ab7;
 }
-.manage>.header, .manage>.sidebar {
+body.manage>.header, body.manage>.sidebar {
     position: absolute;
     background-color:#f8f8f8;
     left: 0;
     top: 0;
 }
-.manage>.header {
+body.manage>.header {
     height:50px;
     line-height: 50px;
     border-bottom:1px solid #e7e7e7;
     z-index: 3;
 }
-.manage>.header::after {
+body.manage>.header::after {
     content:" ";
     display: inline-block;
     clear: both;
 }
-.manage>.header>.title {
+body.manage>.header>.title {
     float:left;
     padding-left: 20px;
 }
-.manage>.header>.control-panel {
+body.manage>.header>.control-panel {
     float:right;
     padding-right: 20px;
 }
-.manage>.sidebar {
+body.manage>.sidebar {
     width:300px;
-    border-right:1px solid #e7e7e7;
     height: 100%;
     z-index: 2;
 }
-.manage>.sidebar>.wrap {
-    padding-top:51px;
+body.manage>.sidebar>.wrap, body.manage>.content>.wrap {
+    padding-top:71px;
 }
-.manage>.sidebar .user-info {
+body.manage>.sidebar .user-info {
     text-align:center;
-    line-height: 60px;
-    height: 60px;
+    line-height: 40px;
+    height: 40px;
     padding:0 20px;
 }
-.manage>.sidebar .user-info span {
+body.manage>.sidebar .user-info span {
     margin-right:1em;
 }
-.manage>.sidebar .user-info i {
+body.manage>.sidebar .user-info i {
     margin-right:.5em;
 }
-.manage>.content {
-    background-color:white;
+body.manage>.sidebar .nav li {
+    float:none;
     width: 100%;
-    height: 100%;
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    border-bottom:1px solid #e7e7e7;
+    transition: height .2s linear;
 }
-.manage>.content>.wrap {
-    padding:51px 0 0 301px;
+body.manage>.sidebar .nav li.active {
+    overflow: inherit;
+    height: auto;
+}
+body.manage>.sidebar .nav li a {
+    display: block;
+    padding:0 20px;
+}
+body.manage>.sidebar .nav li.active>a {
+    background-color:#eee;
+}
+body.manage>.sidebar .nav li a:hover {
+    background-color:#eee;
+}
+body.manage>.sidebar .nav li a i {
+    margin-right:.5em;
+}
+body.manage>.sidebar .nav li a .arrow {
+    float:right;
+    line-height: 40px;
+    transition: transform .2s linear;
+}
+body.manage>.sidebar .nav li a .arrow::before {
+    content: "\f104";
+    vertical-align: middle;
+}
+body.manage>.sidebar .nav li.active a .arrow {
+    transform: rotate(-90deg);
+}
+body.manage>.sidebar .nav li.parent li {
+    border: none;
+}
+body.manage>.sidebar .nav li.parent li a {
+    padding-left: 40px;
+}
+body.manage>.sidebar .nav li.parent li:last-child {
+    border-bottom: none;
+}
+body.manage>.content {
+    background-color:white;
+    min-height: 100%;
+    margin-left: 300px;
+    border-left:1px solid #e7e7e7;
+}
+body.manage>.content>.wrap {
     text-align: center;
+    padding-left:20px;
+    padding-right:20px;
+    padding-bottom: 20px;
 }
 /*page*/
 /*login page,reg page, user-center page*/

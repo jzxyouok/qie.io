@@ -28,8 +28,8 @@
         </div>
       </fieldset>
       <input type="submit" value="修改">
-    </form>
-    <{include file="./footer.tpl"}> </div>
+    </form> </div>
+    <{include file="./footer.tpl"}>
 </div>
 <script>
 $('#modify_form').on('submit', function(){
@@ -65,6 +65,10 @@ $('#modify_form').on('submit', function(){
 			error: function(xhr, data) {}
 	})
 	return false;
+});
+$('body.manage>.sidebar .nav li.parent a').on('click', function(){
+	$(this).parent().toggleClass('active');
+	return false;	
 });
 </script>
 </body>
