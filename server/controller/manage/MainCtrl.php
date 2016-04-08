@@ -8,15 +8,18 @@ class MainCtrl extends Controller {
 		$this->passport = Loader::load('Passport');
 		
 	}
+	//管理界面首页
 	function index() {
 		if(empty($this->user))
 			header('Location: /index.php/user/');
 		
-		if($this->isAdmin())
+		if($this->isAdmin()) {
+			$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
 			$this->loadView('main');
-		else
+		} else
 			$this->loadView('login');
 	}
+	//登录接口（二次验证）
 	public function login() {
 		if(empty($_POST['captcha'])) {
 			$this->message(-1, '请输入验证码', 1);
@@ -39,12 +42,15 @@ class MainCtrl extends Controller {
 		else
 			$this->message(0,'登录失败');
 	}
+	//退出接口（二次验证）
 	public function logout() {
-		if($this->passport->adminLogout())
-			$this->message(1);
+		if($this->profile['admin_relogin'])
+			$this->passport->adminLogout();
 		else
-			$this->message(0,'登录失败');
+			$this->passport->logout();
+		header('Location: '.$_SERVER['HTTP_REFERER']);
 	}
+	//更新密码（二次验证）
 	public function update() {
 		if(empty($_POST['old_pwd']))
 			$this->message(-1, '请输入旧密码', 1);

@@ -9,28 +9,34 @@
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">
-    <form id="modify_form" action="<{$dir}>/index.php/main/update/" method="post">
-      <fieldset>
-        <div class="form-row">
-          <label>原 密 码:
+    <div class="panel default-form">
+      <h3 class="head">修改密码</h3>
+      <form class="body two-collumn" id="modify_form" action="<{if $admin_relogin}><{$dir}>/index.php/main/update/<{else}>/index.php/user/update/<{/if}>" method="post">
+        <fieldset>
+          <div class="form-group">
+            <label>
+            <div class="title inline-block">原 密 码:</div>
             <input type="password" name="old_pwd">
-          </label>
-        </div>
-        <div class="form-row">
-          <label>密&nbsp; &nbsp;码:
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+            <div class="title inline-block">密&nbsp; &nbsp;码:</div>
             <input type="password" name="pwd">
-          </label>
-        </div>
-        <div class="form-row">
-          <label>确认密码:
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+            <div class="title inline-block">确认密码:</div>
             <input type="password" name="confirm_pwd">
-          </label>
-        </div>
-      </fieldset>
-      <input type="submit" value="修改">
-    </form> </div>
-    <{include file="./footer.tpl"}>
-</div>
+            </label>
+          </div>
+        </fieldset>
+        <input type="submit" value="修改">
+      </form>
+    </div>
+  </div>
+  <{include file="./footer.tpl"}> </div>
 <script>
 $('#modify_form').on('submit', function(){
 	var data = $u.getFormValues(this);
@@ -59,6 +65,7 @@ $('#modify_form').on('submit', function(){
 				if(data.status< 1) {
 					alert(data.result);
 				} else {
+					alert('修改成功');
 					location.href = location.href;
 				}
 			},

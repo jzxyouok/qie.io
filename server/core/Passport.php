@@ -565,7 +565,7 @@ class Passport extends Model {
 		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
 		$sql = "UPDATE `user_admin` SET `code`='{$code}',`password`=MD5('{$code}{$password}') WHERE `user_id`={$this->user['id']} AND EXISTS (SELECT * FROM (SELECT `code` FROM `user_admin` WHERE `user_id`={$this->user['id']} AND `password`=MD5('{$_COOKIE['a_code']}{$oldPassword}') LIMIT 1) AS `tmp`) LIMIT 1";
 		$db = Loader::load('Database');
-		return $db->execute($sql);
+		return $db->execute($sql) && setcookie('a_code', $code, 0, '/') && setcookie('a_verify', md5($this->user['id'].self::SALT.$code.$_COOKIE['a_grade']), 0, '/', NULL, 0, true);
 	}
 	/*
 	 * 判断是否为管理员

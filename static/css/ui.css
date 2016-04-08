@@ -280,6 +280,11 @@ body.manage>.content>.wrap {
     padding-right:20px;
     padding-bottom: 20px;
 }
+body.manage>.content .panel {
+    border-color:#ddd;
+    text-align: left;
+    margin:0 auto;
+}
 /*page*/
 /*login page,reg page, user-center page*/
 body.user .default-form, body.manage .default-form {
