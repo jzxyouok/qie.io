@@ -66,10 +66,6 @@ $('#modify_form').on('submit', function(){
 	})
 	return false;
 });
-$('body.manage>.sidebar .nav li.parent a').on('click', function(){
-	$(this).parent().toggleClass('active');
-	return false;	
-});
 </script>
 </body>
 </html>

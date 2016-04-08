@@ -1,6 +1,6 @@
 <header class="header">
   <div class="title">
-    <h1>Qiezi CMS.</h1>
+    <h1>Qiezi CMS</h1>
   </div>
   <div class="control-panel"></div>
 </header>
