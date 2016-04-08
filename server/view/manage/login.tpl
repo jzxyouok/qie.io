@@ -14,7 +14,7 @@
       <fieldset>
         <div class="form-group">
           <label><span class="inline-block input-addon"><i class="icon fa fa-key"></i></span>
-            <input type="password" name="pwd" required>
+            <input type="password" name="pwd" required autofocus>
           </label>
         </div>
         <div class="form-group img">
@@ -25,8 +25,8 @@
       </fieldset>
       <button type="submit" value="">登录</button>
       <input type="hidden" name="token" value="<{$token}>">
+    <p><{$elapsed_time}>s/<{$memory_usage}>MB</p>
     </form>
-    <p><{$elapsed_time}>&<{$memory_usage}></p>
     </div>
   </div>
 </div>

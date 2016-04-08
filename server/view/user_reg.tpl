@@ -15,7 +15,7 @@
         <div class="form-group">
           <label>
           <div class="title inline-block">用 户 名:</div>
-          <input type="text" name="user_name" placeholder="请输入用户名" required>
+          <input type="text" name="user_name" placeholder="请输入用户名" required autofocus>
           </label>
         </div>
         <div class="form-group">

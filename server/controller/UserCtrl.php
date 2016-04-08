@@ -28,7 +28,9 @@ class UserCtrl extends Controller {
 	public function center() {
 		if(empty($this->user))
 			header('Location: /index.php/user/');
-		
+		if(!$this->profile['admin_relogin'])
+			header('Location: /manage/index.php');
+			
 		$this->loadView('user_center');
 	}
 	/*
@@ -53,7 +55,7 @@ class UserCtrl extends Controller {
 			$this->message(-1, '请输入密码', 5);
 		}
 		$psp = Loader::load('Passport');
-		$psp->setExpire(!empty($_POST['expire'])?(int)$_POST['expire']:604800);
+		$psp->setExpire($this->profile['admin_relogin']?(!empty($_POST['expire'])?(int)$_POST['expire']:604800):0);
 		$res = $psp->login($_POST['user_name'], $_POST['pwd']);
 		
 		if(!empty($res['code'])) {
@@ -101,6 +103,9 @@ class UserCtrl extends Controller {
 		if(!empty($this->user)) {
 			$this->message(-1, '请不要重复注册', 6);
 		}
+		if(!$this->profile['admin_relogin'])
+			$this->message(-1, '当前禁止注册', 7);
+			
 		$psp = Loader::load('Passport');
 		$psp->setExpire(!empty($_POST['expire'])?(int)$_POST['expire']:604800);
 		$res = $psp->reg($_POST['user_name'], $_POST['pwd'], $_POST['email'], $_POST['nick']);

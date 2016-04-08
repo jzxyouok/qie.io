@@ -15,7 +15,7 @@
         <div class="form-group">
           <label>
           <div class="title inline-block">用户名:</div>
-          <input type="text" name="user_name" value="<{$smarty.cookies.u_name}>" placeholder="请输入用户名" required>
+          <input type="text" name="user_name" value="<{$smarty.cookies.u_name}>" placeholder="请输入用户名" required autofocus>
           </label>
         </div>
         <div class="form-group">
