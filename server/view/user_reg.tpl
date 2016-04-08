@@ -9,7 +9,7 @@
 <{include file="/theme/`$theme`/header.tpl"}>
 <div class="middle">
   <div class="wrap panel default-form">
-    <h2 class="header">用户注册</h2>
+    <h2 class="head">用户注册</h2>
     <form class="body two-collumn" id="reg_form" action="/index.php/user/insert/" method="post">
       <fieldset>
         <div class="form-group">

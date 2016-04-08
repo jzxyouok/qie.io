@@ -9,7 +9,7 @@
 <{include file="/theme/`$theme`/header.tpl"}>
 <div class="middle">
   <div class="wrap panel default-form">
-    <h2 class="header">出错了</h2>
+    <h2 class="head">出错了</h2>
     <div class="body">
       <div class="msg"><{$msg}></div>
       <div class="ggad"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>

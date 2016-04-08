@@ -8,7 +8,7 @@
 <body class="manage manage-login">
 <div class="middle">
   <div class="wrap panel default-form">
-    <h2 class="header">后台管理系统</h2>
+    <h2 class="head">后台管理系统</h2>
     <div class="body">
     <form class="has-addon" id="login_form" action="<{$dir}>/index.php/main/login/" method="post">
       <fieldset>
