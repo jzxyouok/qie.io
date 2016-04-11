@@ -15,7 +15,7 @@
             <li><a href="<{$dir}>/index.php/setting/" title="系统设定">系统设定</a></li>
           </ul>
         </li>
-        <li class=""><a href="#" title="文章管理"><i class="fa fa-pencil-square-o"></i>文章管理</a>
+        <li class=""><a href="<{$dir}>/index.php/article/" title="文章管理"><i class="fa fa-pencil-square-o"></i>文章管理</a>
         </li>
       </ul>
     </nav>

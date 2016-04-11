@@ -20,7 +20,8 @@ class Controller {
 	protected $profile = array(); //网站配置(title,keywords,js,css...)
 	protected $config = array(); //config
 	protected $dir = ''; //访问地址的物理路径
-	protected $autoload = array(); //自动执行
+	protected $autoload = array(); //自动执行,array('this'=>'isAdmin','Passport'=>'isAdmin');
+	protected $autoloadResult = array();
 	
 	function __construct($startTime = 0) {
 		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
@@ -37,6 +38,11 @@ class Controller {
 		//前端默认主题
 		$this->profile['theme'] = $this->config['profile']['theme']?$this->config['profile']['theme']:'default';
 		$this->profile['admin_relogin'] = (boolean)$this->config['profile']['admin_relogin'];
+		//autoload
+		foreach($this->autoload as $k => $v) {
+			$obj = $k == 'this'?$this:Loader::load($k);
+			$this->autoloadResult[$k][$v] = $obj->$v();
+		}
 	}
 	/*
 	 * 加载view视图文件
@@ -201,7 +207,12 @@ class Controller {
 	 *
 	 * @return boolean
 	 */
-	public function isAdmin() {
-		return $this->profile['admin_relogin'] ? Loader::load('Passport')->isAdmin() : !empty($this->user);
+	public function adminCheck() {
+		$isAdmin = $this->profile['admin_relogin'] ? Loader::load('Passport')->isAdmin() : !empty($this->user);
+		
+		if(!$isAdmin) {
+			header('Location: '.($this->profile['admin_relogin']?'/manage/':'/index.php/user/'));
+		}
+		return $isAdmin;
 	}
 }

@@ -6,7 +6,7 @@
 <{$css}>
 <style>
 body.manage .default-form {
-	width: 400px;
+	width: 500px;
 }
 .default-form .title {
 	width: 30%;

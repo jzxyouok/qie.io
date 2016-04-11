@@ -1,13 +1,8 @@
 <?php
 
 class SettingCtrl extends Controller {
-	private $passport = null;
+	protected $autoload = array('this'=>'adminCheck');
 	
-	function __construct() {
-		parent::__construct();
-		$this->passport = Loader::load('Passport');
-		
-	}
 	//管理界面首页
 	function index() {
 		$setting = Loader::load('Setting');

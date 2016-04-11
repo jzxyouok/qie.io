@@ -11,7 +11,7 @@
   <div class="wrap">
     <div class="panel default-form">
       <h3 class="head">修改密码</h3>
-      <form class="body two-collumn" id="modify_form" action="<{if $admin_relogin}><{$dir}>/index.php/main/update/<{else}>/index.php/user/update/<{/if}>" method="post">
+      <form class="body" id="modify_form" action="<{if $admin_relogin}><{$dir}>/index.php/main/update/<{else}>/index.php/user/update/<{/if}>" method="post">
         <fieldset>
           <div class="form-group">
             <label>

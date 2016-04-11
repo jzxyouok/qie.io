@@ -1,19 +1,20 @@
 <?php
 
 class MainCtrl extends Controller {
-	private $passport = null;
+	private $isAdmin = false;
+	private $passport = NULL;
 	
-	function __construct() {
-		parent::__construct();
+	function __construct($startTime = 0) {
+		parent::__construct($startTime);
 		$this->passport = Loader::load('Passport');
-		
+		$this->isAdmin = $this->profile['admin_relogin'] ? $this->passport->isAdmin() : !empty($this->user);
 	}
 	//管理界面首页
 	function index() {
 		if(empty($this->user))
 			header('Location: /index.php/user/');
 		
-		if($this->isAdmin()) {
+		if($this->isAdmin) {
 			$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
 			$this->loadView('main');
 		} else
