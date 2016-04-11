@@ -27,10 +27,10 @@ body.manage .default-form {
             <div class="title inline-block">管理员二次登录:</div>
             <div class="control inline-block">
               <label>
-                <input type="radio" name="admin_relogin" value="true">
+                <input type="radio" name="admin_relogin" value="true"<{if $profile.admin_relogin}> checked<{/if}>>
                 是 </label>
               <label>
-                <input type="radio" name="admin_relogin" value="false">
+                <input type="radio" name="admin_relogin" value="false"<{if !$profile.admin_relogin}> checked<{/if}>>
                 否 </label>
             </div>
           </div>
@@ -44,11 +44,20 @@ body.manage .default-form {
           </div>
           <div class="form-group">
             <label>
+            <div class="title inline-block">网站首页:</div>
+            <div class="control inline-block">
+              <input type="text" name="homepage" value="<{$profile.homepage}>">
+            </div>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
             <div class="title inline-block">选择主题:</div>
             <div class="control inline-block">
               <select name="theme">
                 <option value="default">默认</option>
                 <option value="test">测试</option>
+                <option value="test2">测试2</option>
               </select>
             </div>
             </label>
@@ -89,7 +98,7 @@ body.manage .default-form {
             <label>
             <div class="title inline-block">ICP证:</div>
             <div class="control inline-block">
-              <textarea name="icp"><{$profile.icp}></textarea>
+              <input type="text" name="icp" value="<{$profile.icp}>">
             </div>
             </label>
           </div>

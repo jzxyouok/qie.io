@@ -204,9 +204,16 @@ body.manage>.header>.title {
     float:left;
     padding-left: 20px;
 }
+body.manage>.header>.title a {
+    font-size: 18px;
+    margin:0 10px;
+}
 body.manage>.header>.control-panel {
     float:right;
     padding-right: 20px;
+}
+body.manage>.header>.control-panel .fa {
+    font-size: 20px;
 }
 body.manage>.sidebar {
     width:300px;

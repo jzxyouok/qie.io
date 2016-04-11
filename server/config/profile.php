@@ -7,6 +7,8 @@
 $profile['admin_relogin'] = true;
 //网站域名
 $profile['domain'] = '';
+//网站首页
+$profile['homepage'] = '/';
 //主题名称
 $profile['theme'] = 'default';
 //网站meta

@@ -2,7 +2,7 @@
   <div class="title">
     <h1>Qiezi CMS</h1>
   </div>
-  <div class="control-panel"></div>
+  <div class="control-panel"><a href="<{$profile.homepage}>" class="fa fa-home"></a></div>
 </header>
 <div class="sidebar">
   <div class="wrap">

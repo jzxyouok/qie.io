@@ -19,69 +19,75 @@ class Setting extends Model {
 		if(empty($data))
 			return false;
 		//判断权限
+		$file = APP_PATH.'/config/profile.php';
+		$profile = Loader::loadVar($file);
 		
-		var_dump($data);
-		exit;
-		
-		if(!empty($data['keywords']))
-			$data['keywords'] = str_replace('，',',', $data['keywords']);
 		$result = false;
 		
-		$file = APPPATH.'config/site.php';
-		$fp = fopen($file, FOPEN_READ_WRITE_CREATE);
+		$content = file_get_contents($file);
 		
-		if($fp) {
-			$config = fread($fp, filesize($file));
+		if($content) {
 			$search = array();
 			$replace = array();
 			
+			//管理员二次登录验证
+			if(isset($data['admin_relogin']) && $data['admin_relogin'] !== $profile['admin_relogin']) {
+				$search[] = '#\$profile\[\s*\'admin_relogin\'\\s*]\s*=.+#';	
+				$replace[] = '$profile[\'admin_relogin\'] = '.($data['admin_relogin']? 'true':'false').';';
+			}
+			//域名
+			if(isset($data['domain'])) {
+				$data['domain'] = trim($data['domain']);
+				$search[] = '#\$profile\[\s*\'domain\'\\s*]\s*=.+#';	
+				$replace[] = '$profile[\'domain\'] = \''.$data['domain'].'\';';
+			}
+			//首页
+			if(isset($data['homepage'])) {
+				$data['homepage'] = trim($data['homepage']);
+				$search[] = '#\$profile\[\s*\'homepage\'\\s*]\s*=.+#';	
+				$replace[] = '$profile[\'homepage\'] = \''.$data['homepage'].'\';';
+			}
+			//网站主题
+			if($data['theme'] && ($data['theme'] = trim($data['theme'])) && $data['theme'] != $profile['theme'] && is_dir(DOCUMENT_ROOT."/theme/{$data['theme']}")) {
+				$search[] = '#\$profile\[\s*\'theme\'\\s*]\s*=.+#';	
+				$replace[] = '$profile[\'theme\'] = \''.$data['theme'].'\';';
+			}
 			//标题
-			if(!empty($data['title'])) {
-				$search[] = '#\$config\[\s*\'meta\'\\s*]\s*\[\s*\'title\'\\s*]\s*=\s*\'.*\'#';	
-				$replace[] = '$config[\'meta\'][\'title\'] = \''.$data['title'].'\'';
+			if(isset($data['title'])) {
+				$data['title'] = trim($data['title']);
+				$search[] = '#\$profile\[\s*\'title\'\\s*]\s*=.+#';	
+				$replace[] = '$profile[\'title\'] = \''.$data['title'].'\';';
 			}
 			//关键词
-			if(!empty($data['keywords'])) {
-				$search[] = '#\$config\[\s*\'meta\'\\s*]\s*\[\s*\'keywords\'\\s*]\s*=\s*\'.*\'#';	
-				$replace[] = '$config[\'meta\'][\'keywords\'] = \''.$data['keywords'].'\'';
+			if(isset($data['keywords'])) {
+				$data['keywords'] = str_replace('，',',', trim($data['keywords']));
+				$search[] = '#\$profile\[\s*\'meta\'\\s*]\s*\[\s*\'keywords\'\\s*]\s*=.+#';	
+				$replace[] = '$profile[\'meta\'][\'keywords\'] = \''.$data['keywords'].'\';';
 			}
 			//网站描述
-			if(!empty($data['description'])) {
-				$search[] = '#\$config\[\s*\'meta\'\\s*]\s*\[\s*\'description\'\\s*]\s*=\s*\'.*\'#';	
-				$replace[] = '$config[\'meta\'][\'description\'] = \''.$data['description'].'\'';
-			}
-			//ICP证
-			if(!empty($data['icp'])) {
-				$search[] = '#\$config\[\s*\'icp\'\\s*]\s*=\s*\'.*\'#';	
-				$replace[] = '$config[\'icp\'] = \''.$data['icp'].'\'';
+			if(isset($data['description'])) {
+				$data['description'] = trim($data['description']);
+				$search[] = '#\$profile\[\s*\'meta\'\\s*]\s*\[\s*\'description\'\\s*]\s*=.+#';	
+				$replace[] = '$profile[\'meta\'][\'description\'] = \''.$data['description'].'\';';
 			}
 			//监测代码
-			if(!empty($data['analytics'])) {
-				$search[] = '#\$config\[\s*\'analytics\'\s*\]\s*=\s*<<<EOT[\n\r](?:\w|\W)*?[\n\r]EOT;#';
-				$replace[] = "\$config['analytics'] = <<<EOT".PHP_EOL."{$data['analytics']}".PHP_EOL."EOT;";
+			//preg_replace('/\s*/', '',$data['analytics']) == preg_replace('/\s*/', '',$profile['analytics'])
+			if(isset($data['analytics'])) {
+				$data['analytics'] = trim($data['analytics']);
+				$search[] = '#\$profile\[\s*\'analytics\'\s*\]\s*=\s*<<<EOT[\n\r](?:\w|\W)*?[\n\r]EOT;#';
+				$replace[] = "\$profile['analytics'] = <<<EOT".PHP_EOL."{$data['analytics']}".PHP_EOL."EOT;";
 			}
-			//简易联系方式
-			if(!empty($data['contact'])) {
-				$search[] = '#\$config\[\s*\'contact\'\s*\]\s*=\s*<<<EOT[\n\r](?:\w|\W)*?[\n\r]EOT;#';
-				$replace[] = "\$config['contact'] = <<<EOT".PHP_EOL."{$data['contact']}".PHP_EOL."EOT;";
+			//ICP证
+			if(isset($data['icp'])) {
+				$search[] = '#\$profile\[\s*\'icp\'\\s*]\s*=.+#';	
+				$replace[] = '$profile[\'icp\'] = \''.trim($data['icp']).'\';';
 			}
-			//管理员
-			if(!empty($data['master'])) {
-				$search[] = '#\$config\[\s*\'master\'\\s*]\s*=\s*\'.*\'#';	
-				$replace[] = '$config[\'master\'] = \''.$data['master'].'\'';
+			
+			$content = preg_replace($search, $replace, $content);
+			
+			if(!empty($content) && !empty($search)) {
+				$result = file_put_contents($file, $content);
 			}
-			//模板
-			if(!empty($data['theme']) && $this->config->config['theme'] != $data['theme'] && is_dir("{$_SERVER['DOCUMENT_ROOT']}/theme/{$data['theme']}")) {
-				$search[] = '#\$config\[\s*\'theme\'\\s*]\s*=\s*\'.*\'#';	
-				$replace[] = '$config[\'theme\'] = \''.$data['theme'].'\'';
-			}
-			$config = preg_replace($search, $replace, $config);
-			if(!empty($config) && !empty($search)) {
-				fclose($fp);
-				$fp = fopen($file, 'w');
-				$result = fwrite($fp, $config);
-			}
-			fclose($fp);	
 		}
 		return $result;
 	}

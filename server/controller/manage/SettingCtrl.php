@@ -18,9 +18,11 @@ class SettingCtrl extends Controller {
 		$data = array();
 		
 		if(!empty($_POST['admin_relogin']))
-			$data['admin_relogin'] = $_POST['admin_relogin'] == 'true'?true:false;
-		if(!empty($_POST['domain']))
+			$data['admin_relogin'] = ($_POST['admin_relogin'] == 'true'?true:false);
+		if(isset($_POST['domain']))
 			$data['domain'] = $_POST['domain'];
+		if(isset($_POST['homepage']))
+			$data['homepage'] = $_POST['homepage'];
 		if(!empty($_POST['theme']))
 			$data['theme'] = $_POST['theme'];
 		if(isset($_POST['title']))
