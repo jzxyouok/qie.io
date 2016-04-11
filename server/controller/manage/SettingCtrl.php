@@ -37,7 +37,7 @@ class SettingCtrl extends Controller {
 			$data['icp'] = $_POST['icp'];
 		
 		$setting = Loader::load('Setting');
-		$res = $setting->update($data);
+		$res = $setting->set($data);
 		
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
