@@ -2,15 +2,13 @@
 /*
  * 网站配置文件
  */
-//网站域名
-$profile['domain'] = '';
+/*writeable*/
 //管理后台二次登录
 $profile['admin_relogin'] = true;
+//网站域名
+$profile['domain'] = '';
 //主题名称
 $profile['theme'] = 'default';
-//前端静态文件
-$profile['css'] = array('<link type="text/css" rel="stylesheet" href="/theme/default/css/style.css">');
-$profile['js'] =  array('<script src="/theme/default/js/common.js"></script>');
 //网站meta
 $profile['title'] = '网站标题';
 $profile['meta']['keywords'] = 'keyword1,keyword23';
@@ -29,3 +27,8 @@ var _hmt = _hmt || [];
 EOT;
 //ICP
 $profile['icp'] = '粤icp5';
+/*writeable end*/
+
+//前端静态文件
+$profile['css'] = array('<link type="text/css" rel="stylesheet" href="/theme/default/css/style.css">');
+$profile['js'] =  array('<script src="/theme/default/js/common.js"></script>');

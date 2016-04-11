@@ -18,38 +18,42 @@ form {
 form fieldset {
     text-align: left;
 }
-form fieldset input {
+form fieldset input, form select, form textarea {
     padding:5px 12px;
+}
+form fieldset input[type=checkbox], form fieldset input[type=radio] {
+    padding: 0;
 }
 form button, form .button, form input[type=submit],form input[type=reset], form input[type=button] {
     display: inline-block;
     padding: 6px 18px;
     font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
+    line-height: 1.5;
     text-align: center;
+    cursor: pointer;
     white-space: nowrap;
     vertical-align: middle;
+    background-color:white;
+    border: 1px solid transparent;
+    border-color:rgb(204, 204, 204);
+    border-radius: 4px;
     -ms-touch-action: manipulation;
     touch-action: manipulation;
-    cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    background-color:white;
-    border-color:rgb(204, 204, 204);
 }
 form button[type=submit], form input[type=submit] {
-    padding:6px 36px;
+    padding:6px 32px;
 }
 form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, form input[type=button]:hover, form .button:hover {
     color: #333;
     background-color: #e6e6e6;
     border-color: #adadad;
+}
+form button[disabed], form input[disabled], form select[disabled], form textarea[disabled] {
+    cursor: not-allowed;
 }
 /*normal class*/
 .wrap {
@@ -91,18 +95,17 @@ form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, fo
 .form-group {
     margin-bottom: 15px;
     font-size: 0;
-    height: 34px;
     line-height: 34px;
 }
-.form-group .title {
+.form-group .title, .form-group .control {
     font-size: 14px;
 }
-.form-group input {
+.form-group input[type=text], .form-group input[type=password], .form-group select, .form-group textarea {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    font-size: 14px;
-    line-height: 1.42857143;
+    min-height:34px;
+    line-height: 1.5;
     color: #555;
     background-color: #fff;
     background-image: none;
@@ -139,8 +142,28 @@ form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, fo
     width:20%;
     vertical-align: top;
 }
-.two-collumn .form-group input {
+.two-collumn .control {
     width:80%;
+}
+.form-group.img img {
+    position: absolute;
+    right:1px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 0 4px 4px 0;
+}
+.form-group input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+.form-group input[type=checkbox]:focus, .form-group input[type=radio]:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.form-group.img, .form-group.img label {
+    position: relative;
 }
 /*default-form*/
 .default-form {
@@ -150,22 +173,6 @@ form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, fo
     color: #333;
     background-color: #f5f5f5;
     border-color: #ddd;
-}
-.default-form .form-group input:focus {
-    border-color: #66afe9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-}
-.default-form .form-group.img, .default-form .form-group.img label {
-    position: relative;
-}
-.default-form .form-group.img img {
-    position: absolute;
-    right:1px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 0 4px 4px 0;
 }
 .default-form button, .default-form .button {
     color: #333;
@@ -226,12 +233,12 @@ body.manage>.sidebar .nav li {
     width: 100%;
     line-height: 40px;
     border-bottom:1px solid #e7e7e7;
-    transition: max-height .2s linear;
-    max-height:40px;
+    transition: height .2s linear;
+    height:40px;
     overflow: hidden;
 }
 body.manage>.sidebar .nav li.active {
-    max-height:320px; /*40*8*/
+
 }
 body.manage>.sidebar .nav li a {
     display: block;
