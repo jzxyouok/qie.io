@@ -56,7 +56,7 @@ body.manage .default-form {
             <div class="control inline-block">
               <select name="theme">
               <{section name=n loop=$profile.themes}>
-                <option value="default"<{if $profile.themes[n] == $profile.theme}> selected<{/if}>><{$profile.themes[n]}></option>
+                <option value="<{$profile.themes[n]}>"<{if $profile.themes[n] == $profile.theme}> selected<{/if}>><{$profile.themes[n]}></option>
                 <{/section}>
               </select>
             </div>
