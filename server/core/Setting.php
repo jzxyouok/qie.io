@@ -58,6 +58,7 @@ class Setting extends Model {
 					}
 					break;
 					case 'analytics': {
+						//网站流量监测
 						$search[] = '#\$profile\[\s*\'analytics\'\s*\]\s*=\s*<<<EOT[\n\r](?:\w|\W)*?[\n\r]EOT;#';
 						$replace[] = "\$profile['analytics'] = <<<EOT".PHP_EOL."{$v}".PHP_EOL."EOT;";
 					}
@@ -77,7 +78,6 @@ class Setting extends Model {
 			}
 			
 			$content = preg_replace($search, $replace, $content);
-			
 			if(!empty($content) && !empty($search)) {
 				$result = file_put_contents(self::FILE, $content);
 			}
@@ -86,5 +86,17 @@ class Setting extends Model {
 	}
 	public function get() {
 		$profile = Loader::loadVar(self::FILE);
+		$profile['themes'] = array();
+		$dir = DOCUMENT_ROOT.'/theme';
+		$handle = opendir($dir);
+		while(false !== ($file = readdir($handle))) {
+			if(0 !== strpos($file, '.') && is_dir($dir . '/' . $file)) {
+         $profile['themes'][] = $file;
+       }
+			
+		}
+		closedir($handle);
+		
+		return $profile;
 	}
 }

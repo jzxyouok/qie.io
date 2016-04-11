@@ -10,7 +10,8 @@ class SettingCtrl extends Controller {
 	}
 	//管理界面首页
 	function index() {
-		$this->vars['profile'] = $this->config['profile'];
+		$setting = Loader::load('Setting');
+		$this->vars['profile'] = $setting->get();
 		$this->loadView('setting');
 	}
 	//保存

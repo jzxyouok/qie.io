@@ -55,9 +55,9 @@ body.manage .default-form {
             <div class="title inline-block">选择主题:</div>
             <div class="control inline-block">
               <select name="theme">
-                <option value="default">默认</option>
-                <option value="test">测试</option>
-                <option value="test2">测试2</option>
+              <{section name=n loop=$profile.themes}>
+                <option value="default"<{if $profile.themes[n] == $profile.theme}> selected<{/if}>><{$profile.themes[n]}></option>
+                <{/section}>
               </select>
             </div>
             </label>
