@@ -512,7 +512,7 @@ class Passport extends Model {
 		if(empty($res))
 			return $this->error(3, '管理员不存在');
 		//密码错误
-		if(md5($res[0]['code'], $password) != $res[0]['password'])
+		if(md5($res[0]['code'].$password) != $res[0]['password'])
 			return false;
 		
 		if(setcookie('a_code', $res[0]['code'], 0, '/') && setcookie('a_verify', md5($this->user['id'].self::SALT.$res[0]['code'].$res[0]['grade']), 0, '/', NULL, 0, true) && setcookie('a_grade', (int)$res[0]['grade'], 0, '/')){
