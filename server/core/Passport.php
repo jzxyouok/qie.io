@@ -46,7 +46,6 @@ class Passport extends Model {
 	private $auth = ''; //授权信息
 	private $loginTime = null;
 	private $loginIP = null;
-	private $domain = ''; //网站域名，verify和setcookie
 	const MINIMUM_USER_ID = 1; //最小用户id
 	const EXPIRE_MAX = 1209600; //cookie过期最长时间为一个星期，14*24*60*60
 	const SALT = '!@#qie.$%^io&*()';
@@ -68,7 +67,7 @@ class Passport extends Model {
 		}
 		$this->loginTime = $_SERVER['REQUEST_TIME'];
 		$this->loginIP = ip2long(Util::getIP());
-		$this->domain = '.'.(defined('DOMAIN') && DOMAIN != ''?DOMAIN:$_SERVER['SERVER_NAME']);
+		
 		//$this->expire = 10;
 		//已登陆情况下，初始化用户信息
 		if($id) {
@@ -202,11 +201,13 @@ class Passport extends Model {
 		//如果用户没登陆
 		if(empty($_COOKIE['u_id']) && empty($_COOKIE['u_auth']))
 			return true;
-			
+		
 		$this->auth = '';
 		$this->user = array();
 		
-		if(setcookie('u_id', '', ($this->loginTime - 60), '/', $this->domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', $this->domain, 0))
+		$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+		$domain = '.'.($profile['domain']?$profile['domain']:$_SERVER['SERVER_NAME']);
+		if(setcookie('u_id', '', ($this->loginTime - 60), '/', $domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', $domain, 0))
 			return true;
 		else
 			return false;
@@ -342,7 +343,7 @@ class Passport extends Model {
 		
 		//[0]:auth,[1]:loginTime,[2]:expire,[3]:loginIP
 		$authArr = explode('_', $auth);
-		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name.$this->domain).$authArr[1].$authArr[2])) {
+		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
 			//$this->expire>0时，可以实现强制重新登录
 			if($authArr[2] > 0 && ($this->loginTime < $authArr[1] || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
 				return false;
@@ -360,7 +361,7 @@ class Passport extends Model {
 		if(!empty($this->auth))
 			return true;
 		else if(!empty($this->user)) {
-			$this->auth = md5(Crypt::encrypt($this->user['id'] . $this->user['name'] . $this->domain) . $this->loginTime . $this->expire) . '_' . $this->loginTime . '_' . $this->expire . '_'.$this->loginIP;
+			$this->auth = md5(Crypt::encrypt($this->user['id'] . $this->user['name']) . $this->loginTime . $this->expire) . '_' . $this->loginTime . '_' . $this->expire . '_'.$this->loginIP;
 			return true;
 		} else
 			return false;
@@ -379,8 +380,11 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function setCookie() {
+		$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+		$domain = '.'.($profile['domain']?$profile['domain']:$_SERVER['SERVER_NAME']);
 		$e = $this->expire > 0 ? $this->loginTime + $this->expire : 0;
-		if(setcookie('u_id', $this->user['id'], $e, '/', $this->domain, 0, true) && setcookie('u_name', $this->user['name'], $this->loginTime + $this->expire + 604800 , '/', $this->domain, 0) && setcookie('u_nick', $this->user['nick'], $this->loginTime + $this->expire + 604800, '/', $this->domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $this->domain, 0, true))
+		
+		if(setcookie('u_id', $this->user['id'], $e, '/', $domain, 0, true) && setcookie('u_name', $this->user['name'], $this->loginTime + $this->expire + 604800 , '/', $domain, 0) && setcookie('u_nick', $this->user['nick'], $this->loginTime + $this->expire + 604800, '/', $domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $domain, 0, true))
 			return true;
 		else
 			return false;
