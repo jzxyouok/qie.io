@@ -18,7 +18,7 @@ form {
 form fieldset {
     text-align: left;
 }
-form fieldset input, form select, form textarea,form button, form .button {
+form input, form select, form textarea,form button, form .button {
     box-sizing: border-box;
     border: 1px solid transparent;
     border-color: rgb(204, 204, 204);
@@ -176,7 +176,6 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     width: auto;
 }
 .panel>.head a {
-    font-size: 12px;
     float:right;
 }
 .panel>.body {

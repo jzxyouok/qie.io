@@ -38,10 +38,14 @@ class MainCtrl extends Controller {
 		if(empty($this->user)) {
 			$this->message(-1, '请先登录', 6);
 		}
-		if($this->passport->adminLogin($_POST['pwd']))
-			$this->message(1);
-		else
+		$res = $this->passport->adminLogin($_POST['pwd']);
+		if(!empty($res['code'])) {
+			$this->message(-1, '登录失败', 10+$res['code']);
+		} else if(!$res) {
 			$this->message(0,'登录失败');
+		} else {
+			$this->message(1);
+		}
 	}
 	//退出接口（二次验证）
 	public function logout() {

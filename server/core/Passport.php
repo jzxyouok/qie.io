@@ -46,6 +46,7 @@ class Passport extends Model {
 	private $auth = ''; //授权信息
 	private $loginTime = null;
 	private $loginIP = null;
+	private $domain = ''; //网站域名，verify和setcookie
 	const MINIMUM_USER_ID = 1; //最小用户id
 	const EXPIRE_MAX = 1209600; //cookie过期最长时间为一个星期，14*24*60*60
 	const SALT = '!@#qie.$%^io&*()';
@@ -67,7 +68,7 @@ class Passport extends Model {
 		}
 		$this->loginTime = $_SERVER['REQUEST_TIME'];
 		$this->loginIP = ip2long(Util::getIP());
-		
+		$this->domain = '.'.(defined('DOMAIN') && DOMAIN != ''?DOMAIN:$_SERVER['SERVER_NAME']);
 		//$this->expire = 10;
 		//已登陆情况下，初始化用户信息
 		if($id) {
@@ -204,9 +205,8 @@ class Passport extends Model {
 			
 		$this->auth = '';
 		$this->user = array();
-		$domain = '.'.(defined('DOMAIN') && DOMAIN != ''?DOMAIN:$_SERVER['SERVER_NAME']);
 		
-		if(setcookie('u_id', '', ($this->loginTime - 60), '/', $domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', $domain, 0))
+		if(setcookie('u_id', '', ($this->loginTime - 60), '/', $this->domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', $this->domain, 0))
 			return true;
 		else
 			return false;
@@ -297,30 +297,6 @@ class Passport extends Model {
 		return false;
 	}
 	/*
-	 * 验证合法性
-	 *
-	 * @param string $id 用户id
-	 * @param string $name 用户名
-	 * @param string $auth 授权信息
-	 *
-	 * @return boolean
-	 */
-	public function verify($id, $name, $auth) {
-		if(empty($id) || !is_numeric($id) || self::MINIMUM_USER_ID > $id || empty($name) || !preg_match(RegExp::USERNAME, $name) || empty($auth))
-			return false;
-		
-		//[0]:auth,[1]:loginTime,[2]:expire,[3]:loginIP
-		$authArr = explode('_', $auth);
-		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
-			//$this->expire>0时，可以实现强制重新登录
-			if($authArr[2] > 0 && ($this->loginTime < $authArr[1] || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
-				return false;
-			else
-				return $authArr;
-		} else
-			return false;
-	}
-	/*
 	 * 密码加密方法
 	 */
 	public function encode($password, $index = false) {
@@ -352,6 +328,30 @@ class Passport extends Model {
 		return $index.md5($newPassword);
 	}
 	/*
+	 * 验证合法性
+	 *
+	 * @param string $id 用户id
+	 * @param string $name 用户名
+	 * @param string $auth 授权信息
+	 *
+	 * @return boolean
+	 */
+	public function verify($id, $name, $auth) {
+		if(empty($id) || !is_numeric($id) || self::MINIMUM_USER_ID > $id || empty($name) || !preg_match(RegExp::USERNAME, $name) || empty($auth))
+			return false;
+		
+		//[0]:auth,[1]:loginTime,[2]:expire,[3]:loginIP
+		$authArr = explode('_', $auth);
+		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name.$this->domain).$authArr[1].$authArr[2])) {
+			//$this->expire>0时，可以实现强制重新登录
+			if($authArr[2] > 0 && ($this->loginTime < $authArr[1] || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
+				return false;
+			else
+				return $authArr;
+		} else
+			return false;
+	}
+	/*
 	 * 设置用户授权验证
 	 *
 	 * @return boolean
@@ -360,7 +360,7 @@ class Passport extends Model {
 		if(!empty($this->auth))
 			return true;
 		else if(!empty($this->user)) {
-			$this->auth = md5(Crypt::encrypt($this->user['id'] . $this->user['name']) . $this->loginTime . $this->expire) . '_' . $this->loginTime . '_' . $this->expire . '_'.$this->loginIP;
+			$this->auth = md5(Crypt::encrypt($this->user['id'] . $this->user['name'] . $this->domain) . $this->loginTime . $this->expire) . '_' . $this->loginTime . '_' . $this->expire . '_'.$this->loginIP;
 			return true;
 		} else
 			return false;
@@ -379,10 +379,8 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function setCookie() {
-		$domain = '.'.(defined('DOMAIN') && DOMAIN != ''?DOMAIN:$_SERVER['SERVER_NAME']);
-		
 		$e = $this->expire > 0 ? $this->loginTime + $this->expire : 0;
-		if(setcookie('u_id', $this->user['id'], $e, '/', $domain, 0, true) && setcookie('u_name', $this->user['name'], $this->loginTime + $this->expire + 604800 , '/', $domain, 0) && setcookie('u_nick', $this->user['nick'], $this->loginTime + $this->expire + 604800, '/', $domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $domain, 0, true))
+		if(setcookie('u_id', $this->user['id'], $e, '/', $this->domain, 0, true) && setcookie('u_name', $this->user['name'], $this->loginTime + $this->expire + 604800 , '/', $this->domain, 0) && setcookie('u_nick', $this->user['nick'], $this->loginTime + $this->expire + 604800, '/', $this->domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $this->domain, 0, true))
 			return true;
 		else
 			return false;
@@ -500,20 +498,24 @@ class Passport extends Model {
 		if(empty($password))
 			return $this->error(1, '密码不能为空');
 		if(empty($this->user))
-			return $this->error(1, '请先登录前端页面');
-		$password = addslashes(trim($password));
+			return $this->error(2, '请先登录前端页面');
+		$password = trim($password);
 		
 		$db = Loader::load('Database');
-		$sql = "SELECT `code`,`grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} AND `password`=MD5(CONCAT(`code`,'{$password}')) LIMIT 1";
+		$sql = "SELECT `code`,`grade`,`password` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1";
 		$res = $db->query($sql);
+		//管理员不存在
 		if(empty($res))
+			return $this->error(3, '管理员不存在');
+		//密码错误
+		if(md5($res[0]['code'], $password) != $res[0]['password'])
 			return false;
-		else if(setcookie('a_code', $res[0]['code'], 0, '/') && setcookie('a_verify', md5($this->user['id'].self::SALT.$res[0]['code'].$res[0]['grade']), 0, '/', NULL, 0, true) && setcookie('a_grade', (int)$res[0]['grade'], 0, '/')){
+		
+		if(setcookie('a_code', $res[0]['code'], 0, '/') && setcookie('a_verify', md5($this->user['id'].self::SALT.$res[0]['code'].$res[0]['grade']), 0, '/', NULL, 0, true) && setcookie('a_grade', (int)$res[0]['grade'], 0, '/')){
 			$this->admin = array('grade' => $res[0]['grade'], 'code' => $res[0]['code']);
 			return true;
-		}
-		
-		return true;
+		} else
+			return false;
 	}
 	/*
 	 * 添加后台管理员
@@ -526,15 +528,15 @@ class Passport extends Model {
 		if(empty($password))
 			return $this->error(1, '密码不能为空');
 		$userId = (int)$userId;
-		$password = addslashes(trim($password));
 		
 		$grade = (int)$grade;
 		
 		if($grade < $this->admin['grade'])
 			$grade = $this->admin['grade'];
 		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
+		$password = md5($code.trim($password));
 		$db = Loader::load('Database');
-		$sql = "INSERT `user_admin` (`user_id`,`password`,`code`,`grade`) VALUES ((SELECT `id` FROM `user` WHERE `id`={$userId} LIMIT 1),MD5(CONCAT('{$code}{$password}')),'{$code}',{$grade})";
+		$sql = "INSERT `user_admin` (`user_id`,`password`,`code`,`grade`) VALUES ((SELECT `id` FROM `user` WHERE `id`={$userId} LIMIT 1),'{$password}','{$code}',{$grade})";
 		return $db->execute($sql);
 	}
 	/*

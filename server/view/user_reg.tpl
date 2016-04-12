@@ -14,43 +14,43 @@
       <fieldset>
         <div class="form-group">
           <label>
-          <div class="title inline-block">用 户 名:</div>
-          <input type="text" name="user_name" placeholder="请输入用户名" required autofocus>
+          <div class="title">用 户 名:</div>
+          <div class="control"><input type="text" name="user_name" placeholder="请输入用户名" required autofocus></div>
           </label>
         </div>
         <div class="form-group">
           <label>
-          <div class="title inline-block">密&nbsp; &nbsp; &nbsp; 码:</div>
-          <input type="password" name="pwd" placeholder="请输入密码" required>
+          <div class="title">密&nbsp; &nbsp; &nbsp; 码:</div>
+          <div class="control"><input type="password" name="pwd" placeholder="请输入密码" required></div>
           </label>
         </div>
         <div class="form-group">
           <label>
-          <div class="title inline-block">确认密码:</div>
-          <input type="password" name="confirm_pwd" placeholder="请再次输入密码" required>
+          <div class="title">确认密码:</div>
+          <div class="control"><input type="password" name="confirm_pwd" placeholder="请再次输入密码" required></div>
           </label>
         </div>
         <div class="form-group">
           <label>
-          <div class="title inline-block">电子邮箱:</div>
-          <input type="text" name="email" placeholder="请输入电子邮箱" required>
+          <div class="title">电子邮箱:</div>
+          <div class="control"><input type="text" name="email" placeholder="请输入电子邮箱" required></div>
           </label>
         </div>
         <div class="form-group">
           <label>
-          <div class="title inline-block">昵&nbsp; &nbsp; &nbsp; 称:</div>
-          <input type="text" name="nick">
+          <div class="title">昵&nbsp; &nbsp; &nbsp; 称:</div>
+          <div class="control"><input type="text" name="nick"></div>
           </label>
         </div>
-        <div class="form-group img">
+        <div class="form-group has-img">
           <label>
-          <div class="title inline-block">验 证 码:</div>
-          <input type="text" name="captcha" maxlength="4" placeholder="请输入验证码" required>
+          <div class="title">验 证 码:</div>
+          <div class="control"><input type="text" name="captcha" maxlength="4" placeholder="请输入验证码" required></div>
           </label>
           <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
       </fieldset>
-      <button type="submit">注册</button>
-      <a class="button" href="/index.php/user/" title="登录">登录</a>
+      <div class="form-button"><button type="submit">注册</button>
+      <a class="button" href="/index.php/user/" title="登录">登录</a></div>
       <input type="hidden" name="token" value="<{$token}>">
     </form>
   </div>

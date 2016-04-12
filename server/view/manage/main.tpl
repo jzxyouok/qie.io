@@ -15,13 +15,13 @@
         <fieldset>
           <div class="form-group">
             <label>
-            <div class="title inline-block">原 密 码:</div>
+            <div class="title">原 密 码:</div>
             <input type="password" name="old_pwd">
             </label>
           </div>
           <div class="form-group">
             <label>
-            <div class="title inline-block">密&nbsp; &nbsp;码:</div>
+            <div class="title">密&nbsp; &nbsp;码:</div>
             <input type="password" name="pwd">
             </label>
           </div>
@@ -32,7 +32,7 @@
             </label>
           </div>
         </fieldset>
-        <input type="submit" value="修改">
+        <div class="form-button"><input type="submit" value="修改"></div>
       </form>
     </div>
   </div>

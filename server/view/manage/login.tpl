@@ -8,7 +8,7 @@
 <body class="manage manage-login">
 <div class="middle">
   <div class="wrap panel default-form">
-    <h2 class="head">后台管理系统</h2>
+    <h2 class="head">后台管理系统<a href="<{$homepage}>" class="fa fa-home"></a></h2>
     <div class="body">
       <form id="login_form" action="<{$dir}>/index.php/main/login/" method="post">
         <fieldset>
@@ -17,13 +17,13 @@
               <input type="password" name="pwd" required autofocus>
             </label>
           </div>
-          <div class="form-group has-addon img">
+          <div class="form-group has-addon has-img">
             <label><span class="inline-block input-addon"><i class="icon fa fa-image"></i></span>
               <input type="text" name="captcha" maxlength="4" required>
             </label>
             <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
         </fieldset>
-        <button type="submit" value="">登录</button>
+        <div class="form-button"><button type="submit" value="">登录</button></div>
         <input type="hidden" name="token" value="<{$token}>">
       </form>
     </div>

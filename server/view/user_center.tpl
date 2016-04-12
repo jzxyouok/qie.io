@@ -9,37 +9,37 @@
 <{include file="/theme/`$theme`/header.tpl"}>
 <div class="middle">
   <div class="wrap panel default-form">
-    <h2 class="head">用户中心<a href="/manage/">管理后台</a></h2>
+    <h2 class="head">用户中心<a href="/manage/" class="fa fa-cog"></a></h2>
     <form class="body two-collumn" id="modify_form" action="/index.php/user/update/" method="post">
       <fieldset>
         <div class="form-group">
-          <label><div class="title inline-block">原 密 码 :</div>
-            <input type="password" name="old_pwd">
+          <label><div class="title">原 密 码 :</div>
+            <div class="control"><input type="password" name="old_pwd"></div>
           </label>
         </div>
         <div class="form-group">
-          <label><div class="title inline-block">密&nbsp; &nbsp; &nbsp; 码:</div>
-            <input type="password" name="pwd">
+          <label><div class="title">密&nbsp; &nbsp; &nbsp; 码:</div>
+            <div class="control"><input type="password" name="pwd"></div>
           </label>
         </div>
         <div class="form-group">
-          <label><div class="title inline-block">确认密码:</div>
-            <input type="password" name="confirm_pwd">
+          <label><div class="title">确认密码:</div>
+            <div class="control"><input type="password" name="confirm_pwd"></div>
           </label>
         </div>
         <div class="form-group">
-          <label><div class="title inline-block">电子邮箱:</div>
-            <input type="text" name="email">
+          <label><div class="title">电子邮箱:</div>
+            <div class="control"><input type="text" name="email"></div>
           </label>
         </div>
         <div class="form-group">
-          <label><div class="title inline-block">昵&nbsp; &nbsp; &nbsp; 称:</div>
-            <input type="text" name="nick" value="<{$smarty.cookies.u_nick}>">
+          <label><div class="title">昵&nbsp; &nbsp; &nbsp; 称:</div>
+            <div class="control"><input type="text" name="nick" value="<{$smarty.cookies.u_nick}>"></div>
           </label>
         </div>
       </fieldset>
       <input type="hidden" name="token" value="<{$token}>">
-      <button type="submit">修改</button>
+      <div class="form-button"><button type="submit">修改</button></div>
     </form>
   </div>
   <{include file="/theme/`$theme`/footer.tpl"}> </div>

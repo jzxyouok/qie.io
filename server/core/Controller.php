@@ -103,6 +103,7 @@ class Controller {
 			$view->registerClass($k, $v);
 		
 		//assign变量
+		$this->vars['homepage'] = $this->config['profile']['homepage'];
 		$this->vars['theme'] = $this->profile['theme'];
 		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
 		$this->vars['meta'] = $this->config['profile']['meta'];
