@@ -18,15 +18,18 @@ form {
 form fieldset {
     text-align: left;
 }
-form fieldset input, form select, form textarea {
+form fieldset input, form select, form textarea,form button, form .button {
+    box-sizing: border-box;
     padding:5px 12px;
+    border: 1px solid transparent;
+    border-color: rgb(204, 204, 204);
 }
 form fieldset input[type=checkbox], form fieldset input[type=radio] {
     padding: 0;
 }
 form button, form .button, form input[type=submit],form input[type=reset], form input[type=button] {
-    display: inline-block;
-    padding: 6px 18px;
+    color: #333;
+    padding: 6px 24px;
     font-size: 14px;
     line-height: 1.5;
     text-align: center;
@@ -34,9 +37,6 @@ form button, form .button, form input[type=submit],form input[type=reset], form 
     white-space: nowrap;
     vertical-align: middle;
     background-color:white;
-    border: 1px solid transparent;
-    border-color:rgb(204, 204, 204);
-    border-radius: 4px;
     -ms-touch-action: manipulation;
     touch-action: manipulation;
     -webkit-user-select: none;
@@ -45,10 +45,9 @@ form button, form .button, form input[type=submit],form input[type=reset], form 
     user-select: none;
 }
 form button[type=submit], form input[type=submit] {
-    padding:6px 32px;
+    padding:6px 28px;
 }
 form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, form input[type=button]:hover, form .button:hover {
-    color: #333;
     background-color: #e6e6e6;
     border-color: #adadad;
 }
@@ -75,6 +74,7 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
 .panel {
     border-radius: 4px;
     border: 1px solid transparent;
+    border-color:rgb(204,204,204);
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
     box-sizing: border-box;
 }
@@ -85,6 +85,10 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     border-radius:3px 3px 0 0;
     line-height: 1;
     width: auto;
+}
+.panel>.head a {
+    font-size: 12px;
+    float:right;
 }
 .panel>.body {
     padding: 15px;
@@ -97,59 +101,29 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     font-size: 0;
     line-height: 34px;
 }
-.form-group .title, .form-group .control {
-    font-size: 14px;
+.form-group input[type=text], .form-group input[type=password], .form-group select {
+    height: 34px;
 }
 .form-group input[type=text], .form-group input[type=password], .form-group select, .form-group textarea {
-    box-sizing: border-box;
     width: 100%;
-    height: 100%;
     min-height:34px;
     line-height: 1.5;
     color: #555;
-    background-color: #fff;
-    background-image: none;
+    background: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;
+    vertical-align: top;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
-.form-group .input-addon {
-    font-size: 14px;
-    box-sizing:border-box;
-    height: 100%;
-    vertical-align: top;
-    text-align: center;
-    border-radius: 4px 0 0 4px;
-    border: 1px solid #ccc;
-    border-right:none;
-    background-color:#eee;
-}
-.form-group .input-addon .icon {
-    vertical-align: middle;
-}
-.has-addon .input-addon {
-    width:15%;
-}
-.has-addon .form-group input {
-    border-radius: 0 4px 4px 0;
-    width:85%;
-}
-.two-collumn .title {
-    width:20%;
-    vertical-align: top;
-}
-.two-collumn .control {
-    width:80%;
-}
-.form-group.img img {
+.form-group.has-img img {
     position: absolute;
     right:1px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1px;
+    /*transform: translateY(-50%);*/
     border-radius: 0 4px 4px 0;
 }
 .form-group input:focus {
@@ -162,10 +136,49 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.form-group.img, .form-group.img label {
+.form-group.has-img, .form-group.has-img label {
     position: relative;
 }
-/*default-form*/
+.form-group .input-group {
+    font-size: 14px;
+}
+/*带icon组件*/
+.has-addon .input-addon {
+    width:15%;
+    display: inline-block;
+}
+.has-addon .input-addon {
+    font-size: 14px;
+    box-sizing:border-box;
+    height: 34px;
+    vertical-align: top;
+    text-align: center;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #ccc;
+    border-right:none;
+    background-color:#eee;
+}
+.has-addon .input-addon .icon {
+    vertical-align: middle;
+}
+.has-addon input[type=text], .has-addon input[type=password], .has-addon select, .has-addon textarea {
+    border-radius: 0 4px 4px 0;
+    width:85%;
+}
+/*2列结构*/
+.form-group .title, .form-group .control {
+    display: inline-block;
+    font-size: 14px;
+}
+.form-group .title {
+    width:25%;
+    vertical-align: top;
+}
+.form-group .control {
+    width:75%;
+    position: relative;
+}
+/*default-form panel*/
 .default-form {
     border-color:#ddd;
 }
@@ -174,11 +187,10 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     background-color: #f5f5f5;
     border-color: #ddd;
 }
-.default-form button, .default-form .button {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
-}
+.default-form form button, .default-form form .button, .default-form form input[type=submit], .default-form form input[type=reset], .default-form form input[type=button] {
+     height: 34px;
+    border-radius: 4px;
+ }
 /*manage ui*/
 body.manage a {
     color:#337ab7;
