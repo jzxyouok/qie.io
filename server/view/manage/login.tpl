@@ -10,27 +10,25 @@
   <div class="wrap panel default-form">
     <h2 class="head">后台管理系统</h2>
     <div class="body">
-    <form class="has-addon" id="login_form" action="<{$dir}>/index.php/main/login/" method="post">
-      <fieldset>
-        <div class="form-group">
-          <label><span class="inline-block input-addon"><i class="icon fa fa-key"></i></span>
-            <input type="password" name="pwd" required autofocus>
-          </label>
-        </div>
-        <div class="form-group img">
-          <label><span class="inline-block input-addon"><i class="icon fa fa-image"></i></span>
-            <input type="text" name="captcha" maxlength="4" required>
-          </label>
-          <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
-      </fieldset>
-      <button type="submit" value="">登录</button>
-      <input type="hidden" name="token" value="<{$token}>">
-    <p><{$elapsed_time}>s/<{$memory_usage}>MB</p>
-    </form>
+      <form id="login_form" action="<{$dir}>/index.php/main/login/" method="post">
+        <fieldset>
+          <div class="form-group has-addon">
+            <label><span class="inline-block input-addon"><i class="icon fa fa-key"></i></span>
+              <input type="password" name="pwd" required autofocus>
+            </label>
+          </div>
+          <div class="form-group has-addon img">
+            <label><span class="inline-block input-addon"><i class="icon fa fa-image"></i></span>
+              <input type="text" name="captcha" maxlength="4" required>
+            </label>
+            <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
+        </fieldset>
+        <button type="submit" value="">登录</button>
+        <input type="hidden" name="token" value="<{$token}>">
+      </form>
     </div>
-  </div>
+  </div><{include file="./footer.tpl"}>
 </div>
-<{$js}> 
 <script>
 function refreshImg() {
 	var img = new Image();
