@@ -24,20 +24,25 @@ class Controller {
 	protected $autoloadResult = array();
 	
 	function __construct($startTime = 0) {
-		$this->processStart = empty($startTime)?microtime():$startTime; //计算性能
+		//计算性能
+		$this->processStart = empty($startTime)?microtime():$startTime;
+		//获取注册用户信息
 		$this->user = Loader::load('Passport')->getUser();
-		
+		//分解请求
+		$request = Loader::load('Request');
+		$this->dir = $request->getDir();
 		//初始化网站配置
 		$this->profile['css'] = array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">');
 		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script>',
 									'<script src="/static/js/util.js"></script>');
 		//加载网站配置文件
 		$this->loadConfig('profile');
-		if(!empty($this->config['profile']['domain']))
-			define('DOMAIN', $this->config['profile']['domain']);
 		//前端默认主题
 		$this->profile['theme'] = $this->config['profile']['theme']?$this->config['profile']['theme']:'default';
+		//管理后台二次登录验证
 		$this->profile['admin_relogin'] = (boolean)$this->config['profile']['admin_relogin'];
+		//管理后台地址
+		$this->profile['manage_dir'] = $this->config['profile']['manage_dir'];
 		//autoload
 		foreach($this->autoload as $k => $v) {
 			$obj = $k == 'this'?$this:Loader::load($k);
@@ -104,9 +109,9 @@ class Controller {
 		
 		//assign变量
 		$this->vars['homepage'] = $this->config['profile']['homepage'];
-		$this->vars['theme'] = $this->profile['theme'];
 		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
 		$this->vars['meta'] = $this->config['profile']['meta'];
+		$this->vars['theme'] = $this->profile['theme'];
 		$this->vars['js'] = implode('', $this->profile['js']);
 		$this->vars['css'] = implode('', $this->profile['css']);
 		$this->vars['user'] = $this->user;
@@ -208,11 +213,11 @@ class Controller {
 	 *
 	 * @return boolean
 	 */
-	public function adminCheck() {
+	public function hasAdminLogin() {
 		$isAdmin = $this->profile['admin_relogin'] ? Loader::load('Passport')->isAdmin() : !empty($this->user);
 		
 		if(!$isAdmin) {
-			header('Location: '.($this->profile['admin_relogin']?'/manage/':'/index.php/user/'));
+			header('Location: '.($this->profile['admin_relogin']?$this->profile['manage_dir'].'/':'/index.php/user/'));
 		}
 		return $isAdmin;
 	}

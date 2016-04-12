@@ -38,7 +38,6 @@ class App {
 			if(!$object)
 				$this->error('找不到对象::object not found', $request);
 			
-			$object->setDir($dir);
 			if(empty($method) && !($method = $request->segment($position+1))) {
 				$method = 'index'; //尝试加载默认方法
 				$param = -1;

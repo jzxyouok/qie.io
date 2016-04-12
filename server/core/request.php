@@ -15,7 +15,7 @@
 
 class Request {
 	private $dir = ''; //物理路径
-	private $path = ''; //index.php后面部分。REQUEST_URI,path_info
+	private $path = ''; //虚拟路径。index.php后面部分(REQUEST_URI,path_info)
 	private $segments = array();
 	private $route = array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
 							'replace'=>array('/', ''));

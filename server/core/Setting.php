@@ -41,6 +41,14 @@ class Setting extends Model {
 						}
 					}
 					break;
+					case 'manage_dir': {
+						//manage_dir,管理后台地址
+						if($v !== $profile['manage_dir'] && is_dir(DOCUMENT_ROOT.$v)) {
+							$search[] = '#\$profile\[\s*\'manage_dir\'\s*]\s*=.+#';	
+							$replace[] = '$profile[\'manage_dir\'] = '.($v? 'true':'false').';';
+						}
+					}
+					break;
 					case 'theme': {
 						//网站主题
 						if($v != $profile['theme'] && is_dir(DOCUMENT_ROOT."/theme/{$v}")) {

@@ -24,8 +24,8 @@ body.manage .default-form {
       <form class="body two-collumn" id="modify_form" action="<{$dir}>/index.php/setting/save/" method="post">
         <fieldset>
           <div class="form-group">
-            <div class="title inline-block">管理员二次登录:</div>
-            <div class="control inline-block">
+            <div class="title">管理员二次登录:</div>
+            <div class="control">
               <label>
                 <input type="radio" name="admin_relogin" value="true"<{if $profile.admin_relogin}> checked<{/if}>>
                 是 </label>
@@ -35,25 +35,32 @@ body.manage .default-form {
             </div>
           </div>
           <div class="form-group">
+              <label>
+            <div class="title">管理后台地址:</div>
+            <div class="control">
+              <input type="text" name="manage_dir" value="<{$profile.manage_dir}>">
+            </div></label>
+          </div>
+          <div class="form-group">
             <label>
-            <div class="title inline-block">网站域名:</div>
-            <div class="control inline-block">
+            <div class="title">网站域名:</div>
+            <div class="control">
               <input type="text" name="domain" value="<{$profile.domain}>">
             </div>
             </label>
           </div>
           <div class="form-group">
             <label>
-            <div class="title inline-block">网站首页:</div>
-            <div class="control inline-block">
+            <div class="title">网站首页:</div>
+            <div class="control">
               <input type="text" name="homepage" value="<{$profile.homepage}>">
             </div>
             </label>
           </div>
           <div class="form-group">
             <label>
-            <div class="title inline-block">选择主题:</div>
-            <div class="control inline-block">
+            <div class="title">选择主题:</div>
+            <div class="control">
               <select name="theme">
               <{section name=n loop=$profile.themes}>
                 <option value="<{$profile.themes[n]}>"<{if $profile.themes[n] == $profile.theme}> selected<{/if}>><{$profile.themes[n]}></option>
@@ -64,46 +71,46 @@ body.manage .default-form {
           </div>
           <div class="form-group">
             <label>
-            <div class="title inline-block">网站标题:</div>
-            <div class="control inline-block">
+            <div class="title">网站标题:</div>
+            <div class="control">
               <input type="text" name="title" value="<{$profile.title}>">
             </div>
             </label>
           </div>
           <div class="form-group">
             <label>
-            <div class="title inline-block">网站关键词:</div>
-            <div class="control inline-block">
+            <div class="title">网站关键词:</div>
+            <div class="control">
               <input type="text" name="keywords" value="<{$profile.meta.keywords}>">
             </div>
             </label>
           </div>
           <div class="form-group">
             <label>
-            <div class="title inline-block">网站简介:</div>
-            <div class="control inline-block">
+            <div class="title">网站简介:</div>
+            <div class="control">
               <input type="text" name="description" value="<{$profile.meta.description}>">
             </div>
             </label>
           </div>
           <div class="form-group">
             <label>
-            <div class="title inline-block">流量监测代码:</div>
-            <div class="control inline-block">
+            <div class="title">流量监测代码:</div>
+            <div class="control">
               <textarea rows="3" name="analytics"><{$profile.analytics}></textarea>
             </div>
             </label>
           </div>
           <div class="form-group">
             <label>
-            <div class="title inline-block">ICP证:</div>
-            <div class="control inline-block">
+            <div class="title">ICP证:</div>
+            <div class="control">
               <input type="text" name="icp" value="<{$profile.icp}>">
             </div>
             </label>
           </div>
         </fieldset>
-        <input type="submit" value="确认修改">
+        <div class="form-button"><input type="submit" value="确认修改"></div>
       </form>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <?php
 
 class SettingCtrl extends Controller {
-	protected $autoload = array('this'=>'adminCheck');
+	protected $autoload = array('this'=>'hasAdminLogin');
 	
 	//管理界面首页
 	function index() {
@@ -15,6 +15,8 @@ class SettingCtrl extends Controller {
 		
 		if(!empty($_POST['admin_relogin']))
 			$data['admin_relogin'] = ($_POST['admin_relogin'] == 'true'?true:false);
+		if(isset($_POST['manage_dir']))
+			$data['manage_dir'] = $_POST['manage_dir'];
 		if(isset($_POST['domain']))
 			$data['domain'] = $_POST['domain'];
 		if(isset($_POST['homepage']))

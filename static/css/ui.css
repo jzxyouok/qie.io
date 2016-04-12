@@ -226,7 +226,7 @@ body.manage>.header>.control-panel {
     padding-right: 20px;
 }
 body.manage>.header>.control-panel .fa {
-    font-size: 20px;
+    vertical-align: middle;
 }
 body.manage>.sidebar {
     width:300px;

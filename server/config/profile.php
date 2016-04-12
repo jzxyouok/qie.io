@@ -3,8 +3,10 @@
  * 网站配置文件
  */
 /*writeable*/
-//管理后台二次登录
+//管理后台二次登录验证
 $profile['admin_relogin'] = true;
+//管理后台物理路径
+$profile['manage_dir'] = '/manage';
 //网站域名
 $profile['domain'] = '';
 //网站首页
