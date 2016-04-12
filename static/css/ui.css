@@ -23,6 +23,7 @@ form fieldset input, form select, form textarea,form button, form .button {
     padding:5px 12px;
     border: 1px solid transparent;
     border-color: rgb(204, 204, 204);
+    display: inline-block;
 }
 form fieldset input[type=checkbox], form fieldset input[type=radio] {
     padding: 0;
@@ -110,7 +111,7 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     line-height: 1.5;
     color: #555;
     background: #fff;
-    border: 1px solid #ccc;
+    border-color: #ccc;
     border-radius: 4px;
     vertical-align: top;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
@@ -146,8 +147,6 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
 .has-addon .input-addon {
     width:15%;
     display: inline-block;
-}
-.has-addon .input-addon {
     font-size: 14px;
     box-sizing:border-box;
     height: 34px;
@@ -162,7 +161,8 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     vertical-align: middle;
 }
 .has-addon input[type=text], .has-addon input[type=password], .has-addon select, .has-addon textarea {
-    border-radius: 0 4px 4px 0;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
     width:85%;
 }
 /*2列结构*/
