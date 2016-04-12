@@ -20,10 +20,10 @@ form fieldset {
 }
 form fieldset input, form select, form textarea,form button, form .button {
     box-sizing: border-box;
-    padding:5px 12px;
     border: 1px solid transparent;
     border-color: rgb(204, 204, 204);
     display: inline-block;
+    padding:5px 12px;
 }
 form fieldset input[type=checkbox], form fieldset input[type=radio] {
     padding: 0;
@@ -55,48 +55,6 @@ form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, fo
 form button[disabed], form input[disabled], form select[disabled], form textarea[disabled] {
     cursor: not-allowed;
 }
-/*normal class*/
-.wrap {
-    margin:0 auto;
-    text-align: left;
-}
-.middle {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-/*ui layout*/
-.header, .footer {
-    width: 100%;
-}
-.footer {
-    padding-top: 60px;
-}
-.panel {
-    border-radius: 4px;
-    border: 1px solid transparent;
-    border-color:rgb(204,204,204);
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    box-sizing: border-box;
-}
-.panel>.head {
-    padding: 10px 15px;
-    border-bottom: 1px solid transparent;
-    font-size:16px;
-    border-radius:3px 3px 0 0;
-    line-height: 1;
-    width: auto;
-}
-.panel>.head a {
-    font-size: 12px;
-    float:right;
-}
-.panel>.body {
-    padding: 15px;
-    background-color:white;
-    border-radius: 0 0 3px 3px;
-}
-/*form style*/
 .form-group {
     margin-bottom: 15px;
     font-size: 0;
@@ -140,8 +98,9 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
 .form-group.has-img, .form-group.has-img label {
     position: relative;
 }
-.form-group .input-group {
-    font-size: 14px;
+.form-button button, .form-button .button, .form-button input[type=submit], .form-button input[type=reset], .form-button input[type=button] {
+    height: 34px;
+    border-radius: 4px;
 }
 /*带icon组件*/
 .has-addon .input-addon {
@@ -167,16 +126,63 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
 }
 /*2列结构*/
 .form-group .title, .form-group .control {
-    display: inline-block;
     font-size: 14px;
 }
 .form-group .title {
-    width:25%;
     vertical-align: top;
 }
 .form-group .control {
-    width:75%;
     position: relative;
+}
+.two-collumn .title, .two-collumn .control {
+    display: inline-block;
+}
+.two-collumn .title {
+    width:25%;
+}
+.two-collumn .control {
+    width:75%;
+}
+/*normal class*/
+.wrap {
+    margin:0 auto;
+    text-align: left;
+}
+.middle {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+/*ui layout*/
+.header, .footer {
+    width: 100%;
+}
+.footer {
+    padding-top: 60px;
+}
+.panel {
+    border-radius: 4px;
+    border: 1px solid transparent;
+    border-color:rgb(204,204,204);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-sizing: border-box;
+}
+.panel>.head {
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    font-size:16px;
+    border-radius:3px 3px 0 0;
+    line-height: 1;
+    width: auto;
+}
+.panel>.head a {
+    font-size: 12px;
+    float:right;
+}
+.panel>.body {
+    padding: 15px;
+    background-color:white;
+    border-radius: 0 0 3px 3px;
 }
 /*default-form panel*/
 .default-form {
@@ -187,10 +193,6 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     background-color: #f5f5f5;
     border-color: #ddd;
 }
-.default-form form button, .default-form form .button, .default-form form input[type=submit], .default-form form input[type=reset], .default-form form input[type=button] {
-     height: 34px;
-    border-radius: 4px;
- }
 /*manage ui*/
 body.manage a {
     color:#337ab7;

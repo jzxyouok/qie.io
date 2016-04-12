@@ -14,7 +14,7 @@
   <h2 class="head">form</h2>
   <div class="body">
     <div class="panel">
-      <h3 class="head">default-form</h3>
+      <h3 class="head">form</h3>
       <form class="body" >
         <fieldset>
           <div>
@@ -47,7 +47,7 @@
           </div>
           <div>
             <div class="title">input checkbox:</div>
-            <div class="input-group">
+            <div class="control">
               <label>
                 <input type="checkbox" name="checkbox">
                 checkbox1 </label>
@@ -61,7 +61,7 @@
           </div>
           <div>
             <div class="title">input radio:</div>
-            <div class="input-group">
+            <div class="control">
               <label>
                 <input type="radio" name="radio">
                 radio1 </label>
@@ -83,8 +83,8 @@
         <a class="button" href="/index.php/user/reg/" title="注册">注册</a>
       </form>
     </div>
-    <div class="panel default-form">
-      <h3 class="head">default-form</h3>
+    <div class="panel">
+      <h3 class="head">form form-button</h3>
       <form class="body" >
         <fieldset>
           <div>
@@ -117,7 +117,7 @@
           </div>
           <div>
             <div class="title">input checkbox:</div>
-            <div class="input-group">
+            <div class="control">
               <label>
                 <input type="checkbox" name="checkbox">
                 checkbox1 </label>
@@ -131,7 +131,7 @@
           </div>
           <div>
             <div class="title">input radio:</div>
-            <div class="input-group">
+            <div class="control">
               <label>
                 <input type="radio" name="radio">
                 radio1 </label>
@@ -149,8 +149,8 @@
             <textarea>textarea</textarea>
           </div>
         </fieldset>
-        <button type="submit">登录</button>
-        <a class="button" href="/index.php/user/reg/" title="注册">注册</a>
+        <div class="form-button"><button type="submit">登录</button>
+        <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
       </form>
     </div>
     <div class="panel default-form">
@@ -187,7 +187,7 @@
           </div>
           <div class="form-group">
             <div class="title">input checkbox:</div>
-            <div class="input-group">
+            <div class="control">
               <label>
                 <input type="checkbox" name="checkbox">
                 checkbox1 </label>
@@ -201,7 +201,7 @@
           </div>
           <div class="form-group">
             <div class="title">input radio:</div>
-            <div class="input-group">
+            <div class="control">
               <label>
                 <input type="radio" name="radio">
                 radio1 </label>
@@ -219,13 +219,13 @@
             <textarea>textarea</textarea>
           </div>
         </fieldset>
-        <button type="submit">登录</button>
-        <a class="button" href="/index.php/user/reg/" title="注册">注册</a>
+        <div class="form-button"><button type="submit">登录</button>
+        <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
       </form>
     </div>
     <div class="panel default-form">
-      <h3 class="head">default-form title&control</h3>
-      <form class="body" >
+      <h3 class="head">default-form two-collumn</h3>
+      <form class="body two-collumn" >
         <fieldset>
           <div class="form-group">
             <label>
@@ -299,8 +299,8 @@
             </div>
           </div>
         </fieldset>
-        <button type="submit">登录</button>
-        <a class="button" href="/index.php/user/reg/" title="注册">注册</a>
+        <div class="form-button"><button type="submit">登录</button>
+        <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
       </form>
     </div>
     <div class="panel default-form">
@@ -333,7 +333,7 @@
           </div>
           <div class="form-group">
             <div class="title">input checkbox:</div>
-            <div class="input-group">
+            <div class="control">
               <label>
                 <input type="checkbox" name="checkbox">
                 checkbox1 </label>
@@ -347,7 +347,7 @@
           </div>
           <div class="form-group">
             <div class="title">input radio:</div>
-            <div class="input-group">
+            <div class="control">
               <label>
                 <input type="radio" name="radio">
                 radio1 </label>
@@ -365,8 +365,8 @@
             <textarea>textarea</textarea>
           </div>
         </fieldset>
-        <button type="submit">登录</button>
-        <a class="button" href="/index.php/user/reg/" title="注册">注册</a>
+        <div class="form-button"><button type="submit">登录</button>
+        <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
       </form>
     </div>
   </div>
