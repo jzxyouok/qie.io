@@ -9,7 +9,7 @@
 <{include file="/theme/`$theme`/header.tpl"}>
 <div class="middle">
   <div class="wrap panel default-form">
-    <h2 class="head">用户中心<a href="/manage/" class="fa fa-cog"></a></h2>
+    <h2 class="head">用户中心<a href="<{$manageDir}>/" class="fa fa-cog"></a></h2>
     <form class="body two-collumn" id="modify_form" action="/index.php/user/update/" method="post">
       <fieldset>
         <div class="form-group">

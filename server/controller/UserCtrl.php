@@ -12,7 +12,7 @@ class UserCtrl extends Controller {
 	//登录页
 	function index() {
 		if(!empty($this->user)) {
-			header('Location: '.($this->profile['admin_relogin']?'/index.php/user/center/':'/manage/index.php'));
+			header('Location: '.($this->profile['admin_relogin']?'/index.php/user/center/':$this->profile['manage_dir'].'/'));
 		}
 		
 		$this->loadView('user');
@@ -29,8 +29,9 @@ class UserCtrl extends Controller {
 		if(empty($this->user))
 			header('Location: /index.php/user/');
 		if(!$this->profile['admin_relogin'])
-			header('Location: /manage/index.php');
+			header('Location: '.$this->profile['manage_dir'].'/');
 			
+		$this->vars['manageDir'] = $this->profile['manage_dir'];
 		$this->loadView('user_center');
 	}
 	/*
