@@ -35,7 +35,7 @@ class Controller {
 		}
 	}
 	/*
-	 * 加载view视图文件
+	 * 加载view文件夹视图
 	 *
 	 * @param string $tpl 视图文件地址 
 	 */
@@ -44,14 +44,12 @@ class Controller {
 			return false;
 		
 		//分解请求
-		$dir = Loader::load('Request')->getDir();
-		$this->vars['dir'] = $dir;
+		$this->vars['dir'] = Loader::load('Request')->getDir();
 		
-		$tpl = APP_PATH.'/view'.$dir.'/'.$tpl.'.tpl';
-		$this->view($tpl);
+		$this->view(APP_PATH.'/view'.$this->vars['dir'].'/'.$tpl.'.tpl');
 	}
 	/*
-	 * 加载theme视图(用户主题)文件
+	 * 加载theme文件夹视图(用户主题)
 	 * 
 	 * @param string $tpl 视图文件地址 
 	 */
@@ -65,10 +63,8 @@ class Controller {
 		
 		$this->vars['icp'] = $this->config['profile']['icp'];
 		$this->vars['analytics'] = $this->config['profile']['analytics'];
-		
-		$tpl = DOCUMENT_ROOT.'/theme/'.$this->config['profile']['theme'].'/'.$tpl.'.tpl';
 
-		$this->view($tpl);
+		$this->view(DOCUMENT_ROOT.'/theme/'.$this->config['profile']['theme'].'/'.$tpl.'.tpl');
 	}
 	/*
 	 * 加载视图文件
@@ -79,10 +75,10 @@ class Controller {
 		if(!file_exists($tpl))
 			return false;
 		
-		$this->vars['homepage'] = $this->config['profile']['homepage'];
 		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
 		$this->vars['meta'] = $this->config['profile']['meta'];
 		$this->vars['theme'] = $this->config['profile']['theme'];
+		$this->vars['homepage'] = $this->config['profile']['homepage'];
 		$this->vars['user'] = $this->user;
 		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
 		
@@ -106,7 +102,7 @@ class Controller {
 		$view->display($tpl);
 	}
 	/*
-	 * 加载配置文件
+	 * 加载config文件夹下面的配置文件
 	 *
 	 * @param string $name 配置名称
 	 */
@@ -117,22 +113,7 @@ class Controller {
 		$this->config[$name] = Loader::loadVar(APP_PATH.'/config/'.$name.'.php', $name);
 	}
 	/*
-	 * 设置自动调用方法的参数uri位置
-	 * 
-	 * @param int $pos uri位置
-	 * 
-	 */
-	public function setParamPos($pos) {
-		$this->paramPos = $pos;
-	}
-	/*
-	 * 返回自动调用方法的参数uri位置
-	 */
-	public function getParamPos() {
-		return $this->paramPos;
-	}
-	/*
-	 * 检查安全性
+	 * 根据token检查安全性
 	 * 
 	 * @param string $timeout 过期时间
 	 *
@@ -184,11 +165,26 @@ class Controller {
 	 * @return boolean
 	 */
 	public function hasAdminLogin() {
-		$isAdmin = $this->config['profile']['admin_relogin'] ? Loader::load('Passport')->isAdmin() : !empty($this->user);
-		
-		if(!$isAdmin) {
+		if(empty($this->user) || ($this->config['profile']['admin_relogin'] && !Loader::load('Passport')->isAdmin())) {
+			//exit('need login');
 			header('Location: '.($this->config['profile']['admin_relogin']?$this->config['profile']['manage_dir'].'/':'/index.php/user/'));
 		}
-		return $isAdmin;
+		
+		return true;
+	}
+	/*
+	 * 设置自动调用方法的参数uri位置
+	 * 
+	 * @param int $pos uri位置
+	 * 
+	 */
+	public function setParamPos($pos) {
+		$this->paramPos = $pos;
+	}
+	/*
+	 * 返回自动调用方法的参数uri位置
+	 */
+	public function getParamPos() {
+		return $this->paramPos;
 	}
 }
