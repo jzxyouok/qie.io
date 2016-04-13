@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>用户注册-<{$title}></title>
-<{$css}>
+<{include file="./css.tpl"}>
 </head>
 <body class="user user-reg">
 <{include file="/theme/`$theme`/header.tpl"}>
@@ -55,6 +55,7 @@
     </form>
   </div>
   <{include file="/theme/`$theme`/footer.tpl"}></div>
+<{include file="./js.tpl"}>
 <script>
 function refreshImg() {
 	var img = new Image();

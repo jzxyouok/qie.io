@@ -47,9 +47,6 @@ class Controller {
 		$dir = Loader::load('Request')->getDir();
 		$this->vars['dir'] = $dir;
 		
-		$this->config['profile']['css'] = array_merge($this->config['profile']['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">',
-																		'<link type="text/css" rel="stylesheet" href="/static/css/ui.css">'));
-		
 		$tpl = APP_PATH.'/view'.$dir.'/'.$tpl.'.tpl';
 		$this->view($tpl);
 	}
@@ -86,9 +83,6 @@ class Controller {
 		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
 		$this->vars['meta'] = $this->config['profile']['meta'];
 		$this->vars['theme'] = $this->config['profile']['theme'];
-		$this->vars['js'] = implode('', array_merge(array('<script src="/static/js/jquery.min.js"></script>',
-									'<script src="/static/js/util.js"></script>'), $this->config['profile']['js']));
-		$this->vars['css'] = implode('', array_merge(array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">'), $this->config['profile']['css']));
 		$this->vars['user'] = $this->user;
 		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
 		

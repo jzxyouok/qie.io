@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>error-<{$title}></title>
-<{$css}>
+<{include file="./css.tpl"}>
 </head>
 <body class="error">
 <{include file="/theme/`$theme`/header.tpl"}>
@@ -24,5 +24,6 @@
     </div>
   </div></div>
   <{include file="/theme/`$theme`/footer.tpl"}>
+<{include file="./js.tpl"}>
 </body>
 </html>

@@ -2,7 +2,7 @@
 /*
  * 网站配置文件
  */
-/*writeable*/
+
 //管理后台二次登录验证
 $profile['admin_relogin'] = true;
 //管理后台物理路径
@@ -31,8 +31,3 @@ var _hmt = _hmt || [];
 EOT;
 //ICP
 $profile['icp'] = '粤icp5';
-/*writeable end*/
-
-//前端静态文件
-$profile['css'] = array('<link type="text/css" rel="stylesheet" href="/theme/default/css/style.css">');
-$profile['js'] =  array('<script src="/theme/default/js/common.js"></script>');

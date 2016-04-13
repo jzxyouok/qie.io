@@ -5,11 +5,12 @@
 <title><{$title}></title>
 <meta name="keywords" content="<{$meta.keywords}>">
 <meta name="description" content="<{$meta.description}>">
-<{$css}>
+<{include file="./css.tpl"}>
 </head>
 <body>
-<{include file="/theme/`$theme`/header.tpl"}>
+<{include file="./header.tpl"}>
 <a href="/index.php/user/">用户中心</a>
-<{include file="/theme/`$theme`/footer.tpl"}>
+<{include file="./footer.tpl"}>
+<{include file="./js.tpl"}>
 </body>
 </html>
