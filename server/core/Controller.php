@@ -71,7 +71,7 @@ class Controller {
 	 * 
 	 * @param string $tpl 视图文件地址 
 	 */
-	protected function view($tpl = '') {
+	public function view($tpl = '') {
 		if(!file_exists($tpl))
 			return false;
 		
@@ -161,6 +161,8 @@ class Controller {
 	}
 	/*
 	 * 判断是否为管理员
+	 *
+	 * @param boolean $redirect 未登录状态下是否跳转到登录页面
 	 *
 	 * @return boolean
 	 */
