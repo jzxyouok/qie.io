@@ -7,7 +7,7 @@ class MainCtrl extends Controller {
 	function __construct($startTime = 0) {
 		parent::__construct($startTime);
 		$this->passport = Loader::load('Passport');
-		$this->isAdmin = $this->profile['admin_relogin'] ? $this->passport->isAdmin() : !empty($this->user);
+		$this->isAdmin = $this->config['profile']['admin_relogin'] ? $this->passport->isAdmin() : !empty($this->user);
 	}
 	//管理界面首页
 	function index() {
@@ -15,7 +15,7 @@ class MainCtrl extends Controller {
 			header('Location: /index.php/user/');
 		
 		if($this->isAdmin) {
-			$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
+			$this->vars['admin_relogin'] = $this->config['profile']['admin_relogin'];
 			$this->loadView('main');
 		} else
 			$this->loadView('login');
@@ -49,7 +49,7 @@ class MainCtrl extends Controller {
 	}
 	//退出接口（二次验证）
 	public function logout() {
-		if($this->profile['admin_relogin'])
+		if($this->config['profile']['admin_relogin'])
 			$this->passport->adminLogout();
 		else
 			$this->passport->logout();

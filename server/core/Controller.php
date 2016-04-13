@@ -17,9 +17,7 @@ class Controller {
 	protected $funcs = array(); //页面模板需要的函数
 	protected $classes = array(); //页面模板需要的类
 	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf";
-	protected $profile = array(); //网站配置(title,keywords,js,css...)
 	protected $config = array(); //config
-	protected $dir = ''; //访问地址的物理路径
 	protected $autoload = array(); //自动执行,array('this'=>'isAdmin','Passport'=>'isAdmin');
 	protected $autoloadResult = array();
 	
@@ -28,21 +26,8 @@ class Controller {
 		$this->processStart = empty($startTime)?microtime():$startTime;
 		//获取注册用户信息
 		$this->user = Loader::load('Passport')->getUser();
-		//分解请求
-		$request = Loader::load('Request');
-		$this->dir = $request->getDir();
-		//初始化网站配置
-		$this->profile['css'] = array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">');
-		$this->profile['js'] = array('<script src="/static/js/jquery.min.js"></script>',
-									'<script src="/static/js/util.js"></script>');
 		//加载网站配置文件
 		$this->loadConfig('profile');
-		//前端默认主题
-		$this->profile['theme'] = $this->config['profile']['theme']?$this->config['profile']['theme']:'default';
-		//管理后台二次登录验证
-		$this->profile['admin_relogin'] = (boolean)$this->config['profile']['admin_relogin'];
-		//管理后台地址
-		$this->profile['manage_dir'] = $this->config['profile']['manage_dir'];
 		//autoload
 		foreach($this->autoload as $k => $v) {
 			$obj = $k == 'this'?$this:Loader::load($k);
@@ -58,12 +43,15 @@ class Controller {
 		if(empty($tpl))
 			return false;
 		
-		$this->vars['dir'] = $this->dir;
-		$this->profile['css'] = array_merge($this->profile['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">',
-																		'<link type="text/css" rel="stylesheet" href="/static/css/ui.css">'));
-		//$this->profile['js'] = array_merge($this->profile['js'] , array());
+		//分解请求
+		$request = Loader::load('Request');
+		$dir = $request->getDir();
+		$this->vars['dir'] = $dir;
 		
-		$tpl = APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl';
+		$this->config['profile']['css'] = array_merge($this->config['profile']['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">',
+																		'<link type="text/css" rel="stylesheet" href="/static/css/ui.css">'));
+		
+		$tpl = APP_PATH.'/view'.$dir.'/'.$tpl.'.tpl';
 		$this->view($tpl);
 	}
 	/*
@@ -77,15 +65,12 @@ class Controller {
 		
 		//确定用户主题文件夹
 		if(!empty($_COOKIE['theme']) && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
-			$this->profile['theme'] = $_COOKIE['theme'];
+			$this->config['profile']['theme'] = $_COOKIE['theme'];
 		
 		$this->vars['icp'] = $this->config['profile']['icp'];
 		$this->vars['analytics'] = $this->config['profile']['analytics'];
-		//引入js和css
-		$this->profile['css'] = array_merge($this->profile['css'] , $this->config['profile']['css']);
-		$this->profile['js'] = array_merge($this->profile['js'] , $this->config['profile']['js']);
 		
-		$tpl = DOCUMENT_ROOT.'/theme/'.$this->profile['theme'].'/'.$tpl.'.tpl';
+		$tpl = DOCUMENT_ROOT.'/theme/'.$this->config['profile']['theme'].'/'.$tpl.'.tpl';
 
 		$this->view($tpl);
 	}
@@ -111,9 +96,10 @@ class Controller {
 		$this->vars['homepage'] = $this->config['profile']['homepage'];
 		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
 		$this->vars['meta'] = $this->config['profile']['meta'];
-		$this->vars['theme'] = $this->profile['theme'];
-		$this->vars['js'] = implode('', $this->profile['js']);
-		$this->vars['css'] = implode('', $this->profile['css']);
+		$this->vars['theme'] = $this->config['profile']['theme'];
+		$this->vars['js'] = implode('', array_merge(array('<script src="/static/js/jquery.min.js"></script>',
+									'<script src="/static/js/util.js"></script>'), $this->config['profile']['js']));
+		$this->vars['css'] = implode('', array_merge(array('<link type="text/css" rel="stylesheet" href="/static/css/reset.css">'), $this->config['profile']['css']));
 		$this->vars['user'] = $this->user;
 		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
 		
@@ -201,23 +187,15 @@ class Controller {
 			exit($_GET['jsoncallback'].'('.(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error))).')');
 	}
 	/*
-	 * 设置dir属性
-	 *
-	 * @param string $dir 物理路径
-	 */
-	public function setDir($dir) {
-		$this->dir = (string)$dir;
-	}
-	/*
 	 * 判断是否为管理员
 	 *
 	 * @return boolean
 	 */
 	public function hasAdminLogin() {
-		$isAdmin = $this->profile['admin_relogin'] ? Loader::load('Passport')->isAdmin() : !empty($this->user);
+		$isAdmin = $this->config['profile']['admin_relogin'] ? Loader::load('Passport')->isAdmin() : !empty($this->user);
 		
 		if(!$isAdmin) {
-			header('Location: '.($this->profile['admin_relogin']?$this->profile['manage_dir'].'/':'/index.php/user/'));
+			header('Location: '.($this->config['profile']['admin_relogin']?$this->config['profile']['manage_dir'].'/':'/index.php/user/'));
 		}
 		return $isAdmin;
 	}
