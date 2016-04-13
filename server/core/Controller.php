@@ -44,8 +44,7 @@ class Controller {
 			return false;
 		
 		//分解请求
-		$request = Loader::load('Request');
-		$dir = $request->getDir();
+		$dir = Loader::load('Request')->getDir();
 		$this->vars['dir'] = $dir;
 		
 		$this->config['profile']['css'] = array_merge($this->config['profile']['css'] , array('<link type="text/css" rel="stylesheet" href="/static/css/font-awesome.min.css">',
@@ -83,16 +82,6 @@ class Controller {
 		if(!file_exists($tpl))
 			return false;
 		
-		$view = Loader::load('View');
-		
-		//assign函数
-		foreach($this->funcs as $k => $v)
-			$view->registerPlugin("function", $k, $v);
-		//assign类
-		foreach($this->classes as $k => $v)
-			$view->registerClass($k, $v);
-		
-		//assign变量
 		$this->vars['homepage'] = $this->config['profile']['homepage'];
 		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
 		$this->vars['meta'] = $this->config['profile']['meta'];
@@ -103,6 +92,15 @@ class Controller {
 		$this->vars['user'] = $this->user;
 		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
 		
+		$view = Loader::load('View');
+		
+		//assign函数
+		foreach($this->funcs as $k => $v)
+			$view->registerPlugin("function", $k, $v);
+		//assign类
+		foreach($this->classes as $k => $v)
+			$view->registerClass($k, $v);
+		//assign变量
 		foreach($this->vars as $k => $v)
 			$view->assign($k, $v);
 		
