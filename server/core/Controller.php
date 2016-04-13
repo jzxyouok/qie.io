@@ -164,10 +164,13 @@ class Controller {
 	 *
 	 * @return boolean
 	 */
-	public function hasAdminLogin() {
+	public function hasAdminLogin($redirect = true) {
 		if(empty($this->user) || ($this->config['profile']['admin_relogin'] && !Loader::load('Passport')->isAdmin())) {
 			//exit('need login');
-			header('Location: '.($this->config['profile']['admin_relogin']?$this->config['profile']['manage_dir'].'/':'/index.php/user/'));
+			if($redirect)
+				header('Location: '.($this->config['profile']['admin_relogin']?$this->config['profile']['manage_dir'].'/':'/index.php/user/'));
+			else
+				return false;
 		}
 		
 		return true;

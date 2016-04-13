@@ -7,7 +7,7 @@ class MainCtrl extends Controller {
 	function __construct($startTime = 0) {
 		parent::__construct($startTime);
 		$this->passport = Loader::load('Passport');
-		$this->isAdmin = $this->config['profile']['admin_relogin'] ? $this->passport->isAdmin() : !empty($this->user);
+		$this->isAdmin = $this->hasAdminLogin(false);
 	}
 	//管理界面首页
 	function index() {
