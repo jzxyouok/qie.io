@@ -69,7 +69,7 @@ class App {
 		}
 	}
 	public function error($msg = '', $obj = null) {
-		if(defined('TEST_MODE') && TEST_MODE) {
+		if(TEST_MODE) {
 			header('Content-type: text/html; charset=utf-8');
 			echo '<h4>',$msg,'</h4>','<div><pre>',var_dump($obj),'</pre></div>';
 		} else
