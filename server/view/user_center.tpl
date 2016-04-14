@@ -6,7 +6,7 @@
 <{include file="./css.tpl"}>
 </head>
 <body class="user user-center">
-<{include file="/theme/`$theme`/header.tpl"}>
+<{include file="`$DOCUMENT_ROOT`/theme/`$theme`/header.tpl"}>
 <div class="middle">
   <div class="wrap panel default-form">
     <h2 class="head">用户中心<a href="<{$manage_dir}>/" class="fa fa-cog"></a></h2>
@@ -42,7 +42,7 @@
       <div class="form-button"><button type="submit">修改</button></div>
     </form>
   </div>
-  <{include file="/theme/`$theme`/footer.tpl"}> </div>
+  <{include file="`$DOCUMENT_ROOT`/theme/`$theme`/footer.tpl"}> </div>
 <{include file="./js.tpl"}>
 <script>
 $('#modify_form').on('submit', function(){

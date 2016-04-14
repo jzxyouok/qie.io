@@ -43,8 +43,10 @@ class Controller {
 		if(empty($tpl))
 			return false;
 		
-		//分解请求
+		//assign
 		$this->vars['dir'] = Loader::load('Request')->getDir();
+		$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
+		$this->vars['theme'] = $this->config['profile']['theme'];
 		
 		$this->view(APP_PATH.'/view'.$this->vars['dir'].'/'.$tpl.'.tpl');
 	}
@@ -61,9 +63,10 @@ class Controller {
 		if(!empty($_COOKIE['theme']) && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
 			$this->config['profile']['theme'] = $_COOKIE['theme'];
 		
+		//assign
 		$this->vars['icp'] = $this->config['profile']['icp'];
 		$this->vars['analytics'] = $this->config['profile']['analytics'];
-
+		
 		$this->view(DOCUMENT_ROOT.'/theme/'.$this->config['profile']['theme'].'/'.$tpl.'.tpl');
 	}
 	/*
@@ -77,7 +80,6 @@ class Controller {
 		
 		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
 		$this->vars['meta'] = $this->config['profile']['meta'];
-		$this->vars['theme'] = $this->config['profile']['theme'];
 		$this->vars['homepage'] = $this->config['profile']['homepage'];
 		$this->vars['user'] = $this->user;
 		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码

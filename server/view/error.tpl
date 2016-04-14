@@ -6,7 +6,7 @@
 <{include file="./css.tpl"}>
 </head>
 <body class="error">
-<{include file="/theme/`$theme`/header.tpl"}>
+<{include file="`$DOCUMENT_ROOT`/theme/`$theme`/header.tpl"}>
 <div class="middle">
   <div class="wrap panel default-form">
     <h2 class="head">出错了</h2>
@@ -23,7 +23,7 @@
 </script></div>
     </div>
   </div></div>
-  <{include file="/theme/`$theme`/footer.tpl"}>
+  <{include file="`$DOCUMENT_ROOT`/theme/`$theme`/footer.tpl"}>
 <{include file="./js.tpl"}>
 </body>
 </html>
