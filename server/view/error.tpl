@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <title>error-<{$title}></title>
 <{include file="./css.tpl"}>
+<style>
+.msg {text-align:center;}
+.msg i {font-size:1.5em; margin-right:.2em;}
+</style>
 </head>
 <body class="error">
 <{include file="`$DOCUMENT_ROOT`/theme/`$theme`/header.tpl"}>
@@ -11,7 +15,7 @@
   <div class="wrap panel default-form">
     <h2 class="head">出错了</h2>
     <div class="body">
-      <div class="msg"><{$msg}></div>
+      <div class="msg"><i class="fa fa-frown-o"></i><{$msg}></div>
       <div class="ggad"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- parked -->
 <ins class="adsbygoogle"
