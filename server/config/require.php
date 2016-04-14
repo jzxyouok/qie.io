@@ -2,8 +2,6 @@
 /*
  * 定义初始化时加载的类/文件
  */
-//引用配置文件
-require('constant.php');
 //引用core目录下文件
 require(APP_PATH.'/core/App.php');
 require(APP_PATH.'/core/Cache.php');
