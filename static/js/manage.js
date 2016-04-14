@@ -12,8 +12,10 @@ $(function(){
             if(regexp.test(location.pathname)) {
                 navActiveCatch = true;
                 var $li = $(this).find('li');
-                var height = $li.outerHeight(true);
-                $(this).css('height', (height*($li.length+1)-1)+'px');
+                if($li.length>0) {
+                    var height = $li.outerHeight(true);
+                    $(this).css('height', (height * ($li.length + 1) - 1) + 'px');
+                }
                 $(this).addClass('active');
             }
         }
@@ -22,16 +24,17 @@ $(function(){
     $('body.manage>.sidebar .nav li.parent>a').on('click', function(){
         var $parent = $(this).parent();
         var $li = $parent.find('li');
-        var height = $li.outerHeight(true);
+        if($li.length>0) {
+            var height = $li.outerHeight(true);
 
-        if(!$parent.hasClass('active')) {
-            $parent.css('height', (height*($li.length+1)-1)+'px');
-        } else {
-            $parent.css('height', height+'px');
+            if(!$parent.hasClass('active')) {
+                $parent.css('height', (height*($li.length+1)-1)+'px');
+            } else {
+                $parent.css('height', height+'px');
+            }
+            $parent.toggleClass('active');
+            return false;
         }
-
-        $parent.toggleClass('active');
-        return false;
     });
     /*初始化导航条 end*/
 });
