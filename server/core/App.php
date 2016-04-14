@@ -1,6 +1,6 @@
 <?php
 /*
- * 程序入口/初始化
+ * 程序入口/初始化/设定环境变量
  * app init
  *
  * 作者：billchen
@@ -18,8 +18,19 @@ class App {
 			if(!class_exists('Loader'))
 				require(APP_PATH.'/core/Loader.php');
 			
+			//设定环境变量
+			$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+			//测试模式
+			define('TEST_MODE', isset($profile['test_mode'])?(boolean)$profile['test_mode']:false);
+			if(TEST_MODE) {
+				error_reporting(E_ERROR | E_WARNING | E_PARSE); //E_ALL
+				error_reporting(1);
+			} else {
+				error_reporting(0);
+			}
+			
 			$route = Loader::loadVar(APP_PATH.'/config/route.php');
-			$request = Loader::load('Request', $route);
+			$request = Loader::load('Request', array($route));
 			$dir = $request->getDir();
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$objName = ''; //自动调用的控制器名称
