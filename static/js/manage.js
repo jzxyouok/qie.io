@@ -9,7 +9,7 @@ $(function(){
         var reg = $(this).data('active-url');
         if(reg) {
             var regexp = new RegExp(reg);
-            if(regexp.test(location.href)) {
+            if(regexp.test(location.pathname)) {
                 navActiveCatch = true;
                 var $li = $(this).find('li');
                 var height = $li.outerHeight(true);
