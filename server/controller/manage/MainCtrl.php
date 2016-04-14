@@ -1,12 +1,18 @@
 <?php
-
+/*
+ * 后台登录验证
+ * 
+ * 作者：billchen
+ * 邮箱：48838096@qq.com
+ *
+ * 更新时间：2016/04/14
+ *
+ */
 class MainCtrl extends Controller {
 	private $isAdmin = false;
-	private $passport = NULL;
 	
 	function __construct($startTime = 0) {
 		parent::__construct($startTime);
-		$this->passport = Loader::load('Passport');
 		$this->isAdmin = $this->hasAdminLogin(false);
 	}
 	//管理界面首页
@@ -38,7 +44,8 @@ class MainCtrl extends Controller {
 		if(empty($this->user)) {
 			$this->message(-1, '请先登录', 6);
 		}
-		$res = $this->passport->adminLogin($_POST['pwd']);
+		$passport = Loader::load('Passport');
+		$res = $passport->adminLogin($_POST['pwd']);
 		if(!empty($res['code'])) {
 			$this->message(-1, '登录失败', 10+$res['code']);
 		} else if(!$res) {
@@ -49,20 +56,28 @@ class MainCtrl extends Controller {
 	}
 	//退出接口（二次验证）
 	public function logout() {
+		if(!$this->isAdmin) {
+			exit();
+		}
+		$passport = Loader::load('Passport');
 		if($this->config['profile']['admin_relogin'])
-			$this->passport->adminLogout();
+			$passport->adminLogout();
 		else
-			$this->passport->logout();
+			$passport->logout();
 		header('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	//更新密码（二次验证）
 	public function update() {
+		if(!$this->isAdmin) {
+			$this->message(-1, '请先登录', 1);
+		}
 		if(empty($_POST['old_pwd']))
 			$this->message(-1, '请输入旧密码', 1);
 		if(empty($_POST['pwd']))
 			$this->message(-1, '请输入新密码', 1);
 		
-		$res = $this->passport->adminModify($_POST['pwd'], $_POST['old_pwd']);
+		$passport = Loader::load('Passport');
+		$res = $passport->adminModify($_POST['pwd'], $_POST['old_pwd']);
 		
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
