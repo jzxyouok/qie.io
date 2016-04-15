@@ -37,7 +37,7 @@ class App {
 			/*
 			 * 实现路由
 			 */
-			$route = Loader::loadVar(APP_PATH.'/config/route.php');
+			$route = array_merge($route, Loader::loadVar(APP_PATH.'/config/route.php'));
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
 			$dir = $info['dirname'];
 		
@@ -51,7 +51,6 @@ class App {
 			if(!empty($path)) {
 				$segments = explode('/', preg_replace($route['regexp'], $route['replace'], $path));
 			}
-			
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$ctrlName = ''; //自动调用的控制器名称
 			$controller = null; //自动调用的控制器
@@ -71,10 +70,12 @@ class App {
 			if(!$controller)
 				self::error('找不到控制器对象::controller not found', $request);
 			
-			if(empty($method) && !($method = $this->segment($position+1))) {
+			$controller->setDir($dir);
+			if(empty($method) && !($method = $segments[$position+1])) {
 				$method = 'index'; //尝试加载默认方法
 				$param = -1;
 			}
+			
 			if(!is_callable(array($controller, $method))) {
 				$method = 'index';
 				if(!is_callable(array($controller, $method)))
@@ -83,7 +84,7 @@ class App {
 				$param = $position + 1;
 			}
 			$controller->setParamPos($param);
-			if($param != -1 && NULL !== ($param = $this->segment($param)))
+			if($param != -1 && NULL !== ($param = $segments[$param]))
 				$controller->$method($param);
 			else
 				$controller->$method();

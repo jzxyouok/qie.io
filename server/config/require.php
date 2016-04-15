@@ -12,7 +12,6 @@ require(APP_PATH.'/core/Loader.php');
 require(APP_PATH.'/core/Model.php');
 require(APP_PATH.'/core/Passport.php');
 require(APP_PATH.'/core/RegExp.php');
-require(APP_PATH.'/core/Request.php');
 require(APP_PATH.'/core/Store.php');
 require(APP_PATH.'/core/Util.php');
 require(APP_PATH.'/core/View.php');

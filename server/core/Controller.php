@@ -20,6 +20,7 @@ class Controller {
 	protected $config = array(); //config
 	protected $autoload = array(); //自动执行,array('this'=>'isAdmin','Passport'=>'isAdmin');
 	protected $autoloadResult = array();
+	protected $dir = '';
 	
 	function __construct($startTime = 0) {
 		//计算性能
@@ -44,7 +45,7 @@ class Controller {
 			return false;
 		
 		//assign
-		$this->vars['dir'] = Loader::load('Request')->getDir();
+		$this->vars['dir'] = $this->dir;
 		$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
 		$this->vars['theme'] = $this->config['profile']['theme'];
 		
@@ -193,5 +194,12 @@ class Controller {
 	 */
 	public function getParamPos() {
 		return $this->paramPos;
+	}
+	/*
+	 * dir
+	 */
+	public function setDir($dir = '') {
+		if($dir)
+			$this->dir = (string)$dir;
 	}
 }
