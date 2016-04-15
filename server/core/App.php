@@ -53,7 +53,7 @@ class App {
 			$ctrlName{0} = strtoupper($ctrlName{0});
 			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl', array($process_start), false);
 			if(!$controller)
-				$this->error('找不到控制器对象::controller not found', $request);
+				self::error('找不到控制器对象::controller not found', $request);
 			
 			if(empty($method) && !($method = $request->segment($position+1))) {
 				$method = 'index'; //尝试加载默认方法
@@ -62,7 +62,7 @@ class App {
 			if(!is_callable(array($controller, $method))) {
 				$method = 'index';
 				if(!is_callable(array($controller, $method)))
-					$this->error('找不到对象方法::method not found', array($request, $controller)); //错误处理，找不到对象方法。
+					self::error('找不到对象方法::method not found', array($request, $controller)); //错误处理，找不到对象方法。
 				
 				$param = $position + 1;
 			}
@@ -73,10 +73,10 @@ class App {
 			else
 				$controller->$method();
 		} catch(Exception $error) {
-			$this->error('Exception:'.$error->getMessage());
+			self::error('Exception:'.$error->getMessage());
 		}
 	}
-	public function error($msg = '', $obj = null) {
+	public static function error($msg = '', $obj = null) {
 		if(TEST_MODE) {
 			header('Content-type: text/html; charset=utf-8');
 			echo '<h4>',$msg,'</h4>','<div><pre>',var_dump($obj),'</pre></div>';
