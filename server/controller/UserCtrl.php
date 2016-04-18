@@ -55,19 +55,23 @@ class UserCtrl extends Controller {
 		if(empty($_POST['pwd'])) {
 			$this->message(-1, '请输入密码', 5);
 		}
-		$psp = Loader::load('Passport');
-		$psp->setExpire($this->config['profile']['admin_relogin']?(!empty($_POST['expire'])?(int)$_POST['expire']:604800):0);
-		$res = $psp->login($_POST['user_name'], $_POST['pwd']);
+		try {
+			$psp = Loader::load('Passport');
+			$psp->setExpire($this->config['profile']['admin_relogin']?(!empty($_POST['expire'])?(int)$_POST['expire']:604800):0);
+			$res = $psp->login($_POST['user_name'], $_POST['pwd']);
 		
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else {
-			if($_GET['url']) {
-				header("Location: {$_GET['url']}");
-				exit;
-			}
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else {
+				if($_GET['url']) {
+					header("Location: {$_GET['url']}");
+					exit;
+				}
 				
-			$this->message(1, array('id'=>$res['id'], 'name'=>$res['name'], 'nick'=>$res['nick']));
+				$this->message(1, array('id'=>$res['id'], 'name'=>$res['name'], 'nick'=>$res['nick']));
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 	//退出
@@ -106,22 +110,25 @@ class UserCtrl extends Controller {
 		}
 		if(!$this->config['profile']['admin_relogin'])
 			$this->message(-1, '当前禁止注册', 7);
-			
-		$psp = Loader::load('Passport');
-		$psp->setExpire(!empty($_POST['expire'])?(int)$_POST['expire']:604800);
-		$res = $psp->reg($_POST['user_name'], $_POST['pwd'], $_POST['email'], $_POST['nick']);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res === false) {
-			//数据库保存失败
-			$this->message(0, '注册失败');
-		} else {
-			if($_GET['url']) {
-				header("Location: {$_GET['url']}");
-				exit;
+		
+		try {
+			$psp = Loader::load('Passport');
+			$psp->setExpire(!empty($_POST['expire'])?(int)$_POST['expire']:604800);
+			$res = $psp->reg($_POST['user_name'], $_POST['pwd'], $_POST['email'], $_POST['nick']);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res === false) {
+				//数据库保存失败
+				$this->message(0, '注册失败');
+			} else {
+				if($_GET['url']) {
+					header("Location: {$_GET['url']}");
+					exit;
+				}
+				$this->message(1, array('id'=>$res['id'], 'user_name'=>$res['name'], 'nick'=>$res['nick']));
 			}
-			
-			$this->message(1, array('id'=>$res['id'], 'user_name'=>$res['name'], 'nick'=>$res['nick']));
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 	//更新信息
@@ -135,21 +142,24 @@ class UserCtrl extends Controller {
 			$data['email'] = $_POST['email'];
 		if(!empty($_POST['nick']))
 			$data['nick'] = $_POST['nick'];
-		
-		$psp = Loader::load('Passport');
-		$res = $psp->modify(array('old_password'=>$data['old_pwd'], 'password'=>$data['pwd'], 'email'=>$data['email'], 'nick'=>$data['nick']));
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res === false) {
-			//数据库保存失败
-			$this->message(0, '修改失败');
-		} else {
-			if($_GET['url']) {
-				header("Location: {$_GET['url']}");
-				exit;
-			}
+		try {
+			$psp = Loader::load('Passport');
+			$res = $psp->modify(array('old_password'=>$data['old_pwd'], 'password'=>$data['pwd'], 'email'=>$data['email'], 'nick'=>$data['nick']));
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res === false) {
+				//数据库保存失败
+				$this->message(0, '修改失败');
+			} else {
+				if($_GET['url']) {
+					header("Location: {$_GET['url']}");
+					exit;
+				}
 			
-			$this->message(1, array('id'=>$res['id'], 'user_name'=>$res['name'], 'nick'=>$res['nick']));
+				$this->message(1, array('id'=>$res['id'], 'user_name'=>$res['name'], 'nick'=>$res['nick']));
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 }
