@@ -114,12 +114,26 @@ class Setting extends Model {
 		
 		return $profile;
 	}
+	/*
+	 *  更新网站数据库配置
+	 *
+	 * @param array $data
+	 *
+	 * @return boolean
+	 */
 	public function setDatabase($data) {
 		if(empty($data))
 			return false;
 		
-		return file_put_contents(self::DATABASE_PATH, var_export($data, true));
+		$oldContent = file_get_contents(self::DATABASE_PATH);
+		$content = substr($oldContent, 0, strpos($oldContent, '$DBList')).'$DBList = '.var_export($data, true).';';
+		return file_put_contents(self::DATABASE_PATH, $content);
 	}
+	/*
+	 * 获取网站数据库配置
+	 *
+	 * @return array
+	 */
 	public function getDatabase() {
 		return Loader::loadVar(self::DATABASE_PATH, 'DBList');
 	}

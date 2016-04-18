@@ -68,6 +68,13 @@ class SettingCtrl extends Controller {
 		$db[$_POST['db_profile']]['port'] = $_POST['port'];
 		$db[$_POST['db_profile']]['charset'] = $_POST['charset'];
 		
-		$res = $setting->setDatabase($data);
+		$res = $setting->setDatabase($db);
+		if(!empty($res['code'])) {
+			$this->message(-1, $res['msg'], 10+$res['code']);
+		} else if($res) {
+			$this->message(1);
+		} else {
+			$this->message(0,'更新失败');
+		}
 	}
 }
