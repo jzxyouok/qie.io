@@ -22,7 +22,7 @@ body.manage .default-form {
 <div class="content">
   <div class="wrap">
     <div class="panel default-form">
-      <h3 class="head">系统设定</h3>
+      <h3 class="head">网站设定</h3>
       <form class="body two-collumn" id="profile_form" action="<{$dir}>/index.php/setting/update/" method="post">
         <fieldset>
           <div class="form-group">

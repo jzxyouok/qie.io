@@ -44,14 +44,19 @@ class MainCtrl extends Controller {
 		if(empty($this->user)) {
 			$this->message(-1, '请先登录', 6);
 		}
-		$passport = Loader::load('Passport');
-		$res = $passport->adminLogin($_POST['pwd']);
-		if(!empty($res['code'])) {
-			$this->message(-1, '登录失败', 10+$res['code']);
-		} else if(!$res) {
-			$this->message(0,'登录失败');
-		} else {
-			$this->message(1);
+		
+		try {
+			$passport = Loader::load('Passport');
+			$res = $passport->adminLogin($_POST['pwd']);
+			if(!empty($res['code'])) {
+				$this->message(-1, '登录失败', 10+$res['code']);
+			} else if(!$res) {
+				$this->message(0,'登录失败');
+			} else {
+				$this->message(1);
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 	//退出接口（二次验证）
@@ -76,15 +81,19 @@ class MainCtrl extends Controller {
 		if(empty($_POST['pwd']))
 			$this->message(-1, '请输入新密码', 1);
 		
-		$passport = Loader::load('Passport');
-		$res = $passport->adminModify($_POST['pwd'], $_POST['old_pwd']);
+		try {
+			$passport = Loader::load('Passport');
+			$res = $passport->adminModify($_POST['pwd'], $_POST['old_pwd']);
 		
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if(!$res) {
-			$this->message(0,'修改失败');
-		} else {
-			$this->message(1);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if(!$res) {
+				$this->message(0,'修改失败');
+			} else {
+				$this->message(1);
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 }
