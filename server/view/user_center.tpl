@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>用户中心-<{$title}></title>
-<{include file="./css.tpl"}>
+<{include file="./common/css.tpl"}>
 </head>
 <body class="user user-center">
 <{include file="`$DOCUMENT_ROOT`/theme/`$theme`/header.tpl"}>
@@ -43,7 +43,7 @@
     </form>
   </div>
   <{include file="`$DOCUMENT_ROOT`/theme/`$theme`/footer.tpl"}> </div>
-<{include file="./js.tpl"}>
+<{include file="./common/js.tpl"}>
 <script>
 $('#modify_form').on('submit', function(){
 	var data = $u.getFormValues(this);

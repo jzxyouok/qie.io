@@ -14,6 +14,12 @@ class Loader {
 	private static $vars = array();
 	/*
 	 * 加载对象
+	 *
+	 * @param string $class 类名
+	 * @param array $args 参数列表
+	 * @param int $key 生成对象保存的位置，false时不保存
+	 *
+	 * @return mix
 	 */
 	public static function load($class = '', $args = array(), $key = 0) {
 		if(empty($class))

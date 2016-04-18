@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>qie.io</title>
-<{include file="../css.tpl"}>
+<{include file="../common/css.tpl"}>
 </head>
 <body class="manage manage-article">
 <{include file="./header.tpl"}>
@@ -15,7 +15,7 @@
     </div>
   </div>
   <{include file="./footer.tpl"}> </div>
-<{include file="../js.tpl"}>
+<{include file="../common/js.tpl"}>
 <script>
 
 </script>

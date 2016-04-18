@@ -16,7 +16,8 @@ class Database extends Model {
 	 * @param string $cfg 数据库配置字符串
 	 */
 	function __construct($db = 'default') {
-		$db = $db or 'default';
+		if(empty($db))
+			$db = 'default';
 		//引用配置文件
 		$DBList = Loader::loadVar(APP_PATH.'/config/database.php', 'DBList');
 		if(empty($DBList) || empty($DBList[$db]))

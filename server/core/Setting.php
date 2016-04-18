@@ -92,8 +92,14 @@ class Setting extends Model {
 		}
 		return $result;
 	}
+	/*
+	 * 获取网站配置
+	 *
+	 * @return array
+	 */
 	public function get() {
 		$profile = Loader::loadVar(self::FILE);
+		
 		$profile['themes'] = array();
 		$dir = DOCUMENT_ROOT.'/theme';
 		$handle = opendir($dir);

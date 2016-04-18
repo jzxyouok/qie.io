@@ -38,6 +38,7 @@ class App {
 			 * 实现路由
 			 */
 			$route = array_merge($route, Loader::loadVar(APP_PATH.'/config/route.php'));
+			
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
 			$dir = $info['dirname'];
 		
@@ -69,11 +70,12 @@ class App {
 			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl', array($process_start), false);
 			if(!$controller)
 				self::error('找不到控制器对象::controller not found', $request);
-			
 			$controller->setDir($dir);
+			$controller->setSegments($segments);
+			
 			if(empty($method) && !($method = $segments[$position+1])) {
 				$method = 'index'; //尝试加载默认方法
-				$param = -1;
+				$param = -1; //没有参数
 			}
 			
 			if(!is_callable(array($controller, $method))) {

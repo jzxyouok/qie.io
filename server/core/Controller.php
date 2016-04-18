@@ -21,6 +21,7 @@ class Controller {
 	protected $autoload = array(); //自动执行,array('this'=>'isAdmin','Passport'=>'isAdmin');
 	protected $autoloadResult = array();
 	protected $dir = '';
+	protected $segments = array();
 	
 	function __construct($startTime = 0) {
 		//计算性能
@@ -198,8 +199,14 @@ class Controller {
 	/*
 	 * dir
 	 */
-	public function setDir($dir = '') {
+	public function setDir($dir) {
 		if($dir)
 			$this->dir = (string)$dir;
+	}
+	public function setSegments($s) {
+		$this->segments = $s;
+	}
+	public function getSegments($pos) {
+		return isset($this->segments[$pos])?$this->segments[$pos]:false;
 	}
 }

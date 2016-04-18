@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>qie.io</title>
-<{include file="../css.tpl"}>
+<{include file="../common/css.tpl"}>
 </head>
 <body class="manage manage-article">
 <{include file="./header.tpl"}>
@@ -12,7 +12,7 @@
     <iframe id="phpinfo" name="phpinfo" src="<{$dir}>/index.php/phpinfoframe/" style="width:100%; border:none;"></iframe>
   </div>
   <{include file="./footer.tpl"}> </div>
-<{include file="../js.tpl"}>
+<{include file="../common/js.tpl"}>
 <script>
 $(function(){
 	document.getElementById('phpinfo').style.height = (document.documentElement.clientHeight-71-20-80-20-5)+'px';	

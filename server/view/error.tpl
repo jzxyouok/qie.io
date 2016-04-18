@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>error-<{$title}></title>
-<{include file="./css.tpl"}>
+<{include file="./common/css.tpl"}>
 <style>
 .msg {text-align:center;}
 .msg i {font-size:1.5em; margin-right:.2em;}
@@ -28,6 +28,6 @@
     </div>
   </div></div>
   <{include file="`$DOCUMENT_ROOT`/theme/`$theme`/footer.tpl"}>
-<{include file="./js.tpl"}>
+<{include file="./common/js.tpl"}>
 </body>
 </html>

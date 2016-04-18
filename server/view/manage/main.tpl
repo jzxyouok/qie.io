@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>qie.io</title>
-<{include file="../css.tpl"}>
+<{include file="../common/css.tpl"}>
 </head>
 <body class="manage manage-main">
 <{include file="./header.tpl"}>
@@ -37,7 +37,7 @@
     </div>
   </div>
   <{include file="./footer.tpl"}> </div>
-<{include file="../js.tpl"}>
+<{include file="../common/js.tpl"}>
 <script>
 $('#modify_form').on('submit', function(){
 	var data = $u.getFormValues(this);

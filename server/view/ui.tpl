@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>UI-<{$title}></title>
-<{include file="./css.tpl"}>
+<{include file="./common/css.tpl"}>
 <style>
 .default-form {
 	width: 500px;

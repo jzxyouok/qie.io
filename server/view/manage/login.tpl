@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>后台管理系统-<{$title}></title>
-<{include file="../css.tpl"}>
+<{include file="../common/css.tpl"}>
 </head>
 <body class="manage manage-login">
 <div class="middle">
@@ -29,7 +29,7 @@
     </div>
   </div><{include file="./footer.tpl"}>
 </div>
-<{include file="../js.tpl"}>
+<{include file="../common/js.tpl"}>
 <script>
 function refreshImg() {
 	var img = new Image();
