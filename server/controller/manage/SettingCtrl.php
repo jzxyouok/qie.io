@@ -14,11 +14,13 @@ class SettingCtrl extends Controller {
 	//首页
 	function index() {
 		$setting = Loader::load('Setting');
-		$this->vars['profile'] = $setting->get();
+		$this->vars['profile'] = $setting->getProfile();
+		$this->vars['database'] = $setting->getDatabase();
+		$this->vars['db_profile'] = $_GET['db_profile'] && isset($this->vars['database'][$_GET['db_profile']])?$_GET['db_profile']:'default';
 		$this->loadView('setting');
 	}
 	//保存
-	public function save() {
+	public function update() {
 		$data = array();
 		
 		if(!empty($_POST['admin_relogin']))
@@ -43,7 +45,7 @@ class SettingCtrl extends Controller {
 			$data['icp'] = $_POST['icp'];
 		
 		$setting = Loader::load('Setting');
-		$res = $setting->set($data);
+		$res = $setting->setProfile($data);
 		
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
@@ -52,5 +54,20 @@ class SettingCtrl extends Controller {
 		} else {
 			$this->message(0,'更新失败');
 		}
+	}
+	public function update_db() {
+		$setting = Loader::load('Setting');
+		$db = $setting->getDatabase();
+		if(!isset($db[$_POST['db_profile']]))
+			$this->message(-1, '数据库配置不存在', 1);
+		
+		$db[$_POST['db_profile']]['user'] = $_POST['user'];
+		$db[$_POST['db_profile']]['password'] = $_POST['password'];
+		$db[$_POST['db_profile']]['host'] = $_POST['host'];
+		$db[$_POST['db_profile']]['db'] = $_POST['db'];
+		$db[$_POST['db_profile']]['port'] = $_POST['port'];
+		$db[$_POST['db_profile']]['charset'] = $_POST['charset'];
+		
+		$res = $setting->setDatabase($data);
 	}
 }

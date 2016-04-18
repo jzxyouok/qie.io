@@ -23,7 +23,7 @@ body.manage .default-form {
   <div class="wrap">
     <div class="panel default-form">
       <h3 class="head">系统设定</h3>
-      <form class="body two-collumn" id="modify_form" action="<{$dir}>/index.php/setting/update/" method="post">
+      <form class="body two-collumn" id="profile_form" action="<{$dir}>/index.php/setting/update/" method="post">
         <fieldset>
           <div class="form-group">
             <div class="title">管理员二次登录:</div>
@@ -118,7 +118,7 @@ body.manage .default-form {
     </div>
     <div class="panel default-form">
       <h3 class="head">数据库设定</h3>
-      <form class="body two-collumn" id="modify_form" action="<{$dir}>/index.php/setting/update/database/" method="post">
+      <form class="body two-collumn" id="database_form" action="<{$dir}>/index.php/setting/update_db/" method="post">
         <fieldset>
           <div class="form-group">
             <label>
@@ -185,7 +185,29 @@ body.manage .default-form {
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}> 
 <script>
-$('#modify_form').on('submit', function(){
+$('#profile_form').on('submit', function(){
+	var data = $u.getFormValues(this);
+	
+	$.ajax({url:this.action,
+			method: this.method,
+			data: data,
+			dataType: 'json',
+			success: function(data){
+				if(data.status< 1) {
+					alert(data.result);
+				} else {
+					alert('修改成功');
+					location.href = location.href;
+				}
+			},
+			error: function(xhr, data) {}
+	});
+	return false;
+});
+$('#database_form select').on('change', function(){
+		location.href = '?db_profile='+this.value;
+});
+$('#database_form').on('submit', function(){
 	var data = $u.getFormValues(this);
 	
 	$.ajax({url:this.action,

@@ -33,14 +33,6 @@ class Database extends Model {
 			$this->db->set_charset($option['charset']);
 	}
 	/*
-	 * 选择数据库
-	 *
-	 * @param string $db 数据库名称
-	 */
-	public function selectDB($db) {
-		return $this->db->select_db($db);
-	}
-	/*
 	 * 查询数据用，执行select查询工作
 	 * 
 	 * @param string $sql 查询的sql语句(select)
@@ -106,6 +98,14 @@ class Database extends Model {
 	 */
 	public function commit($sql) {
 		
+	}
+	/*
+	 * 选择数据库
+	 *
+	 * @param string $db 数据库名称
+	 */
+	public function selectDB($db) {
+		return $this->db->select_db($db);
 	}
 	/*
 	 * 统计需要查询表数据的总数

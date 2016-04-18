@@ -8,7 +8,8 @@
  */
 
 class Setting extends Model {
-	const FILE = APP_PATH.'/config/profile.php';
+	const PROFILE_PATH = APP_PATH.'/config/profile.php';
+	const DATABASE_PATH = APP_PATH.'/config/database.php';
 	/*
 	 *  更新网站信息配置文件
 	 *
@@ -16,15 +17,15 @@ class Setting extends Model {
 	 *
 	 * @return boolean
 	 */
-	function set($data) {
+	function setProfile($data) {
 		if(empty($data))
 			return false;
 		//判断权限
-		$profile = Loader::loadVar(self::FILE);
+		$profile = Loader::loadVar(self::PROFILE_PATH);
 		
 		$result = false;
 		
-		$content = file_get_contents(self::FILE);
+		$content = file_get_contents(self::PROFILE_PATH);
 		
 		if($content) {
 			$search = array();
@@ -87,7 +88,7 @@ class Setting extends Model {
 			
 			$content = preg_replace($search, $replace, $content);
 			if(!empty($content) && !empty($search)) {
-				$result = file_put_contents(self::FILE, $content);
+				$result = file_put_contents(self::PROFILE_PATH, $content);
 			}
 		}
 		return $result;
@@ -97,8 +98,8 @@ class Setting extends Model {
 	 *
 	 * @return array
 	 */
-	public function get() {
-		$profile = Loader::loadVar(self::FILE);
+	public function getProfile() {
+		$profile = Loader::loadVar(self::PROFILE_PATH);
 		
 		$profile['themes'] = array();
 		$dir = DOCUMENT_ROOT.'/theme';
@@ -112,5 +113,14 @@ class Setting extends Model {
 		closedir($handle);
 		
 		return $profile;
+	}
+	public function setDatabase($data) {
+		if(empty($data))
+			return false;
+		
+		return file_put_contents(self::DATABASE_PATH, var_export($data, true));
+	}
+	public function getDatabase() {
+		return Loader::loadVar(self::DATABASE_PATH, 'DBList');
 	}
 }

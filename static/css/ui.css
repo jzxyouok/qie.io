@@ -136,6 +136,7 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
 }
 .two-collumn .title, .two-collumn .control {
     display: inline-block;
+    vertical-align: top;
 }
 .two-collumn .title {
     width:25%;
