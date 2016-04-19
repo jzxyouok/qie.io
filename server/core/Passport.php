@@ -48,7 +48,7 @@ class Passport extends Model {
 	private $loginIP = null;
 	const MINIMUM_USER_ID = 1; //最小用户id
 	const EXPIRE_MAX = 1209600; //cookie过期最长时间为一个星期，14*24*60*60
-	const SALT = '!@#qie.$%^io&*()';
+	const MY_SALT = '!@#qie.$%^io&*()';
 	
 	/*
 	 * 构造函数，检查登陆
@@ -205,7 +205,7 @@ class Passport extends Model {
 		$this->auth = '';
 		$this->user = array();
 		
-		$domain = '.'.(defined('DOMAIN') && DOMAIN?$profile['domain']:$_SERVER['SERVER_NAME']);
+		$domain = '.'.(defined('DOMAIN') && DOMAIN?DOMAIN:$_SERVER['SERVER_NAME']);
 		if(setcookie('u_id', '', ($this->loginTime - 60), '/', $domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', $domain, 0))
 			return true;
 		else
@@ -318,12 +318,12 @@ class Passport extends Model {
 			$index = 9; //保证密码是33位
 		}
 		if($index === 0) {
-			$newPassword = self::SALT.$password;
+			$newPassword = self::MY_SALT.$password;
 		} else if($index === $len) {
 			//$index不可能>$len
-			$newPassword = $password.self::SALT;
+			$newPassword = $password.self::MY_SALT;
 		} else {
-			$newPassword = substr($password, 0, $index).self::SALT.substr($password, $index);
+			$newPassword = substr($password, 0, $index).self::MY_SALT.substr($password, $index);
 		}
 		return $index.md5($newPassword);
 	}
@@ -342,7 +342,7 @@ class Passport extends Model {
 		
 		//[0]:auth,[1]:loginTime,[2]:expire,[3]:loginIP
 		$authArr = explode('_', $auth);
-		if(2 <= count($authArr) && $authArr[0] === md5(Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
+		if(2 <= count($authArr) && $authArr[0] === md5(self::MY_SALT.(defined('SALT')?SALT:'').Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
 			//$this->expire>0时，可以实现强制重新登录
 			if($authArr[2] > 0 && ($this->loginTime < $authArr[1] || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
 				return false;
@@ -360,7 +360,7 @@ class Passport extends Model {
 		if(!empty($this->auth))
 			return true;
 		else if(!empty($this->user)) {
-			$this->auth = md5(Crypt::encrypt($this->user['id'] . $this->user['name']) . $this->loginTime . $this->expire) . '_' . $this->loginTime . '_' . $this->expire . '_'.$this->loginIP;
+			$this->auth = md5(self::MY_SALT.(defined('SALT')?SALT:'').Crypt::encrypt($this->user['id'] . $this->user['name']) . $this->loginTime . $this->expire) . '_' . $this->loginTime . '_' . $this->expire . '_'.$this->loginIP;
 			return true;
 		} else
 			return false;
@@ -379,7 +379,7 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function setCookie() {
-		$domain = '.'.(defined('DOMAIN') && DOMAIN?$profile['domain']:$_SERVER['SERVER_NAME']);
+		$domain = '.'.(defined('DOMAIN') && DOMAIN?DOMAIN:$_SERVER['SERVER_NAME']);
 		$e = $this->expire > 0 ? $this->loginTime + $this->expire : 0;
 		
 		if(setcookie('u_id', $this->user['id'], $e, '/', $domain, 0, true) && setcookie('u_name', $this->user['name'], $this->loginTime + $this->expire + 604800 , '/', $domain, 0) && setcookie('u_nick', $this->user['nick'], $this->loginTime + $this->expire + 604800, '/', $domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $domain, 0, true))
@@ -513,7 +513,7 @@ class Passport extends Model {
 		if(md5($res[0]['code'].$password) != $res[0]['password'])
 			return false;
 		
-		if(setcookie('a_code', $res[0]['code'], 0, '/') && setcookie('a_verify', md5($this->user['id'].self::SALT.$res[0]['code'].$res[0]['grade']), 0, '/', NULL, 0, true) && setcookie('a_grade', (int)$res[0]['grade'], 0, '/')){
+		if(setcookie('a_code', $res[0]['code'], 0, '/') && setcookie('a_verify', md5($this->user['id'].(defined('SALT')?SALT:'').$res[0]['code'].$res[0]['grade']), 0, '/', NULL, 0, true) && setcookie('a_grade', (int)$res[0]['grade'], 0, '/')){
 			$this->admin = array('grade' => $res[0]['grade'], 'code' => $res[0]['code']);
 			return true;
 		} else
@@ -569,7 +569,7 @@ class Passport extends Model {
 		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
 		$sql = "UPDATE `user_admin` SET `code`='{$code}',`password`=MD5('{$code}{$password}') WHERE `user_id`={$this->user['id']} AND EXISTS (SELECT * FROM (SELECT `code` FROM `user_admin` WHERE `user_id`={$this->user['id']} AND `password`=MD5('{$_COOKIE['a_code']}{$oldPassword}') LIMIT 1) AS `tmp`) LIMIT 1";
 		$db = Loader::load('Database');
-		return $db->execute($sql) && setcookie('a_code', $code, 0, '/') && setcookie('a_verify', md5($this->user['id'].self::SALT.$code.$_COOKIE['a_grade']), 0, '/', NULL, 0, true);
+		return $db->execute($sql) && setcookie('a_code', $code, 0, '/') && setcookie('a_verify', md5($this->user['id'].(defined('SALT')?SALT:'').$code.$_COOKIE['a_grade']), 0, '/', NULL, 0, true);
 	}
 	/*
 	 * 判断是否为管理员
@@ -577,6 +577,6 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function isAdmin() {
-		return !empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].self::SALT.$_COOKIE['a_code'].$_COOKIE['a_grade']);
+		return !empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].(defined('SALT')?SALT:'').$_COOKIE['a_code'].$_COOKIE['a_grade']);
 	}
 }

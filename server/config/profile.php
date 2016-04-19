@@ -10,7 +10,7 @@ $profile['admin_relogin'] = true;
 //管理后台物理路径
 $profile['manage_dir'] = '/manage';
 //加密字符串(SALT)
-$profile['salt'] = 'Qiezi123';
+$profile['salt'] = 'Qiezi123!';
 //网站域名
 $profile['domain'] = '';
 //网站首页
