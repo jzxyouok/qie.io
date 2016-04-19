@@ -33,6 +33,10 @@ class App {
 			} else {
 				error_reporting(0);
 			}
+			//全局加密SALT
+			define('SALT', (string)$profile['salt']);
+			//domain
+			define('DOMAIN', (string)$profile['domain']);
 			
 			/*
 			 * 实现路由

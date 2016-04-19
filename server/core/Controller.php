@@ -84,7 +84,7 @@ class Controller {
 		$this->vars['meta'] = $this->config['profile']['meta'];
 		$this->vars['homepage'] = $this->config['profile']['homepage'];
 		$this->vars['user'] = $this->user;
-		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
+		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], (defined('SALT')?SALT:'').$this->dynamicCode); //系统安全码
 		
 		$view = Loader::load('View');
 		

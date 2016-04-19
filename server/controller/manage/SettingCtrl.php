@@ -43,6 +43,8 @@ class SettingCtrl extends Controller {
 			$data['analytics'] = $_POST['analytics'];
 		if(isset($_POST['icp']))
 			$data['icp'] = $_POST['icp'];
+		if(isset($_POST['salt']))
+			$data['salt'] = $_POST['salt'];
 		
 		$setting = Loader::load('Setting');
 		$res = $setting->setProfile($data);

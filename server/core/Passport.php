@@ -205,8 +205,7 @@ class Passport extends Model {
 		$this->auth = '';
 		$this->user = array();
 		
-		$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
-		$domain = '.'.($profile['domain']?$profile['domain']:$_SERVER['SERVER_NAME']);
+		$domain = '.'.(defined('DOMAIN') && DOMAIN?$profile['domain']:$_SERVER['SERVER_NAME']);
 		if(setcookie('u_id', '', ($this->loginTime - 60), '/', $domain, 0) && setcookie('u_auth', '', ($this->loginTime - 60), '/', $domain, 0))
 			return true;
 		else
@@ -380,8 +379,7 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function setCookie() {
-		$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
-		$domain = '.'.($profile['domain']?$profile['domain']:$_SERVER['SERVER_NAME']);
+		$domain = '.'.(defined('DOMAIN') && DOMAIN?$profile['domain']:$_SERVER['SERVER_NAME']);
 		$e = $this->expire > 0 ? $this->loginTime + $this->expire : 0;
 		
 		if(setcookie('u_id', $this->user['id'], $e, '/', $domain, 0, true) && setcookie('u_name', $this->user['name'], $this->loginTime + $this->expire + 604800 , '/', $domain, 0) && setcookie('u_nick', $this->user['nick'], $this->loginTime + $this->expire + 604800, '/', $domain, 0) && setcookie('u_auth', $this->auth, $e, '/', $domain, 0, true))
