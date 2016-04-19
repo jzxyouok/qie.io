@@ -74,6 +74,7 @@ class Setting extends Model {
 					break;
 					default: {
 						//salt,加密
+						//db_profile,数据库连接
 						//domain,域名
 						//homepage,首页
 						//title,标题

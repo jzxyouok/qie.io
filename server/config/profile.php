@@ -11,6 +11,8 @@ $profile['admin_relogin'] = true;
 $profile['manage_dir'] = '/manage';
 //加密字符串(SALT)
 $profile['salt'] = 'Qiezi123!';
+//默认数据库配置
+$profile['db_profile'] = 'default';
 //网站域名
 $profile['domain'] = '';
 //网站首页

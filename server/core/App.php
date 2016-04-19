@@ -37,6 +37,8 @@ class App {
 			define('SALT', (string)$profile['salt']);
 			//domain
 			define('DOMAIN', (string)$profile['domain']);
+			//默认数据库配置
+			define('DB_PROFILE', (string)$profile['db_profile']);
 			
 			/*
 			 * 实现路由

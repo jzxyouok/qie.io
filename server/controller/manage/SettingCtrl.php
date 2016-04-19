@@ -16,7 +16,7 @@ class SettingCtrl extends Controller {
 		$setting = Loader::load('Setting');
 		$this->vars['profile'] = $setting->getProfile();
 		$this->vars['database'] = $setting->getDatabase();
-		$this->vars['db_profile'] = $_GET['db_profile'] && (isset($this->vars['database'][$_GET['db_profile']]) || $_GET['db_profile']=='add_profile')?$_GET['db_profile']:'default';
+		$this->vars['db_profile'] = $_GET['db_profile'] && (isset($this->vars['database'][$_GET['db_profile']]) || $_GET['db_profile']=='add_profile')?$_GET['db_profile']:$this->vars['profile']['db_profile'];
 		$this->loadView('setting');
 	}
 	//更新profile
@@ -45,6 +45,8 @@ class SettingCtrl extends Controller {
 			$data['icp'] = $_POST['icp'];
 		if(isset($_POST['salt']))
 			$data['salt'] = $_POST['salt'];
+		if(isset($_POST['db_profile']))
+			$data['db_profile'] = $_POST['db_profile'];
 		
 		$setting = Loader::load('Setting');
 		$res = $setting->setProfile($data);
@@ -93,7 +95,7 @@ class SettingCtrl extends Controller {
 	//测试database
 	public function check_db() {
 		try {
-			$db = Loader::load('Database', array(''));
+			$db = Loader::load('Database', array(false));
 			$db->connect(array(
 					'user'=>trim($_POST['user']),
 					'password'=>trim($_POST['password']),
@@ -109,11 +111,12 @@ class SettingCtrl extends Controller {
 	}
 	//添加database
 	public function delete_db($profileName) {
-		if($profileName == 'default')
-			$this->message(-1, '不能删除默认配置');
-			
 		$setting = Loader::load('Setting');
 		$db = $setting->getDatabase();
+		$profile = $setting->getProfile();
+		if($profileName == $profile['db_profile'])
+			$this->message(-1, '不能删除默认配置');
+			
 		unset($db[$profileName]);
 		$res = $setting->setDatabase($db);
 		if(!empty($res['code'])) {

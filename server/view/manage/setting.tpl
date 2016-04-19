@@ -52,6 +52,18 @@ body.manage .default-form {
           </div>
           <div class="form-group">
             <label>
+            <div class="title">数据库配置:</div>
+            <div class="control">
+              <select name="db_profile">
+                  <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $profile.db_profile}> selected<{/if}>><{$k}>
+                  </option>
+                  <{/foreach}>
+                </select>
+            </div>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
             <div class="title">网站域名:</div>
             <div class="control">
               <input type="text" name="domain" value="<{$profile.domain}>">

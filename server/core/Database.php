@@ -18,6 +18,9 @@ class Database extends Model {
 	function __construct($db = 'default') {
 		if(!empty($db)) {
 			//引用配置文件
+			if($db == 'default' && defined('DB_PROFILE'))
+				$db = DB_PROFILE;
+				
 			$DBList = Loader::loadVar(APP_PATH.'/config/database.php', 'DBList');
 			if(empty($DBList) || empty($DBList[$db]))
 				throw new DatabaseException('the db option is missing.');
