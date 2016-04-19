@@ -44,6 +44,14 @@ body.manage .default-form {
           </div>
           <div class="form-group">
             <label>
+            <div class="title">加密SALT:</div>
+            <div class="control">
+              <input type="text" name="salt" value="<{$profile.salt}>">
+            </div>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
             <div class="title">网站域名:</div>
             <div class="control">
               <input type="text" name="domain" value="<{$profile.domain}>">
@@ -195,7 +203,7 @@ body.manage .default-form {
           <div class="form-button">
             <input type="submit" value="确认<{if 'add_profile' == $db_profile}>添加<{else}>修改<{/if}>">
             <input type="button" value="测试连接">
-            <input type="button" value="删除配置"<{if 'add_profile' == $db_profile}> disabled<{/if}>>
+            <{if 'add_profile' != $db_profile}><input type="button" value="删除配置"><{/if}>
           </div>
         </form>
         <div class="tips">
@@ -252,7 +260,8 @@ document.querySelector('#database_form input[type=button]:last-child').addEventL
 	var profileName = document.querySelector('#database_form select').value
 	if(profileName == 'add_profile')
 		return;
-	
+	if(!confirm('确认删除？'))
+		return;
 	$.ajax({url:'<{$dir}>/index.php/setting/delete_db/'+profileName+'/',
 			method: 'get',
 			data: {},
