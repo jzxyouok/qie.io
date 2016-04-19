@@ -16,7 +16,7 @@ class SettingCtrl extends Controller {
 		$setting = Loader::load('Setting');
 		$this->vars['profile'] = $setting->getProfile();
 		$this->vars['database'] = $setting->getDatabase();
-		$this->vars['db_profile'] = $_GET['db_profile'] && isset($this->vars['database'][$_GET['db_profile']])?$_GET['db_profile']:'default';
+		$this->vars['db_profile'] = $_GET['db_profile'] && (isset($this->vars['database'][$_GET['db_profile']]) || $_GET['db_profile']=='add_profile')?$_GET['db_profile']:'default';
 		$this->loadView('setting');
 	}
 	//更新profile
@@ -55,21 +55,29 @@ class SettingCtrl extends Controller {
 			$this->message(0,'更新失败');
 		}
 	}
-	//更新database
+	//添加/更新database
 	public function update_db() {
 		$setting = Loader::load('Setting');
 		$db = $setting->getDatabase();
-		/*
-		if(!isset($db[$_POST['db_profile']]))
-			$this->message(-1, '数据库配置不存在', 1);
-		*/
 		
-		$db[$_POST['db_profile']]['user'] = trim($_POST['user']);
-		$db[$_POST['db_profile']]['password'] = trim($_POST['password']);
-		$db[$_POST['db_profile']]['host'] = trim($_POST['host']);
-		$db[$_POST['db_profile']]['db'] = trim($_POST['db']);
-		$db[$_POST['db_profile']]['port'] = (int)$_POST['port'];
-		$db[$_POST['db_profile']]['charset'] = trim($_POST['charset']);
+		if($_POST['db_profile'] == 'add_profile') {
+			if(empty($db))
+				$profileName = 'default';
+			else
+				$profileName = trim($_POST['profile_name']);
+		} else {
+			$profileName = trim($_POST['db_profile']);
+			if(!isset($db[$profileName]))
+				$this->message(-1, '数据库配置不存在', 1);
+		}
+		
+		$db[$profileName]['user'] = trim($_POST['user']);
+		$db[$profileName]['password'] = trim($_POST['password']);
+		$db[$profileName]['host'] = trim($_POST['host']);
+		$db[$profileName]['db'] = trim($_POST['db']);
+		$db[$profileName]['port'] = (int)$_POST['port'];
+		$db[$profileName]['charset'] = trim($_POST['charset']);
+		$db[$profileName]['prefix'] = '';
 		
 		$res = $setting->setDatabase($db);
 		if(!empty($res['code'])) {
@@ -98,11 +106,20 @@ class SettingCtrl extends Controller {
 		}
 	}
 	//添加database
-	public function add_db() {
-		
-	}
-	//添加database
-	public function delete_db() {
-		
+	public function delete_db($profileName) {
+		if($profileName == 'default')
+			$this->message(-1, '不能删除默认配置');
+			
+		$setting = Loader::load('Setting');
+		$db = $setting->getDatabase();
+		unset($db[$profileName]);
+		$res = $setting->setDatabase($db);
+		if(!empty($res['code'])) {
+			$this->message(-1, $res['msg'], 10+$res['code']);
+		} else if($res) {
+			$this->message(1);
+		} else {
+			$this->message(0,'删除失败');
+		}
 	}
 }

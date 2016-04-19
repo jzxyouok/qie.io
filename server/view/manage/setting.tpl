@@ -129,11 +129,20 @@ body.manage .default-form {
                   <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $db_profile}> selected<{/if}>><{$k}>
                   </option>
                   <{/foreach}>
-                  <option value="">(+)增加配置</option>
+                  <option value="add_profile"<{if 'add_profile' == $db_profile}> selected<{/if}>>(+)增加配置</option>
                 </select>
               </div>
               </label>
             </div>
+            <{if 'add_profile' == $db_profile}>
+            <div class="form-group">
+              <label>
+              <div class="title">配置名称:</div>
+              <div class="control">
+                <input type="text" name="profile_name" value="" required autofocus>
+              </div>
+              </label>
+            </div><{/if}>
             <div class="form-group">
               <label>
               <div class="title">用户名:</div>
@@ -184,8 +193,9 @@ body.manage .default-form {
             </div>
           </fieldset>
           <div class="form-button">
-            <input type="submit" value="确认修改">
+            <input type="submit" value="确认<{if 'add_profile' == $db_profile}>添加<{else}>修改<{/if}>">
             <input type="button" value="测试连接">
+            <input type="button" value="删除配置"<{if 'add_profile' == $db_profile}> disabled<{/if}>>
           </div>
         </form>
         <div class="tips">
@@ -233,6 +243,26 @@ document.querySelector('#database_form input[type=button]').addEventListener('cl
 					alert(data.result);
 				} else {
 					alert('测试通过');
+				}
+			},
+			error: function(xhr, data) {}
+	});
+});
+document.querySelector('#database_form input[type=button]:last-child').addEventListener('click', function(e){
+	var profileName = document.querySelector('#database_form select').value
+	if(profileName == 'add_profile')
+		return;
+	
+	$.ajax({url:'<{$dir}>/index.php/setting/delete_db/'+profileName+'/',
+			method: 'get',
+			data: {},
+			dataType: 'json',
+			success: function(data){
+				if(data.status< 1) {
+					alert(data.result);
+				} else {
+					alert('删除成功');
+					location.href = location.href;
 				}
 			},
 			error: function(xhr, data) {}
