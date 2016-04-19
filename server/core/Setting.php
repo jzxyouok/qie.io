@@ -11,7 +11,7 @@ class Setting extends Model {
 	const PROFILE_PATH = APP_PATH.'/config/profile.php';
 	const DATABASE_PATH = APP_PATH.'/config/database.php';
 	/*
-	 *  更新网站信息配置文件
+	 *  更新网站信息配置文件(profile)
 	 *
 	 * @param array $data
 	 *
@@ -115,7 +115,7 @@ class Setting extends Model {
 		return $profile;
 	}
 	/*
-	 *  更新网站数据库配置
+	 *  更新网站数据库配置(database)
 	 *
 	 * @param array $data
 	 *

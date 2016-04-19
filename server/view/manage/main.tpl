@@ -39,8 +39,10 @@
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}>
 <script>
-$('#modify_form').on('submit', function(){
-	var data = $u.getFormValues(this);
+document.querySelector('#modify_form').addEventListener('submit', function(e){
+	e.preventDefault();
+	
+	var data = $u.getFormValues(e.target);
 	
 	if(!data.pwd) {
 		alert('密码不能为空');
@@ -72,7 +74,6 @@ $('#modify_form').on('submit', function(){
 			},
 			error: function(xhr, data) {}
 	})
-	return false;
 });
 </script>
 </body>

@@ -16,14 +16,14 @@ class Database extends Model {
 	 * @param string $cfg 数据库配置字符串
 	 */
 	function __construct($db = 'default') {
-		if(empty($db))
-			$db = 'default';
-		//引用配置文件
-		$DBList = Loader::loadVar(APP_PATH.'/config/database.php', 'DBList');
-		if(empty($DBList) || empty($DBList[$db]))
-			throw new DatabaseException('the db option is missing.');
+		if(!empty($db)) {
+			//引用配置文件
+			$DBList = Loader::loadVar(APP_PATH.'/config/database.php', 'DBList');
+			if(empty($DBList) || empty($DBList[$db]))
+				throw new DatabaseException('the db option is missing.');
 		
-		$this->connect($DBList[$db]);
+			$this->connect($DBList[$db]);
+		}
 	}
 	public function connect($option) {
 		$this->db = new MySQLi($option['host'], $option['user'], $option['password'], $option['db'], $option['port']);

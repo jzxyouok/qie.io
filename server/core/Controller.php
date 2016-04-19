@@ -197,16 +197,28 @@ class Controller {
 		return $this->paramPos;
 	}
 	/*
-	 * dir
+	 * 设置物理dir
+	 *
+	 * @param string $dir
 	 */
 	public function setDir($dir) {
 		if($dir)
 			$this->dir = (string)$dir;
 	}
+	/*
+	 * 设置segments
+	 *
+	 * @param string $s
+	 */
 	public function setSegments($s) {
 		$this->segments = $s;
 	}
-	public function getSegments($pos) {
+	/*
+	 * 获取segment
+	 *
+	 * @param int $pos
+	 */
+	public function getSegment($pos) {
 		return isset($this->segments[$pos])?$this->segments[$pos]:false;
 	}
 }

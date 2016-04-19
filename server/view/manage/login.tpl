@@ -31,16 +31,19 @@
 </div>
 <{include file="../common/js.tpl"}>
 <script>
+var captchaImg = document.getElementById('captcha_img');
 function refreshImg() {
 	var img = new Image();
 	img.onload = function(){
-		$('#captcha_img').removeAttr('src').attr('src', this.src);
+		captchaImg.src = this.src;
 	}
 	img.src = '/index.php/captcha/?w=80&h=32&v='+new Date().getTime();
 }
-$('#captcha_img').on('click', refreshImg);
-$('#login_form').on('submit', function(){
-	var data = $u.getFormValues(this);
+captchaImg.addEventListener('click', refreshImg);
+document.getElementById('login_form').addEventListener('submit', function(e){
+	e.preventDefault();
+	
+	var data = $u.getFormValues(e.target);
 	
 	if(!data.pwd) {
 		alert('密码不能为空');
@@ -62,7 +65,6 @@ $('#login_form').on('submit', function(){
 			},
 			error: function(xhr, data) {}
 	})
-	return false;
 });
 </script>
 </body>

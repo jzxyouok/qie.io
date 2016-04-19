@@ -19,7 +19,7 @@ class SettingCtrl extends Controller {
 		$this->vars['db_profile'] = $_GET['db_profile'] && isset($this->vars['database'][$_GET['db_profile']])?$_GET['db_profile']:'default';
 		$this->loadView('setting');
 	}
-	//保存
+	//更新profile
 	public function update() {
 		$data = array();
 		
@@ -55,18 +55,21 @@ class SettingCtrl extends Controller {
 			$this->message(0,'更新失败');
 		}
 	}
+	//更新database
 	public function update_db() {
 		$setting = Loader::load('Setting');
 		$db = $setting->getDatabase();
+		/*
 		if(!isset($db[$_POST['db_profile']]))
 			$this->message(-1, '数据库配置不存在', 1);
+		*/
 		
-		$db[$_POST['db_profile']]['user'] = $_POST['user'];
-		$db[$_POST['db_profile']]['password'] = $_POST['password'];
-		$db[$_POST['db_profile']]['host'] = $_POST['host'];
-		$db[$_POST['db_profile']]['db'] = $_POST['db'];
-		$db[$_POST['db_profile']]['port'] = $_POST['port'];
-		$db[$_POST['db_profile']]['charset'] = $_POST['charset'];
+		$db[$_POST['db_profile']]['user'] = trim($_POST['user']);
+		$db[$_POST['db_profile']]['password'] = trim($_POST['password']);
+		$db[$_POST['db_profile']]['host'] = trim($_POST['host']);
+		$db[$_POST['db_profile']]['db'] = trim($_POST['db']);
+		$db[$_POST['db_profile']]['port'] = (int)$_POST['port'];
+		$db[$_POST['db_profile']]['charset'] = trim($_POST['charset']);
 		
 		$res = $setting->setDatabase($db);
 		if(!empty($res['code'])) {
@@ -76,5 +79,30 @@ class SettingCtrl extends Controller {
 		} else {
 			$this->message(0,'更新失败');
 		}
+	}
+	//测试database
+	public function check_db() {
+		try {
+			$db = Loader::load('Database', array(''));
+			$db->connect(array(
+					'user'=>trim($_POST['user']),
+					'password'=>trim($_POST['password']),
+					'host'=>trim($_POST['host']),
+					'db'=>trim($_POST['db']),
+					'port'=>(int)$_POST['port'],
+					'charset'=>trim($_POST['charset'])
+			));
+			$this->message(1);
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
+		}
+	}
+	//添加database
+	public function add_db() {
+		
+	}
+	//添加database
+	public function delete_db() {
+		
 	}
 }

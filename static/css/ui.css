@@ -193,6 +193,10 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     background-color: #f5f5f5;
     border-color: #ddd;
 }
+.default-form .tips {
+    margin-top:10px;
+    line-height: 1.5;
+}
 /*manage ui*/
 body.manage a {
     color:#337ab7;
