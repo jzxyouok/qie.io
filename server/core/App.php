@@ -48,7 +48,9 @@ class App {
 			
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
 			$dir = $info['dirname'];
-		
+			if($dir == $profile['admin_dir'])
+				$dir = '/admin';
+			
 			if(!empty($_SERVER['PATH_INFO']))
 				$path = substr($_SERVER['PATH_INFO'], 1);
 			else {
@@ -73,7 +75,6 @@ class App {
 			}
 			
 			$ctrlName{0} = strtoupper($ctrlName{0});
-			
 			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl', array($process_start), false);
 			if(!$controller)
 				self::error('找不到控制器对象::controller not found', $request);

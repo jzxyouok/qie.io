@@ -49,6 +49,7 @@ class Controller {
 		$this->vars['dir'] = $this->dir;
 		$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
 		$this->vars['theme'] = $this->config['profile']['theme'];
+		$this->vars['admin_dir'] = $this->config['profile']['admin_dir'];
 		
 		$this->view(APP_PATH.'/view'.$this->vars['dir'].'/'.$tpl.'.tpl');
 	}
@@ -174,7 +175,7 @@ class Controller {
 		if(empty($this->user) || ($this->config['profile']['admin_relogin'] && !Loader::load('Passport')->isAdmin())) {
 			//exit('need login');
 			if($redirect)
-				header('Location: '.($this->config['profile']['admin_relogin']?$this->config['profile']['manage_dir'].'/':'/index.php/user/'));
+				header('Location: '.($this->config['profile']['admin_relogin']?$this->config['profile']['admin_dir'].'/':'/index.php/user/'));
 			else
 				return false;
 		}

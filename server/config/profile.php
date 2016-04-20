@@ -8,7 +8,7 @@ $profile['test_mode'] = true;
 //管理后台二次登录验证
 $profile['admin_relogin'] = true;
 //管理后台物理路径
-$profile['admin_dir'] = '/admin';
+$profile['admin_dir'] = '/manage';
 //加密字符串(SALT)
 $profile['salt'] = 'Qiezi123!';
 //默认数据库配置

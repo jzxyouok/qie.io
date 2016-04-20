@@ -29,9 +29,8 @@ class UserCtrl extends Controller {
 		if(empty($this->user))
 			header('Location: /index.php/user/');
 		if(!$this->config['profile']['admin_relogin'])
-			header('Location: '.$this->config['profile']['manage_dir'].'/');
-			
-		$this->vars['manage_dir'] = $this->config['profile']['manage_dir'];
+			header('Location: '.$this->config['profile']['admin_dir'].'/');
+		
 		$this->loadView('user_center');
 	}
 	/*
