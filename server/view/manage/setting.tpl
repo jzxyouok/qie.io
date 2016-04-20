@@ -54,8 +54,8 @@ body.manage .default-form {
             <label>
             <div class="title">数据库配置:</div>
             <div class="control">
-              <select name="db_profile">
-                  <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $profile.db_profile}> selected<{/if}>><{$k}>
+              <select name="db_config">
+                  <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $profile.db_config}> selected<{/if}>><{$k}>
                   </option>
                   <{/foreach}>
                 </select>
@@ -145,16 +145,16 @@ body.manage .default-form {
               <label>
               <div class="title">选择配置文件:</div>
               <div class="control">
-                <select name="db_profile">
-                  <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $db_profile}> selected<{/if}>><{$k}>
+                <select name="db_config">
+                  <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $db_config}> selected<{/if}>><{$k}>
                   </option>
                   <{/foreach}>
-                  <option value="add_profile"<{if 'add_profile' == $db_profile}> selected<{/if}>>(+)增加配置</option>
+                  <option value="add_profile"<{if 'add_profile' == $db_config}> selected<{/if}>>(+)增加配置</option>
                 </select>
               </div>
               </label>
             </div>
-            <{if 'add_profile' == $db_profile}>
+            <{if 'add_profile' == $db_config}>
             <div class="form-group">
               <label>
               <div class="title">配置名称:</div>
@@ -167,7 +167,7 @@ body.manage .default-form {
               <label>
               <div class="title">用户名:</div>
               <div class="control">
-                <input type="text" name="user" value="<{$database[$db_profile].user}>">
+                <input type="text" name="user" value="<{$database[$db_config].user}>">
               </div>
               </label>
             </div>
@@ -175,7 +175,7 @@ body.manage .default-form {
               <label>
               <div class="title">密码:</div>
               <div class="control">
-                <input type="text" name="password" value="<{$database[$db_profile].password}>">
+                <input type="text" name="password" value="<{$database[$db_config].password}>">
               </div>
               </label>
             </div>
@@ -183,7 +183,7 @@ body.manage .default-form {
               <label>
               <div class="title">主机host:</div>
               <div class="control">
-                <input type="text" name="host" value="<{$database[$db_profile].host}>">
+                <input type="text" name="host" value="<{$database[$db_config].host}>">
               </div>
               </label>
             </div>
@@ -191,7 +191,7 @@ body.manage .default-form {
               <label>
               <div class="title">数据库名称:</div>
               <div class="control">
-                <input type="text" name="db" value="<{$database[$db_profile].db}>">
+                <input type="text" name="db" value="<{$database[$db_config].db}>">
               </div>
               </label>
             </div>
@@ -199,7 +199,7 @@ body.manage .default-form {
               <label>
               <div class="title">端口号:</div>
               <div class="control">
-                <input type="text" name="port" value="<{$database[$db_profile].port}>">
+                <input type="text" name="port" value="<{$database[$db_config].port}>">
               </div>
               </label>
             </div>
@@ -207,15 +207,15 @@ body.manage .default-form {
               <label>
               <div class="title">字符编码:</div>
               <div class="control">
-                <input type="text" name="charset" value="<{$database[$db_profile].charset}>">
+                <input type="text" name="charset" value="<{$database[$db_config].charset}>">
               </div>
               </label>
             </div>
           </fieldset>
           <div class="form-button">
-            <input type="submit" value="确认<{if 'add_profile' == $db_profile}>添加<{else}>修改<{/if}>">
+            <input type="submit" value="确认<{if 'add_profile' == $db_config}>添加<{else}>修改<{/if}>">
             <input type="button" value="测试连接">
-            <{if 'add_profile' != $db_profile}><input type="button" value="删除配置"><{/if}>
+            <{if 'add_profile' != $db_config}><input type="button" value="删除配置"><{/if}>
           </div>
         </form>
         <div class="tips">
@@ -250,7 +250,7 @@ document.getElementById('profile_form').addEventListener('submit', function(e){
 	});
 });
 document.querySelector('#database_form select').addEventListener('change', function(e){
-		location.href = '?db_profile='+e.target.value;
+		location.href = '?db_config='+e.target.value;
 });
 document.querySelector('#database_form input[type=button]').addEventListener('click', function(e){
 	var data = $u.getFormValues(e.target.parentNode.parentNode);

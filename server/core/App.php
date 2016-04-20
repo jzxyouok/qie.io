@@ -27,18 +27,19 @@ class App {
 			$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
 			//测试模式
 			define('TEST_MODE', isset($profile['test_mode'])?(boolean)$profile['test_mode']:false);
+			//全局加密SALT
+			define('SALT', (string)$profile['salt']);
+			//domain
+			define('DOMAIN', (string)$profile['domain']);
+			//默认数据库配置
+			define('DB_CONFIG', (string)$profile['db_config']);
+			
 			if(TEST_MODE) {
 				error_reporting(E_ERROR | E_WARNING | E_PARSE); //E_ALL
 				error_reporting(1);
 			} else {
 				error_reporting(0);
 			}
-			//全局加密SALT
-			define('SALT', (string)$profile['salt']);
-			//domain
-			define('DOMAIN', (string)$profile['domain']);
-			//默认数据库配置
-			define('DB_PROFILE', (string)$profile['db_profile']);
 			
 			/*
 			 * 实现路由

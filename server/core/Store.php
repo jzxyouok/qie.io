@@ -32,7 +32,7 @@ class Store {
 		if(self::MAX_SIZE < strlen($value))
 			return false;
 		//写文件
-		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, '/') === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
+		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, DIRECTORY_SEPARATOR) === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
 		if(!$fp = fopen($path, "w+"))
 			throw new StoreException('打开文件失败');
 		$value = "<?php\r\n".$value;
@@ -66,7 +66,7 @@ class Store {
 		if(empty($path))
 			return false;
 			
-		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, '/') === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
+		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, DIRECTORY_SEPARATOR) === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
 		if(!file_exists($path))
 			return false;
 		$res = file_get_contents($path);
@@ -87,7 +87,7 @@ class Store {
 		if(empty($path))
 			return false;
 			
-		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, '/') === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
+		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, DIRECTORY_SEPARATOR) === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
 		if(file_exists($path))
 			return unlink($path);
 		else

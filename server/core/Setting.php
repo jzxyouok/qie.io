@@ -20,11 +20,10 @@ class Setting extends Model {
 	function setProfile($data) {
 		if(empty($data))
 			return false;
+			
 		//判断权限
-		$profile = Loader::loadVar(self::PROFILE_PATH);
-		
 		$result = false;
-		
+		$profile = Loader::loadVar(self::PROFILE_PATH);
 		$content = file_get_contents(self::PROFILE_PATH);
 		
 		if($content) {
