@@ -38,7 +38,7 @@ body.manage .default-form {
             <label>
             <div class="title">管理后台地址:</div>
             <div class="control">
-              <input type="text" name="manage_dir" value="<{$profile.manage_dir}>">
+              <input type="text" name="admin_dir" value="<{$profile.admin_dir}>">
             </div>
             </label>
           </div>

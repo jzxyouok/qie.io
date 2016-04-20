@@ -41,11 +41,11 @@ class Setting extends Model {
 						}
 					}
 					break;
-					case 'manage_dir': {
-						//manage_dir,管理后台地址
-						if($v !== $profile['manage_dir'] && is_dir(DOCUMENT_ROOT.$v)) {
-							$search[] = '#\$profile\[\s*\'manage_dir\'\s*]\s*=.+#';	
-							$replace[] = '$profile[\'manage_dir\'] = '.($v? 'true':'false').';';
+					case 'admin_dir': {
+						//admin_dir,管理后台地址
+						if($v !== $profile['admin_dir'] && is_dir(DOCUMENT_ROOT.$v)) {
+							$search[] = '#\$profile\[\s*\'admin_dir\'\s*]\s*=.+#';	
+							$replace[] = '$profile[\'admin_dir\'] = '.($v? 'true':'false').';';
 						}
 					}
 					break;

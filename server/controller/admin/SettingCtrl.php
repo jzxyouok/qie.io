@@ -25,8 +25,8 @@ class SettingCtrl extends Controller {
 		
 		if(!empty($_POST['admin_relogin']))
 			$data['admin_relogin'] = ($_POST['admin_relogin'] == 'true'?true:false);
-		if(isset($_POST['manage_dir']))
-			$data['manage_dir'] = $_POST['manage_dir'];
+		if(isset($_POST['admin_dir']))
+			$data['admin_dir'] = $_POST['admin_dir'];
 		if(isset($_POST['domain']))
 			$data['domain'] = $_POST['domain'];
 		if(isset($_POST['homepage']))
