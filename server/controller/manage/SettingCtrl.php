@@ -113,6 +113,8 @@ class SettingCtrl extends Controller {
 	public function delete_db($profileName) {
 		$setting = Loader::load('Setting');
 		$db = $setting->getDatabase();
+		if(!isset($db[$profileName]))
+			$this->message(-1, '删除失败');
 		$profile = $setting->getProfile();
 		if($profileName == $profile['db_config'])
 			$this->message(-1, '不能删除默认配置');
