@@ -71,9 +71,15 @@ class Setting extends Model {
 						$replace[] = "\$profile['analytics'] = <<<EOT".PHP_EOL."{$v}".PHP_EOL."EOT;";
 					}
 					break;
+					case 'db_config': {
+						//数据库配置
+						$dbList = $this->getDatabase();
+						if(!isset($dbList[$v])) {
+							continue;
+						}
+					}
 					default: {
 						//salt,加密
-						//db_profile,数据库连接
 						//domain,域名
 						//homepage,首页
 						//title,标题
