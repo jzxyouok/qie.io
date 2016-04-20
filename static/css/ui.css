@@ -62,6 +62,15 @@ form .split-line {
     margin-bottom: 17px;
     text-align:center;
 }
+.field-group {
+    -webkit-transition: height ease-in-out .15s;
+    -o-transition: height ease-in-out .15s;
+    transition: height ease-in-out .15s;
+}
+.field-group.hide {
+    height: 0;
+    overflow: hidden;
+}
 .input-group {
     margin-bottom: 15px;
     font-size: 0;

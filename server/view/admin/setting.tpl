@@ -66,8 +66,8 @@ body.manage .default-form {
               </div>
               </label>
             </div>
-            <div class="split-line">高级选项(<a href="">显示</a>)</div>
-            <div class="field-group">
+            <div class="split-line">高级选项(<a href="" class="more">显示</a>)</div>
+            <div class="field-group hide">
               <div class="input-group">
                 <div class="title">管理员二次登录:</div>
                 <div class="control">
@@ -259,6 +259,15 @@ document.getElementById('profile_form').addEventListener('submit', function(e){
 			},
 			error: function(xhr, data) {}
 	});
+});
+document.querySelector('#profile_form .more').addEventListener('click', function(e){
+	e.preventDefault();
+	var nextNode = e.target.parentNode.nextSibling;
+	
+	while(nextNode.nodeType != 1) {
+		nextNode = nextNode.nextSibling;
+	}
+	nextNode.classList.toggle('hide');
 });
 document.querySelector('#database_form select').addEventListener('change', function(e){
 		location.href = '?db_config='+e.target.value;
