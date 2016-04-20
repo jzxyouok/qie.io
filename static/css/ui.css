@@ -55,15 +55,22 @@ form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, fo
 form button[disabed], form input[disabled], form select[disabled], form textarea[disabled] {
     cursor: not-allowed;
 }
-.form-group {
+form .split-line {
+    height:17px;
+    line-height: 34px;
+    border-bottom: 1px dotted #ccc;
+    margin-bottom: 17px;
+    text-align:center;
+}
+.input-group {
     margin-bottom: 15px;
     font-size: 0;
     line-height: 34px;
 }
-.form-group input[type=text], .form-group input[type=password], .form-group select {
+.input-group input[type=text], .input-group input[type=password], .input-group select {
     height: 34px;
 }
-.form-group input[type=text], .form-group input[type=password], .form-group select, .form-group textarea {
+.input-group input[type=text], .input-group input[type=password], .input-group select, .input-group textarea {
     width: 100%;
     min-height:34px;
     line-height: 1.5;
@@ -78,24 +85,24 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
-.form-group.has-img img {
+.input-group.has-img img {
     position: absolute;
     right:1px;
     top: 1px;
     /*transform: translateY(-50%);*/
     border-radius: 0 4px 4px 0;
 }
-.form-group input:focus {
+.input-group input:focus {
     border-color: #66afe9;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
 }
-.form-group input[type=checkbox]:focus, .form-group input[type=radio]:focus {
+.input-group input[type=checkbox]:focus, .input-group input[type=radio]:focus {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.form-group.has-img, .form-group.has-img label {
+.input-group.has-img, .input-group.has-img label {
     position: relative;
 }
 .form-button button, .form-button .button, .form-button input[type=submit], .form-button input[type=reset], .form-button input[type=button] {
@@ -125,13 +132,13 @@ form button[disabed], form input[disabled], form select[disabled], form textarea
     width:85%;
 }
 /*2列结构*/
-.form-group .title, .form-group .control {
+.input-group .title, .input-group .control {
     font-size: 14px;
 }
-.form-group .title {
+.input-group .title {
     vertical-align: top;
 }
-.form-group .control {
+.input-group .control {
     position: relative;
 }
 .two-collumn .title, .two-collumn .control {

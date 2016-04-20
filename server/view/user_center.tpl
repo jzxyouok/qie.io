@@ -12,27 +12,27 @@
     <h2 class="head">用户中心<a href="<{$admin_dir}>/" class="fa fa-cog"></a></h2>
     <form class="body two-collumn" id="modify_form" action="/index.php/user/update/" method="post">
       <fieldset>
-        <div class="form-group">
+        <div class="input-group">
           <label><div class="title">原 密 码 :</div>
             <div class="control"><input type="password" name="old_pwd"></div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label><div class="title">密&nbsp; &nbsp; &nbsp; 码:</div>
             <div class="control"><input type="password" name="pwd"></div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label><div class="title">确认密码:</div>
             <div class="control"><input type="password" name="confirm_pwd"></div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label><div class="title">电子邮箱:</div>
             <div class="control"><input type="text" name="email"></div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label><div class="title">昵&nbsp; &nbsp; &nbsp; 称:</div>
             <div class="control"><input type="text" name="nick" value="<{$smarty.cookies.u_nick}>"></div>
           </label>

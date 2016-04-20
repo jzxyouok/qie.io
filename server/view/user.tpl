@@ -12,7 +12,7 @@
     <h2 class="head">用户登录</h2>
     <form class="body two-collumn" id="login_form" action="/index.php/user/login/" method="post">
       <fieldset>
-        <div class="form-group">
+        <div class="input-group">
           <label>
           <div class="title inline-block">用户名:</div>
           <div class="control">
@@ -20,7 +20,7 @@
           </div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label>
           <div class="title inline-block">密&nbsp; &nbsp;码:</div>
           <div class="control">
@@ -28,7 +28,7 @@
           </div>
           </label>
         </div>
-        <div class="form-group has-img">
+        <div class="input-group has-img">
           <label>
           <div class="title inline-block">验证码:</div>
           <div class="control">

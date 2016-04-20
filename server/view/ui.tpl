@@ -154,28 +154,28 @@
       </form>
     </div>
     <div class="panel default-form">
-      <h3 class="head">default-form form-group</h3>
+      <h3 class="head">default-form input-group</h3>
       <form class="body" >
         <fieldset>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">input text:</div>
             <input type="text" name="user_name" value="" placeholder="请输入用户名" required>
             </label>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">input password:</div>
             <input type="password" name="pwd" placeholder="请输入密码" required>
             </label>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">input img:</div>
             <input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
             </label>
             <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">select:</div>
             <select>
@@ -185,7 +185,7 @@
             </select>
             </label>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <div class="title">input checkbox:</div>
             <div class="control">
               <label>
@@ -199,7 +199,7 @@
                 checkbox3 </label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <div class="title">input radio:</div>
             <div class="control">
               <label>
@@ -213,7 +213,7 @@
                 radio3 </label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">textarea:</div>
             <textarea>textarea</textarea>
@@ -227,7 +227,7 @@
       <h3 class="head">default-form two-collumn</h3>
       <form class="body two-collumn" >
         <fieldset>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">input text:</div>
             <div class="control">
@@ -235,7 +235,7 @@
             </div>
             </label>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">input password:</div>
             <div class="control">
@@ -243,7 +243,7 @@
             </div>
             </label>
           </div>
-          <div class="form-group has-img">
+          <div class="input-group has-img">
             <label>
             <div class="title">input img:</div>
             <div class="control">
@@ -251,7 +251,7 @@
               </label>
               <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"></div>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">select:</div>
             <div class="control">
@@ -263,7 +263,7 @@
               </label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <div class="title">input checkbox:</div>
             <div class="control">
               <label>
@@ -277,7 +277,7 @@
                 checkbox3 </label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <div class="title">input radio:</div>
             <div class="control">
               <label>
@@ -291,7 +291,7 @@
                 radio3 </label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">textarea:</div>
             <div class="control">
@@ -307,22 +307,22 @@
       <h3 class="head">default-form has-addon</h3>
       <form class="body" >
         <fieldset>
-          <div class="form-group has-addon">
+          <div class="input-group has-addon">
             <label> <span class="input-addon"><i class="icon fa fa-flag-checkered"></i></span>
               <input type="text" name="user_name" value="" placeholder="请输入用户名" required>
             </label>
           </div>
-          <div class="form-group has-addon">
+          <div class="input-group has-addon">
             <label><span class="input-addon"><i class="icon fa fa-key"></i></span>
               <input type="password" name="pwd" required>
             </label>
           </div>
-          <div class="form-group has-addon has-img">
+          <div class="input-group has-addon has-img">
             <label><span class="input-addon"><i class="icon fa fa fa-list"></i></span>
               <input type="text" name="captcha" maxlength="4" required>
             </label>
             <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
-          <div class="form-group has-addon">
+          <div class="input-group has-addon">
             <label><span class="input-addon"><i class="icon fa fa-image"></i></span>
               <select>
                 <option>option1</option>
@@ -331,7 +331,7 @@
               </select>
             </label>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <div class="title">input checkbox:</div>
             <div class="control">
               <label>
@@ -345,7 +345,7 @@
                 checkbox3 </label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <div class="title">input radio:</div>
             <div class="control">
               <label>
@@ -359,7 +359,7 @@
                 radio3 </label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">textarea:</div>
             <textarea>textarea</textarea>

@@ -51,7 +51,7 @@ class Controller {
 		$this->vars['theme'] = $this->config['profile']['theme'];
 		$this->vars['admin_dir'] = $this->config['profile']['admin_dir'];
 		
-		$this->view(APP_PATH.'/view'.$this->vars['dir'].'/'.$tpl.'.tpl');
+		$this->view(APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl');
 	}
 	/*
 	 * 加载theme文件夹视图(用户主题)

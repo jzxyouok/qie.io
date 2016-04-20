@@ -13,19 +13,19 @@
       <h3 class="head">修改密码</h3>
       <form class="body" id="modify_form" action="<{if $admin_relogin}><{$admin_dir}>/index.php/main/update/<{else}>/index.php/user/update/<{/if}>" method="post">
         <fieldset>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">原 密 码:</div>
             <input type="password" name="old_pwd">
             </label>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title">密&nbsp; &nbsp;码:</div>
             <input type="password" name="pwd">
             </label>
           </div>
-          <div class="form-group">
+          <div class="input-group">
             <label>
             <div class="title inline-block">确认密码:</div>
             <input type="password" name="confirm_pwd">

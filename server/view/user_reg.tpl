@@ -12,37 +12,37 @@
     <h2 class="head">用户注册</h2>
     <form class="body two-collumn" id="reg_form" action="/index.php/user/insert/" method="post">
       <fieldset>
-        <div class="form-group">
+        <div class="input-group">
           <label>
           <div class="title">用 户 名:</div>
           <div class="control"><input type="text" name="user_name" placeholder="请输入用户名" required autofocus></div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label>
           <div class="title">密&nbsp; &nbsp; &nbsp; 码:</div>
           <div class="control"><input type="password" name="pwd" placeholder="请输入密码" required></div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label>
           <div class="title">确认密码:</div>
           <div class="control"><input type="password" name="confirm_pwd" placeholder="请再次输入密码" required></div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label>
           <div class="title">电子邮箱:</div>
           <div class="control"><input type="text" name="email" placeholder="请输入电子邮箱" required></div>
           </label>
         </div>
-        <div class="form-group">
+        <div class="input-group">
           <label>
           <div class="title">昵&nbsp; &nbsp; &nbsp; 称:</div>
           <div class="control"><input type="text" name="nick"></div>
           </label>
         </div>
-        <div class="form-group has-img">
+        <div class="input-group has-img">
           <label>
           <div class="title">验 证 码:</div>
           <div class="control"><input type="text" name="captcha" maxlength="4" placeholder="请输入验证码" required></div>

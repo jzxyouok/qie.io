@@ -12,12 +12,12 @@
     <div class="body">
       <form id="login_form" action="<{$admin_dir}>/index.php/main/login/" method="post">
         <fieldset>
-          <div class="form-group has-addon">
+          <div class="input-group has-addon">
             <label><span class="inline-block input-addon"><i class="icon fa fa-key"></i></span>
               <input type="password" name="pwd" required autofocus>
             </label>
           </div>
-          <div class="form-group has-addon has-img">
+          <div class="input-group has-addon has-img">
             <label><span class="inline-block input-addon"><i class="icon fa fa-image"></i></span>
               <input type="text" name="captcha" maxlength="4" required>
             </label>

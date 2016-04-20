@@ -23,147 +23,157 @@ body.manage .default-form {
   <div class="wrap">
     <div class="panel default-form">
       <h3 class="head">网站设定</h3>
-      <form class="body two-collumn" id="profile_form" action="<{$admin_dir}>/index.php/setting/update/" method="post">
-        <fieldset>
-          <div class="form-group">
-            <div class="title">管理员二次登录:</div>
-            <div class="control">
-              <label> <input type="radio" name="admin_relogin" value="true"<{if $profile.admin_relogin}> checked<{/if}>>
-                是 </label>
-              <label> <input type="radio" name="admin_relogin" value="false"<{if !$profile.admin_relogin}> checked<{/if}>>
-                否 </label>
+      <div class="body">
+        <form class="two-collumn" id="profile_form" action="<{$admin_dir}>/index.php/setting/update/" method="post">
+          <fieldset>
+            <div class="input-group">
+              <label>
+              <div class="title">网站标题:</div>
+              <div class="control">
+                <input type="text" name="title" value="<{$profile.title}>">
+              </div>
+              </label>
             </div>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">管理后台地址:</div>
-            <div class="control">
-              <input type="text" name="admin_dir" value="<{$profile.admin_dir}>">
+            <div class="input-group">
+              <label>
+              <div class="title">网站关键词:</div>
+              <div class="control">
+                <input type="text" name="keywords" value="<{$profile.meta.keywords}>">
+              </div>
+              </label>
             </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">加密SALT:</div>
-            <div class="control">
-              <input type="text" name="salt" value="<{$profile.salt}>">
+            <div class="input-group">
+              <label>
+              <div class="title">网站简介:</div>
+              <div class="control">
+                <input type="text" name="description" value="<{$profile.meta.description}>">
+              </div>
+              </label>
             </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">数据库配置:</div>
-            <div class="control">
-              <select name="db_config">
-                  <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $profile.db_config}> selected<{/if}>><{$k}>
-                  </option>
-                  <{/foreach}>
-                </select>
+            <div class="input-group">
+              <label>
+              <div class="title">流量监测代码:</div>
+              <div class="control">
+                <textarea rows="3" name="analytics"><{$profile.analytics}></textarea>
+              </div>
+              </label>
             </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">网站域名:</div>
-            <div class="control">
-              <input type="text" name="domain" value="<{$profile.domain}>">
+            <div class="input-group">
+              <label>
+              <div class="title">ICP证:</div>
+              <div class="control">
+                <input type="text" name="icp" value="<{$profile.icp}>">
+              </div>
+              </label>
             </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">网站首页:</div>
-            <div class="control">
-              <input type="text" name="homepage" value="<{$profile.homepage}>">
+            <div class="split-line">高级选项(<a href="">显示</a>)</div>
+            <div class="field-group">
+              <div class="input-group">
+                <div class="title">管理员二次登录:</div>
+                <div class="control">
+                  <label> <input type="radio" name="admin_relogin" value="true"<{if $profile.admin_relogin}> checked<{/if}>>
+                    是 </label>
+                  <label> <input type="radio" name="admin_relogin" value="false"<{if !$profile.admin_relogin}> checked<{/if}>>
+                    否 </label>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>
+                <div class="title">管理后台地址:</div>
+                <div class="control">
+                  <input type="text" name="admin_dir" value="<{$profile.admin_dir}>">
+                </div>
+                </label>
+              </div>
+              <div class="input-group">
+                <label>
+                <div class="title">加密SALT:</div>
+                <div class="control">
+                  <input type="text" name="salt" value="<{$profile.salt}>">
+                </div>
+                </label>
+              </div>
+              <div class="input-group">
+                <label>
+                <div class="title">数据库配置:</div>
+                <div class="control">
+                  <select name="db_config">
+                    <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $profile.db_config}> selected<{/if}>><{$k}>
+                    </option>
+                    <{/foreach}>
+                  </select>
+                </div>
+                </label>
+              </div>
+              <div class="input-group">
+                <label>
+                <div class="title">网站域名:</div>
+                <div class="control">
+                  <input type="text" name="domain" value="<{$profile.domain}>">
+                </div>
+                </label>
+              </div>
+              <div class="input-group">
+                <label>
+                <div class="title">网站首页:</div>
+                <div class="control">
+                  <input type="text" name="homepage" value="<{$profile.homepage}>">
+                </div>
+                </label>
+              </div>
+              <div class="input-group">
+                <label>
+                <div class="title">选择主题:</div>
+                <div class="control">
+                  <select name="theme">
+                    <{section name=n loop=$profile.themes}> <option value="<{$profile.themes[n]}>"<{if $profile.themes[n] == $profile.theme}> selected<{/if}>><{$profile.themes[n]}>
+                    </option>
+                    <{/section}>
+                  </select>
+                </div>
+                </label>
+              </div>
             </div>
-            </label>
+          </fieldset>
+          <div class="form-button">
+            <input type="submit" value="确认修改">
           </div>
-          <div class="form-group">
-            <label>
-            <div class="title">选择主题:</div>
-            <div class="control">
-              <select name="theme">
-                <{section name=n loop=$profile.themes}> <option value="<{$profile.themes[n]}>"<{if $profile.themes[n] == $profile.theme}> selected<{/if}>><{$profile.themes[n]}>
-                </option>
-                <{/section}>
-              </select>
-            </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">网站标题:</div>
-            <div class="control">
-              <input type="text" name="title" value="<{$profile.title}>">
-            </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">网站关键词:</div>
-            <div class="control">
-              <input type="text" name="keywords" value="<{$profile.meta.keywords}>">
-            </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">网站简介:</div>
-            <div class="control">
-              <input type="text" name="description" value="<{$profile.meta.description}>">
-            </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">流量监测代码:</div>
-            <div class="control">
-              <textarea rows="3" name="analytics"><{$profile.analytics}></textarea>
-            </div>
-            </label>
-          </div>
-          <div class="form-group">
-            <label>
-            <div class="title">ICP证:</div>
-            <div class="control">
-              <input type="text" name="icp" value="<{$profile.icp}>">
-            </div>
-            </label>
-          </div>
-        </fieldset>
-        <div class="form-button">
-          <input type="submit" value="确认修改">
+        </form>
+        <div class="tips">
+          <p>* 如果修改管理后台地址失败，请手动修改文件夹名称和设置profile.php对应的值(profile['admin_dir'])。</p>
+          <p>* 网站域名只是用于setcookie。一般留空即可。</p>
         </div>
-      </form>
+      </div>
     </div>
     <div class="panel default-form">
       <h3 class="head">数据库设定</h3>
       <div class="body">
         <form class="two-collumn" id="database_form" action="<{$admin_dir}>/index.php/setting/update_db/" method="post">
           <fieldset>
-            <div class="form-group">
+            <div class="input-group">
               <label>
               <div class="title">选择配置文件:</div>
               <div class="control">
                 <select name="db_config">
                   <{foreach from=$database key=k item=i}><option value="<{$k}>"<{if $k == $db_config}> selected<{/if}>><{$k}>
                   </option>
-                  <{/foreach}>
-                  <option value="add_profile"<{if 'add_profile' == $db_config}> selected<{/if}>>(+)增加配置</option>
+                  <{/foreach}> <option value="add_profile"<{if 'add_profile' == $db_config}> selected<{/if}>>(+)增加配置
+                  </option>
                 </select>
               </div>
               </label>
             </div>
             <{if 'add_profile' == $db_config}>
-            <div class="form-group">
+            <div class="input-group">
               <label>
               <div class="title">配置名称:</div>
               <div class="control">
                 <input type="text" name="profile_name" value="" required autofocus>
               </div>
               </label>
-            </div><{/if}>
-            <div class="form-group">
+            </div>
+            <{/if}>
+            <div class="input-group">
               <label>
               <div class="title">用户名:</div>
               <div class="control">
@@ -171,7 +181,7 @@ body.manage .default-form {
               </div>
               </label>
             </div>
-            <div class="form-group">
+            <div class="input-group">
               <label>
               <div class="title">密码:</div>
               <div class="control">
@@ -179,7 +189,7 @@ body.manage .default-form {
               </div>
               </label>
             </div>
-            <div class="form-group">
+            <div class="input-group">
               <label>
               <div class="title">主机host:</div>
               <div class="control">
@@ -187,7 +197,7 @@ body.manage .default-form {
               </div>
               </label>
             </div>
-            <div class="form-group">
+            <div class="input-group">
               <label>
               <div class="title">数据库名称:</div>
               <div class="control">
@@ -195,7 +205,7 @@ body.manage .default-form {
               </div>
               </label>
             </div>
-            <div class="form-group">
+            <div class="input-group">
               <label>
               <div class="title">端口号:</div>
               <div class="control">
@@ -203,7 +213,7 @@ body.manage .default-form {
               </div>
               </label>
             </div>
-            <div class="form-group">
+            <div class="input-group">
               <label>
               <div class="title">字符编码:</div>
               <div class="control">
@@ -215,8 +225,9 @@ body.manage .default-form {
           <div class="form-button">
             <input type="submit" value="确认<{if 'add_profile' == $db_config}>添加<{else}>修改<{/if}>">
             <input type="button" value="测试连接">
-            <{if 'add_profile' != $db_config}><input type="button" value="删除配置"><{/if}>
-          </div>
+            <{if 'add_profile' != $db_config}>
+            <input type="button" value="删除配置">
+            <{/if}> </div>
         </form>
         <div class="tips">
           <p>* 主机地址为本地，主机host一般填localhost。</p>
