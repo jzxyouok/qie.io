@@ -43,9 +43,9 @@ class Setting extends Model {
 					break;
 					case 'admin_dir': {
 						//admin_dir,管理后台地址
-						if($v !== $profile['admin_dir'] && is_dir(DOCUMENT_ROOT.$v)) {
+						if($v !== $profile['admin_dir'] && rename(DOCUMENT_ROOT.$profile['admin_dir'], DOCUMENT_ROOT.$v)) {
 							$search[] = '#\$profile\[\s*\'admin_dir\'\s*]\s*=.+#';	
-							$replace[] = '$profile[\'admin_dir\'] = '.($v? 'true':'false').';';
+							$replace[] = '$profile[\'admin_dir\'] = \''.$v.'\';';
 						}
 					}
 					break;

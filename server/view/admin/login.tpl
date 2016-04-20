@@ -10,7 +10,7 @@
   <div class="wrap panel default-form">
     <h2 class="head">后台管理系统<a href="<{$homepage}>" class="fa fa-home"></a></h2>
     <div class="body">
-      <form id="login_form" action="<{$dir}>/index.php/main/login/" method="post">
+      <form id="login_form" action="<{$admin_dir}>/index.php/main/login/" method="post">
         <fieldset>
           <div class="form-group has-addon">
             <label><span class="inline-block input-addon"><i class="icon fa fa-key"></i></span>

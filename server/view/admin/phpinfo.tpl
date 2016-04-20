@@ -9,7 +9,7 @@
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">
-    <iframe id="phpinfo" name="phpinfo" src="<{$dir}>/index.php/phpinfoframe/" style="width:100%; border:none;"></iframe>
+    <iframe id="phpinfo" name="phpinfo" src="<{$admin_dir}>/index.php/phpinfoframe/" style="width:100%; border:none;"></iframe>
   </div>
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}>

@@ -23,7 +23,7 @@ body.manage .default-form {
   <div class="wrap">
     <div class="panel default-form">
       <h3 class="head">网站设定</h3>
-      <form class="body two-collumn" id="profile_form" action="<{$dir}>/index.php/setting/update/" method="post">
+      <form class="body two-collumn" id="profile_form" action="<{$admin_dir}>/index.php/setting/update/" method="post">
         <fieldset>
           <div class="form-group">
             <div class="title">管理员二次登录:</div>
@@ -139,7 +139,7 @@ body.manage .default-form {
     <div class="panel default-form">
       <h3 class="head">数据库设定</h3>
       <div class="body">
-        <form class="two-collumn" id="database_form" action="<{$dir}>/index.php/setting/update_db/" method="post">
+        <form class="two-collumn" id="database_form" action="<{$admin_dir}>/index.php/setting/update_db/" method="post">
           <fieldset>
             <div class="form-group">
               <label>
@@ -254,7 +254,7 @@ document.querySelector('#database_form select').addEventListener('change', funct
 });
 document.querySelector('#database_form input[type=button]').addEventListener('click', function(e){
 	var data = $u.getFormValues(e.target.parentNode.parentNode);
-	$.ajax({url:'<{$dir}>/index.php/setting/check_db/',
+	$.ajax({url:'<{$admin_dir}>/index.php/setting/check_db/',
 			method: 'post',
 			data: data,
 			dataType: 'json',
@@ -274,7 +274,7 @@ document.querySelector('#database_form input[type=button]:last-child').addEventL
 		return;
 	if(!confirm('确认删除？'))
 		return;
-	$.ajax({url:'<{$dir}>/index.php/setting/delete_db/'+profileName+'/',
+	$.ajax({url:'<{$admin_dir}>/index.php/setting/delete_db/'+profileName+'/',
 			method: 'get',
 			data: {},
 			dataType: 'json',
