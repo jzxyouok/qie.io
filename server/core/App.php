@@ -15,8 +15,10 @@ class App {
 	 */
 	function __construct($process_start = 0) {
 		$segments = array();
-		$route = array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
-							'replace'=>array('/', ''));
+		$route = array('dir'=>array('regexp'=>array(),
+									'replace'=>array(),
+						'path'=>array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
+									  'replace'=>array('/', '')));
 		try {
 			if(!class_exists('Loader'))
 				require(APP_PATH.'/core/Loader.php');
@@ -44,13 +46,14 @@ class App {
 			/*
 			 * 实现路由
 			 */
+			//处理管理后台目录
+			$route['dir']['regexp'][] = '#^'.$profile['admin_dir'].'#i';
+			$route['dir']['replace'][] = '/admin';
+
 			$route = array_merge($route, Loader::loadVar(APP_PATH.'/config/route.php'));
 			
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
-			$dir = $info['dirname'];
-			//处理管理后台目录
-			if($dir == $profile['admin_dir'])
-				$dir = '/admin';
+			$dir = preg_relace('', '', $info['dirname']);
 			
 			if(!empty($_SERVER['PATH_INFO']))
 				$path = substr($_SERVER['PATH_INFO'], 1);
@@ -60,7 +63,7 @@ class App {
 					$path = $_GET['c'].'/'.$_GET['m'].'/'.$_GET['p']; //controller,method,param
 			}
 			if(!empty($path)) {
-				$segments = explode('/', preg_replace($route['regexp'], $route['replace'], $path));
+				$segments = explode('/', preg_replace($route['path']['regexp'], $route['path']['replace'], $path));
 			}
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$ctrlName = ''; //自动调用的控制器名称
