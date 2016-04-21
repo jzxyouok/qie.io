@@ -46,7 +46,6 @@ class Controller {
 			return false;
 		
 		//assign
-		$this->vars['dir'] = $this->dir;
 		$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
 		$this->vars['theme'] = $this->config['profile']['theme'];
 		$this->vars['admin_dir'] = $this->config['profile']['admin_dir'];

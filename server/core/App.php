@@ -48,6 +48,7 @@ class App {
 			
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
 			$dir = $info['dirname'];
+			//处理管理后台目录
 			if($dir == $profile['admin_dir'])
 				$dir = '/admin';
 			
