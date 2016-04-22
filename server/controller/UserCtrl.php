@@ -12,7 +12,7 @@ class UserCtrl extends Controller {
 	//登录页
 	function index() {
 		if(!empty($this->user)) {
-			header('Location: '.($this->config['profile']['admin_relogin']?'/index.php/user/center/':$this->config['profile']['manage_dir'].'/'));
+			header('Location: '.($this->profile['admin_relogin']?'/index.php/user/center/':$this->profile['manage_dir'].'/'));
 		}
 		
 		$this->loadView('user');
@@ -28,8 +28,8 @@ class UserCtrl extends Controller {
 	public function center() {
 		if(empty($this->user))
 			header('Location: /index.php/user/');
-		if(!$this->config['profile']['admin_relogin'])
-			header('Location: '.$this->config['profile']['admin_dir'].'/');
+		if(!$this->profile['admin_relogin'])
+			header('Location: '.$this->profile['admin_dir'].'/');
 		
 		$this->loadView('user_center');
 	}
@@ -56,7 +56,7 @@ class UserCtrl extends Controller {
 		}
 		try {
 			$psp = Loader::load('Passport');
-			$psp->setExpire($this->config['profile']['admin_relogin']?(!empty($_POST['expire'])?(int)$_POST['expire']:604800):0);
+			$psp->setExpire($this->profile['admin_relogin']?(!empty($_POST['expire'])?(int)$_POST['expire']:604800):0);
 			$res = $psp->login($_POST['user_name'], $_POST['pwd']);
 		
 			if(!empty($res['code'])) {
@@ -107,7 +107,7 @@ class UserCtrl extends Controller {
 		if(!empty($this->user)) {
 			$this->message(-1, '请不要重复注册', 6);
 		}
-		if(!$this->config['profile']['admin_relogin'])
+		if(!$this->profile['admin_relogin'])
 			$this->message(-1, '当前禁止注册', 7);
 		
 		try {

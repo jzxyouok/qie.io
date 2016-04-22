@@ -14,11 +14,6 @@ class App {
 	 *
 	 */
 	function __construct($process_start = 0) {
-		$segments = array();
-		$route = array('dir'=>array('regexp'=>array(),
-									'replace'=>array(),
-						'path'=>array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
-									  'replace'=>array('/', '')));
 		try {
 			if(!class_exists('Loader'))
 				require(APP_PATH.'/core/Loader.php');
@@ -47,14 +42,20 @@ class App {
 			 * 实现路由
 			 */
 			//处理管理后台目录
-			$route['dir']['regexp'][] = '#^'.$profile['admin_dir'].'#i';
-			$route['dir']['replace'][] = '/admin';
-
-			$route = array_merge($route, Loader::loadVar(APP_PATH.'/config/route.php'));
+			$route = array('dir'=>array('regexp'=>array('#^'.$profile['admin_dir'].'#i'),
+																	'replace'=>array('/admin')
+																	),
+										'path'=>array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
+									  							'replace'=>array('/', '')
+																	));
 			
+			$userRoute = Loader::loadVar(APP_PATH.'/config/route.php');
+			$route['dir'] = array_merge($route['dir'], $userRoute['dir']);
+			$route['path'] = array_merge($route['path'], $userRoute['path']);
+			//处理dir
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
-			$dir = preg_relace('', '', $info['dirname']);
-			
+			$dir = preg_replace($route['dir']['regexp'], $route['dir']['replace'], $info['dirname']);
+			//处理path
 			if(!empty($_SERVER['PATH_INFO']))
 				$path = substr($_SERVER['PATH_INFO'], 1);
 			else {
@@ -62,9 +63,11 @@ class App {
 				if(empty($path))
 					$path = $_GET['c'].'/'.$_GET['m'].'/'.$_GET['p']; //controller,method,param
 			}
+			$segments = array();
 			if(!empty($path)) {
 				$segments = explode('/', preg_replace($route['path']['regexp'], $route['path']['replace'], $path));
 			}
+			
 			$position = 0; //系统调用的uri起始位置,调用的方法在这个位置上+1,调用的方法需要的参数在这个位置
 			$ctrlName = ''; //自动调用的控制器名称
 			$controller = null; //自动调用的控制器
@@ -79,11 +82,12 @@ class App {
 			}
 			
 			$ctrlName{0} = strtoupper($ctrlName{0});
-			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl', array($process_start), false);
+			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl', array(), false);
 			if(!$controller)
 				self::error('找不到控制器对象::controller not found', $request);
-			$controller->setDir($dir);
-			$controller->setSegments($segments);
+			$controller->processStart = $process_start;
+			$controller->dir = $dir;
+			$controller->segments = $segments;
 			
 			if(empty($method) && !($method = $segments[$position+1])) {
 				$method = 'index'; //尝试加载默认方法

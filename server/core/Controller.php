@@ -12,24 +12,22 @@
 class Controller {
 	protected $user = array();
 	protected $paramPos = 1; //自动调用方法的参数uri位置
-	protected $processStart = ''; //控制器加载开始时间
 	protected $vars = array(); //页面模板需要的变量
 	protected $funcs = array(); //页面模板需要的函数
 	protected $classes = array(); //页面模板需要的类
 	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf";
-	protected $config = array(); //config
+	protected $profile = array(); //config/profile
 	protected $autoload = array(); //自动执行,array('this'=>'isAdmin','Passport'=>'isAdmin');
 	protected $autoloadResult = array();
-	protected $dir = '';
-	protected $segments = array();
+	public $processStart = ''; //控制器加载开始时间
+	public $dir = '';
+	public $segments = array();
 	
-	function __construct($startTime = 0) {
-		//计算性能
-		$this->processStart = empty($startTime)?microtime():$startTime;
+	function __construct() {
 		//获取注册用户信息
 		$this->user = Loader::load('Passport')->getUser();
 		//加载网站配置文件
-		$this->loadConfig('profile');
+		$this->profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
 		//autoload
 		foreach($this->autoload as $k => $v) {
 			$obj = $k == 'this'?$this:Loader::load($k);
@@ -47,8 +45,8 @@ class Controller {
 		
 		//assign
 		$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
-		$this->vars['theme'] = $this->config['profile']['theme'];
-		$this->vars['admin_dir'] = $this->config['profile']['admin_dir'];
+		$this->vars['theme'] = $this->profile['theme'];
+		$this->vars['admin_dir'] = $this->profile['admin_dir'];
 		
 		$this->view(APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl');
 	}
@@ -63,13 +61,13 @@ class Controller {
 		
 		//确定用户主题文件夹
 		if(!empty($_COOKIE['theme']) && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
-			$this->config['profile']['theme'] = $_COOKIE['theme'];
+			$this->profile['theme'] = $_COOKIE['theme'];
 		
 		//assign
-		$this->vars['icp'] = $this->config['profile']['icp'];
-		$this->vars['analytics'] = $this->config['profile']['analytics'];
+		$this->vars['icp'] = $this->profile['icp'];
+		$this->vars['analytics'] = $this->profile['analytics'];
 		
-		$this->view(DOCUMENT_ROOT.'/theme/'.$this->config['profile']['theme'].'/'.$tpl.'.tpl');
+		$this->view(DOCUMENT_ROOT.'/theme/'.$this->profile['theme'].'/'.$tpl.'.tpl');
 	}
 	/*
 	 * 加载视图文件
@@ -80,9 +78,9 @@ class Controller {
 		if(!file_exists($tpl))
 			return false;
 		
-		$this->vars['title'] = $this->config['profile']['title']?$this->config['profile']['title']:'默认网站';
-		$this->vars['meta'] = $this->config['profile']['meta'];
-		$this->vars['homepage'] = $this->config['profile']['homepage'];
+		$this->vars['title'] = $this->profile['title']?$this->profile['title']:'默认网站';
+		$this->vars['meta'] = $this->profile['meta'];
+		$this->vars['homepage'] = $this->profile['homepage'];
 		$this->vars['user'] = $this->user;
 		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
 		
@@ -99,22 +97,13 @@ class Controller {
 			$view->assign($k, $v);
 		
 		$view->assign('memory_usage', round(memory_get_usage()/1048576, 3)); //运行时间
-		list($msec1, $sec1) = explode(' ', $this->processStart);
-		list($msec2, $sec2) = explode(' ', microtime());
-		$view->assign('elapsed_time', round(((float)$msec2 + (float)$sec2) - ((float)$msec1 + (float)$sec1), 3));
+		if($this->processStart) {
+			list($msec1, $sec1) = explode(' ', $this->processStart);
+			list($msec2, $sec2) = explode(' ', microtime());
+			$view->assign('elapsed_time', round(((float)$msec2 + (float)$sec2) - ((float)$msec1 + (float)$sec1), 3));
+		}
 		//显示模板
 		$view->display($tpl);
-	}
-	/*
-	 * 加载config文件夹下面的配置文件
-	 *
-	 * @param string $name 配置名称
-	 */
-	protected function loadConfig($name) {
-		if(!empty($this->config[$name]))
-			return $this->config[$name];
-		
-		$this->config[$name] = Loader::loadVar(APP_PATH.'/config/'.$name.'.php', $name);
 	}
 	/*
 	 * 根据token检查安全性
@@ -171,10 +160,10 @@ class Controller {
 	 * @return boolean
 	 */
 	public function hasAdminLogin($redirect = true) {
-		if(empty($this->user) || ($this->config['profile']['admin_relogin'] && !Loader::load('Passport')->isAdmin())) {
+		if(empty($this->user) || ($this->profile['admin_relogin'] && !Loader::load('Passport')->isAdmin())) {
 			//exit('need login');
 			if($redirect)
-				header('Location: '.($this->config['profile']['admin_relogin']?$this->config['profile']['admin_dir'].'/':'/index.php/user/'));
+				header('Location: '.($this->profile['admin_relogin']?$this->profile['admin_dir'].'/':'/index.php/user/'));
 			else
 				return false;
 		}
@@ -195,23 +184,6 @@ class Controller {
 	 */
 	public function getParamPos() {
 		return $this->paramPos;
-	}
-	/*
-	 * 设置物理dir
-	 *
-	 * @param string $dir
-	 */
-	public function setDir($dir) {
-		if($dir)
-			$this->dir = (string)$dir;
-	}
-	/*
-	 * 设置segments
-	 *
-	 * @param string $s
-	 */
-	public function setSegments($s) {
-		$this->segments = $s;
 	}
 	/*
 	 * 获取segment

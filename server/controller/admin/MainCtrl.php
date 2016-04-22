@@ -21,7 +21,7 @@ class MainCtrl extends Controller {
 			header('Location: /index.php/user/');
 		
 		if($this->isAdmin) {
-			$this->vars['admin_relogin'] = $this->config['profile']['admin_relogin'];
+			$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
 			$this->loadView('main');
 		} else
 			$this->loadView('login');
@@ -65,7 +65,7 @@ class MainCtrl extends Controller {
 			exit();
 		}
 		$passport = Loader::load('Passport');
-		if($this->config['profile']['admin_relogin'])
+		if($this->profile['admin_relogin'])
 			$passport->adminLogout();
 		else
 			$passport->logout();
