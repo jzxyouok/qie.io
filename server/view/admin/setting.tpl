@@ -66,7 +66,7 @@ body.manage .default-form {
               </div>
               </label>
             </div>
-            <div class="split-line">高级选项(<a href="" class="more">显示</a>)</div>
+            <div class="split-line"><span class="text">高级选项(<a href="" class="more">显示</a>)</span></div>
             <div class="field-group hide">
               <div class="input-group">
                 <div class="title">管理员二次登录:</div>
@@ -262,11 +262,15 @@ document.getElementById('profile_form').addEventListener('submit', function(e){
 });
 document.querySelector('#profile_form .more').addEventListener('click', function(e){
 	e.preventDefault();
-	var nextNode = e.target.parentNode.nextSibling;
+	var nextNode = e.target.parentNode.parentNode.nextSibling;
 	
 	while(nextNode.nodeType != 1) {
 		nextNode = nextNode.nextSibling;
 	}
+	if(nextNode.classList.contains('hide')) {
+		nextNode.style.height = nextNode.children.length*(nextNode.firstElementChild.offsetHeight+15)+'px';
+	} else
+		nextNode.style.height = '';
 	nextNode.classList.toggle('hide');
 });
 document.querySelector('#database_form select').addEventListener('change', function(e){

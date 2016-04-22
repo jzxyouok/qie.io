@@ -62,14 +62,19 @@ form .split-line {
     margin-bottom: 17px;
     text-align:center;
 }
+form .split-line .text {
+    background-color:white;
+    padding:0 .5em;
+}
 .field-group {
-    -webkit-transition: height ease-in-out .15s;
-    -o-transition: height ease-in-out .15s;
-    transition: height ease-in-out .15s;
+    -webkit-transition: height linear .2s;
+    -o-transition: height linear .2s;
+    transition: height linear .2s;
+    overflow: hidden;
 }
 .field-group.hide {
     height: 0;
-    overflow: hidden;
+    margin-bottom: 15px;
 }
 .input-group {
     margin-bottom: 15px;
