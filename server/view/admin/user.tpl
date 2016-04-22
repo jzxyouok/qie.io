@@ -9,13 +9,39 @@
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">
-    <div class="panel default-form">
-      <h3 class="head">用户管理</h3>
-      <div class="body"></div>
+    <div class="panel default-panel">
+      <h3 class="head">用户列表</h3>
+      <div class="body">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>ID</th>
+              <th>用户名</th>
+              <th>昵称</th>
+              <th>电子邮箱</th>
+              <th>注册时间</th>
+            </tr>
+          </thead>
+          <tbody>
+          <{section loop=$data.result name=n}>
+          <tr>
+            <td class="center"><{$smarty.section.n.index+1}></td>
+            <td class="center"><{$data.result[n].id}></td>
+            <td><{$data.result[n].name}></td>
+            <td><{$data.result[n].nick}></td>
+            <td><{$data.result[n].email}></td>
+            <td class="center"><{$data.result[n].create_time}></td>
+          </tr>
+          <{/section}>
+            </tbody>
+        </table>
+        <div class="pagination"><div class="info">共<{$data.sum}>个用户/<{$data.max}>页</div><div class="paging"><{$pagination}></div></div>
+      </div>
     </div>
   </div>
   <{include file="./footer.tpl"}> </div>
-<{include file="../common/js.tpl"}>
+<{include file="../common/js.tpl"}> 
 <script>
 
 </script>

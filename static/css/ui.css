@@ -205,11 +205,64 @@ form .split-line .text {
     background-color:white;
     border-radius: 0 0 3px 3px;
 }
-/*default-form panel*/
-.default-form {
+.panel table {
+    width: 100%;
+    line-height: 1.5;
+}
+.panel table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+}
+.panel table tbody td {
+    padding: 8px;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+.panel .center {
+    text-align: center;
+}
+.panel .pagination .info {
+    float: left;
+}
+.panel .pagination {
+    margin-top: 20px;
+}
+.panel .pagination .paging {
+    float:right;
+    font-family: Helvetica, Arial, sans-serif;
+}
+.panel .pagination::after {
+    content:" ";
+    display: inline-block;
+    height: 0;
+    clear: both;
+}
+.panel .pagination .paging a, .panel .pagination .paging span, .panel .pagination .paging strong {
+    padding:6px 12px;
+    border: 1px solid #ddd;
+    border-left: none;
+}
+.panel .pagination .paging strong, .panel .pagination .paging a:hover {
+    background-color: #337ab7;
+    border-color: #337ab7;
+    color: white;
+}
+.panel .pagination .paging .start {
+    border-left: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+}
+.panel .pagination .paging .end {
+    border-radius: 0 4px 4px 0;
+}
+/*default-panel*/
+.default-panel {
     border-color:#ddd;
 }
-.default-form>.head {
+/*default-form panel*/
+.default-panel,.default-form {
+    border-color:#ddd;
+}
+.default-panel>.head, .default-form>.head {
     color: #333;
     background-color: #f5f5f5;
     border-color: #ddd;

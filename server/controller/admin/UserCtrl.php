@@ -12,7 +12,19 @@ class UserCtrl extends Controller {
 	protected $autoload = array('this'=>'hasAdminLogin');
 	
 	//首页
-	function index() {
+	function index($now = 1) {
+		$row = (int)$_GET['row'] or $row = 20;
+		
+		$user = Loader::load('model/User');
+		$this->vars['data'] = $user->select(array('now'=>$now, 'row'=>$row));
+		$pagination = Loader::load('Pagination', array(array(
+			'sum'=>$this->vars['data']['sum'],
+			'row'=>$this->vars['data']['row'],
+			'now'=>$this->vars['data']['now'],
+			'uri'=>$this->profile['admin_dir'].'/index.php/user/'
+		)));
+		$this->vars['pagination'] = $pagination->get();
+		
 		$this->loadView('user');
 	}
 }

@@ -122,4 +122,126 @@ class Database extends Model {
 	public function sum($table, $where = '') {
 		
 	}
+	/*
+	 * 设置select语句的field字段
+	 *
+	 * @param string $field 如id,name,title
+	 * @param string $table 当前需要设置的表
+	 *
+	 * @return string
+	 */
+	public static function setSelectField($field = '', $table = '') {
+		if(empty($table) || empty($field))
+			return $field;
+		$field = trim($field);
+		$f = explode(',', $field);
+		$counter = 0;
+		while(list($k, $v) = each($f)) {
+			if(false !== strpos($v, ')')) {
+				$counter--;
+				continue;
+			}
+			if(false !== strpos($v, '(')) {
+				$counter++;
+				continue;
+			}
+			if($counter > 0)
+				continue;
+			$f[$k] = "`{$table}`.".($v == '*'?$v:"`{$v}`");
+		}
+		$field = implode(',', $f);
+		return $field;
+	}
+	/*
+	 * 设置select语句的where字段
+	 *
+	 * @param string $where 
+	 * @param string $table 当前需要设置的表
+	 *
+	 * @return string
+	 */
+	public static function setSelectWhere($where = '', $table = '') {
+		//如果条件已and开头
+		if(empty($table) || empty($where))
+			return $where;
+		$w = explode(' ', $where);
+		$subquery_count = 0; //子查询次数()
+		$slash = ''; //引号类型，'|"
+		$slash_count = 0;
+		$flag = true; //断点标记
+		while(list($k, $v) = each($w)) {
+			$flag = true;
+			//处理字符串
+			if($slash != '') {
+				//如果是字符串
+				if($v == $slash || preg_match("/[^\\\]*{$slash}$/i", $v)) {
+					//字符串结束标记
+					$slash = '';
+				}
+				continue;
+			}
+			if($v{0} == '\'' || $v{0} == '"') {
+				$slash = $v{0};
+				continue;
+			} else if(preg_match("/(['\"])/i", $v, $slash)) {
+				//字符串开始标记
+				$slash = $slash[1];
+				if(!preg_match("/^[^\\\]*(['\"]).+?\\1/is", $v)) {
+					if(!preg_match("/^[^.]+?[!=<>]{1,2}.+/is", $v))
+						continue;
+				} else
+					$slash = ''; //如果是闭包的引号，如'abc'
+			} else
+				$slash = '';
+			//处理括号
+			if($slash == '' && false !== strpos($v, '(')) {
+				//如果有子查询开始标记
+				$subquery_count++;
+				if($v == '(') {
+					continue;
+				}
+			}
+			if($slash == '' && $subquery_count > 0) {
+				//子查询结束标记
+				if(false !== strrpos($v, ')'))
+					$subquery_count--;
+				continue;
+			}
+			//如果是系统关键词
+			if(preg_match("/^(?:and|or|in|exists|not|like|regexp|match|against)/i", $v)) {
+				$w[$k] = strtoupper($v);
+				continue;
+			}
+			//如果已经限定表名
+			if(preg_match("/^[a-z0-9_`]+\.[a-z0-9_`]+/is", $v))
+				continue;
+			$match = array();
+			if(preg_match("/^[^.]+?([!=<>]{1,2}).+/is", $v, $match) && $slash_count == 0) {
+				$w[$k] = "`{$table}`.`".substr($v, 0, strpos($v, $match[1]))."`".substr($v, strpos($v, $match[1])); //如果是判断语句
+			} else {
+				//如果是数字或者比值
+				if(is_numeric($v) || in_array($v, array('=','!=','>=','<=','<>')))
+					continue;
+				$w[$k] = "`{$table}`.`{$v}`";
+			}
+		}
+		$where = implode(' ', $w);
+		return $where;
+	}
+	/*
+	 * 设置select语句的order字段
+	 *
+	 * @param string $order
+	 * @param string $table 当前需要设置的表
+	 *
+	 * @return string
+	 */
+	public static function setSelectOrder($order = '', $table = '') {
+		$o = explode(',', $order);
+		foreach($o as $k => $v) {
+			$o[$k] = (false !== strpos($v, '(')? $v : (empty($table) ? "" : "`{$table}`.") . "`" . substr($v, 0, strpos($v, ' ')) . "` " . strtoupper(substr($v, strpos($v, ' ')+1)));	
+		}
+		$order = implode(',', $o);
+		return $order;
+	}
 }
