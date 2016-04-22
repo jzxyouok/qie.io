@@ -270,7 +270,13 @@ body.manage>.sidebar .user-info {
     padding:0 20px;
 }
 body.manage>.sidebar .user-info span {
-    margin-right:1em;
+    margin-right: 1em;
+    max-width: 210px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
 }
 body.manage>.sidebar .user-info i {
     margin-right:.5em;
