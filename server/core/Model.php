@@ -18,7 +18,13 @@ class Model {
 		$this->error = array('code'=>(int)$code, 'msg'=> (string)$msg);
 		return $this->error;
 	}
-	
+	/*
+	 * 通用select
+	 *
+	 * @param array $cfg 配置。如果array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20)
+	 *
+	 * @return array array('now'=>,'max'=>,'row'=>,'sum'=>,'result'=>)
+	 */
 	public function select($cfg = array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20)) {
 		if(empty($cfg['field']))
 			$cfg['field'] = '*';
@@ -71,13 +77,43 @@ class Model {
 		
 		return $data;
 	}
-	public function insert() {
-		
+	/*
+	 * 通用insert
+	 *
+	 * @param array $data 插入的数据
+	 *
+	 * @return int 
+	 */
+	public function insert($data) {
+		$db = Loader::load('Database');
+		$field = Database::setInsertField($data);
+		$sql = "INSERT INTO `{$this->table}`".$field;
+		return $db->execute($sql);
 	}
-	public function update() {
-		
+	/*
+	 * 通用update
+	 *
+	 * @param array $cfg array('data'=>需要更新的数据,'where'=>更新的条件,'limit'=>更新的个数
+	 *
+	 * @return boolean 
+	 */
+	public function update($cfg = array('data'=>array(),'where'=>'','limit'=>0)) {
+		$db = Loader::load('Database');
+		$field = Database::setUpdateField($cfg['data'], $this->table);
+		$sql = "UPDATE `{$this->table}` SET {$field}".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['limit'])?" LIMIT {$cfg['limit']}":"");
+		return $db->execute($sql);
 	}
-	public function delete() {
-		
+	/*
+	 * 通用delete
+	 *
+	 * @param array $cfg array('where'=>删除的条件,'limit'=>删除的个数
+	 *
+	 * @return boolean 
+	 */
+	public function delete($cfg = array('where'=>'','limit'=>0)) {
+		$db = Loader::load('Database');
+		$field = Database::setUpdateField($cfg['data'], $this->table);
+		$sql = "DELETE FROM `{$this->table}`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['limit'])?" LIMIT {$cfg['limit']}":"");
+		return $db->execute($sql);
 	}
 }

@@ -29,12 +29,12 @@
         </div>
         <div class="input-group">
           <label><div class="title">电子邮箱:</div>
-            <div class="control"><input type="text" name="email"></div>
+            <div class="control"><input type="text" name="email" value="<{$data.email}>"></div>
           </label>
         </div>
         <div class="input-group">
           <label><div class="title">昵&nbsp; &nbsp; &nbsp; 称:</div>
-            <div class="control"><input type="text" name="nick" value="<{$smarty.cookies.u_nick}>"></div>
+            <div class="control"><input type="text" name="nick" value="<{$data.nick}>"></div>
           </label>
         </div>
       </fieldset>

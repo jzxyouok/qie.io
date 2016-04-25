@@ -117,7 +117,7 @@ class Passport extends Model {
 		//如果查询为空
 		if(empty($res))
 			return $this->error(4, '用户名或者密码错误');
-		if($res[0]['password'] !== $this->encode($password, substr($res[0]['password'], 0, 1)))
+		if($res[0]['password'] !== self::encode($password, substr($res[0]['password'], 0, 1)))
 			return $this->error(5, '用户名或者密码错误');
 		
 		//初始化user数组
@@ -178,7 +178,7 @@ class Passport extends Model {
 			return $this->error(3, '用户名或者昵称不允许使用');
 		
 		$db = Loader::load('Database');
-		$sql = "INSERT INTO `user` (`name`,`email`,`password`,`nick`,`create_time`,`login_time`,`login_ip`) VALUES ('{$name}','{$email}','".$this->encode($password)."','{$nick}','".date(DATE_FORMAT, $this->loginTime)."','".date(DATE_FORMAT, $this->loginTime)."','{$this->loginIP}')";
+		$sql = "INSERT INTO `user` (`name`,`email`,`password`,`nick`,`create_time`,`login_time`,`login_ip`) VALUES ('{$name}','{$email}','".self::encode($password)."','{$nick}','".date(DATE_FORMAT, $this->loginTime)."','".date(DATE_FORMAT, $this->loginTime)."','{$this->loginIP}')";
 		$res = $db->execute($sql);
 		if($res > 0) {
 			//注册成功
@@ -265,7 +265,7 @@ class Passport extends Model {
 		$res = $db->query($sql);
 		
 		//查询旧密码是否正确
-		if((!empty($cfg['old_password'])) && !empty($res[0]['password']) && $res[0]['password'] !== $this->encode($cfg['old_password'], substr($res[0]['password'], 0, 1)))
+		if((!empty($cfg['old_password'])) && !empty($res[0]['password']) && $res[0]['password'] !== self::encode($cfg['old_password'], substr($res[0]['password'], 0, 1)))
 			return $this->error(3, '原密码错误');
 		//查询用户名是否被占用
 		if(!empty($cfg['name']) && !empty($res[0]['name']))
@@ -278,7 +278,7 @@ class Passport extends Model {
 			return $this->error(6, '昵称已经被占用');
 			
 		//更新信息
-		$sql = "UPDATE `user` SET ".(!empty($cfg['name']) ? "`name`='{$cfg['name']}'," : "").(!empty($cfg['email']) ? "`email`='{$cfg['email']}'," : "").(!empty($cfg['nick']) ? "`nick`='{$cfg['nick']}'," : "").(empty($cfg['password']) ? "" : "`password`='".$this->encode($cfg['password'])."',")."`tm`=NOW() WHERE `id`=".$this->user['id']." LIMIT 1";
+		$sql = "UPDATE `user` SET ".(!empty($cfg['name']) ? "`name`='{$cfg['name']}'," : "").(!empty($cfg['email']) ? "`email`='{$cfg['email']}'," : "").(!empty($cfg['nick']) ? "`nick`='{$cfg['nick']}'," : "").(empty($cfg['password']) ? "" : "`password`='".self::encode($cfg['password'])."',")."`tm`=NOW() WHERE `id`=".$this->user['id']." LIMIT 1";
 		$res = $db->execute($sql);
 		
 		if($res > 0) {
@@ -299,7 +299,7 @@ class Passport extends Model {
 	/*
 	 * 密码加密方法
 	 */
-	public function encode($password, $index = false) {
+	public static function encode($password, $index = false) {
 		if(empty($password))
 			return false;
 			

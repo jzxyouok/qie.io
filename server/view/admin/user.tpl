@@ -33,7 +33,7 @@
             <td><{$data.result[n].nick}></td>
             <td><{$data.result[n].email}></td>
             <td class="center"><{$data.result[n].create_time}></td>
-            <td class="center manage"><a href="<{$admin_dir}>/index.php/user/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="#" class="delete" title="删除">删除</a></td>
+            <td class="center manage"><a href="<{$admin_dir}>/index.php/user/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/user/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
           </tr>
           <{/section}>
             </tbody>
@@ -45,7 +45,18 @@
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}> 
 <script>
-
+$('.panel .body .manage a.delete').on('click', function(e){
+	if(!confirm('确认删除？'))
+		return false;
+		
+	$.get(this.href,function(data){
+									if(data.status< 1) {
+										alert(data.result);
+									} else {
+										location.href = location.href;
+									}}, 'json');
+	return false;
+});
 </script>
 </body>
 </html>

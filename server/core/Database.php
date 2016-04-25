@@ -123,6 +123,57 @@ class Database extends Model {
 		
 	}
 	/*
+	 * 设置insert语句的字段
+	 *
+	 * @param array $param 设置语句的field字段，如 array('id' => 1, 'title' => 'hello world', 'other'=>' 123')，如果field为varchar,但是想传数字，前面可以加个空格' 1234'
+	 *
+	 * @return string
+	 */
+	public static function setInsertField($param = array()) {
+		$key = '';
+		$value = '';
+		$counter = 0;
+		foreach($param as $k => $v) {
+			if(is_array($v)) {
+				$val = '';
+				foreach($v as $kk => $vv) {
+					if($counter < 1)
+						$key .= ",`{$kk}`";
+					$val .= ",".(is_int($vv)||is_float($vv)?$vv:"'{$vv}'");
+				}
+				$value .= ',('.substr($val, 1).')';
+				$counter++;
+			} else {
+				$key .= ",`{$k}`";
+				$value .= ",".(is_int($v)||is_float($v)?$v:"'{$v}'");
+			}
+		}
+		$key = '('.substr($key, 1).')';
+		if($counter == 0)
+			$value = '('.substr($value, 1).')';
+		else
+			$value = substr($value, 1);
+			
+		return $key . ' VALUES ' . $value;
+	}
+	/*
+	 * 设置update语句的字段
+	 *
+	 * @param array $param 设置语句的field字段，如 array('id' => 1, 'title' => 'hello world', 'other'=>' 123')，如果field为varchar,但是想传数字，前面可以加个空格' 1234'
+	 *
+	 * @return string
+	 */
+	public static function setUpdateField($param = array()) {
+		$field = '';
+		foreach($param as $k => $v) {
+			$field .= ",`{$k}`=" . (is_int($v)||is_float($v)?$v:"'{$v}'"); //$field .= ",`{$k}`=" . (preg_match("/^\d+$/", $v) ? $v : "'".trim($v)."'");
+		}
+		if(!empty($field))
+			return substr($field, 1);
+		else
+			return '';
+	}
+	/*
 	 * 设置select语句的field字段
 	 *
 	 * @param string $field 如id,name,title

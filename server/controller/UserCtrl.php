@@ -31,6 +31,8 @@ class UserCtrl extends Controller {
 		if(!$this->profile['admin_relogin'])
 			header('Location: '.$this->profile['admin_dir'].'/');
 		
+		$user = Loader::load('model/User');
+		$this->vars['data'] = $user->selectOne($this->user['id']);
 		$this->loadView('user_center');
 	}
 	/*
