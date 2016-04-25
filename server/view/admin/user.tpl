@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>qie.io</title>
+<title>用户列表-qie.io</title>
 <{include file="../common/css.tpl"}>
 </head>
 <body class="manage manage-article">
@@ -21,6 +21,7 @@
               <th>昵称</th>
               <th>电子邮箱</th>
               <th>注册时间</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -32,6 +33,7 @@
             <td><{$data.result[n].nick}></td>
             <td><{$data.result[n].email}></td>
             <td class="center"><{$data.result[n].create_time}></td>
+            <td class="center manage"><a href="#" class="modify" title="编辑">编辑</a><a href="#" class="delete" title="删除">删除</a></td>
           </tr>
           <{/section}>
             </tbody>

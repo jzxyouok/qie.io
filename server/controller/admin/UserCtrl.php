@@ -27,4 +27,26 @@ class UserCtrl extends Controller {
 		
 		$this->loadView('user');
 	}
+	//添加
+	function add() {
+		
+		$this->loadView('user_add');
+	}
+	//编辑
+	function edit() {
+		
+		$this->loadView('user_edit');
+	}
+	/*
+	 * API
+	 */
+	function insert() {
+		
+	}
+	function update() {
+		
+	}
+	function delete() {
+		
+	}
 }

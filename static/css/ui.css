@@ -216,7 +216,7 @@ form .split-line .text {
 .panel table tbody td {
     padding: 8px;
     vertical-align: top;
-    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 .panel .center {
     text-align: center;
@@ -229,7 +229,7 @@ form .split-line .text {
 }
 .panel .pagination .paging {
     float:right;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: Verdana,sans-serif, Arial;
 }
 .panel .pagination::after {
     content:" ";
@@ -397,6 +397,9 @@ body.manage>.content .panel {
     border-color:#ddd;
     text-align: left;
     margin:0 auto;
+}
+body.manage td.manage a {
+    margin:0 5px;
 }
 /*page*/
 /*login page,reg page, user-center page*/
