@@ -176,14 +176,6 @@ class Util {
 		return $ip;
 	}
 	/*
-	 * 获取当前运行页面路径
-	 *
-	 * @return string
-	 */ 
-	public static function selfUri() {
-		return (stripos('_' . $_SERVER["SERVER_PROTOCOL"], 'HTTPS') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-	}
-	/*
 	 * 模拟post
 	 * 
 	 * @param string $url 请求地址
@@ -345,28 +337,6 @@ class Util {
 		return $res;
 	}
 	/*
-	 * 过滤危险标签
-	 *
-	 * @param string $str
-	 *
-	 * @return string
-	 */
-	public static function noScript($str = '') {
-		if(is_numeric($str))
-			return $str;
-		$str = trim($str);
-		$search = array("/\s+/",
-					"/<(\/?)(php|script|i?frame|style|html|body|title|link|meta|\?|\%)([^>]*?)>/isU", //过滤 <script 等可能引入恶意内容或恶意改变显示布局的代码,如果不需要插入flash等,还可以加入<object的过滤 
-					"/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU", //过滤javascript的on事件
-					);
-		$replace = array(" ",
-					 "&lt;\\1\\2\\3&gt;",           //如果要直接清除不安全的标签，这里可以留空 
-					 "\\1\\2",
-					 );
-		$str = preg_replace($search, $replace, $str); 
-		return $str;	
-	}
-	/*
 	 * 生成随机字符串
 	 *
 	 * @param int $len 字符串长度
@@ -387,6 +357,20 @@ class Util {
 				$code .= $char{mt_rand(0,$len_-1)};
 		}
 		return $code;
+	}
+	/*
+	 * 把变量输出到php文件
+	 *
+	 * @param string $file 文件路径
+	 * @param mix $varData 随机字符字典
+	 * @param string $varName 随机字符字典
+	 *
+	 * @return boolean
+	 */
+	public static function var2file($file, $varData, $varName) {
+		$oldContent = file_get_contents($file);
+		$content = substr($oldContent, 0, strpos($oldContent, '$'.$varName)).'$'.$varName.' = '.var_export($varData, true).';';
+		return file_put_contents($file, $content);
 	}
 	/*
 	 * 按数组抽奖
@@ -425,6 +409,28 @@ class Util {
 			return (float)$num;
 		else
 			return (int)$num;
+	}
+	/*
+	 * 过滤危险标签
+	 *
+	 * @param string $str
+	 *
+	 * @return string
+	 */
+	public static function noScript($str = '') {
+		if(is_numeric($str))
+			return $str;
+		$str = trim($str);
+		$search = array("/\s+/",
+					"/<(\/?)(php|script|i?frame|style|html|body|title|link|meta|\?|\%)([^>]*?)>/isU", //过滤 <script 等可能引入恶意内容或恶意改变显示布局的代码,如果不需要插入flash等,还可以加入<object的过滤 
+					"/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU", //过滤javascript的on事件
+					);
+		$replace = array(" ",
+					 "&lt;\\1\\2\\3&gt;",           //如果要直接清除不安全的标签，这里可以留空 
+					 "\\1\\2",
+					 );
+		$str = preg_replace($search, $replace, $str); 
+		return $str;	
 	}
 	/*
 	 * 对字符串进行分词。中文字符需要传一个词组的长度，如2个字，英文字符按照空格和标点进行分词

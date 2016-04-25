@@ -132,9 +132,7 @@ class Setting extends Model {
 		if(empty($data))
 			return false;
 		
-		$oldContent = file_get_contents(self::DATABASE_PATH);
-		$content = substr($oldContent, 0, strpos($oldContent, '$DBList')).'$DBList = '.var_export($data, true).';';
-		return file_put_contents(self::DATABASE_PATH, $content);
+		return Util::var2file(self::DATABASE_PATH, $data, 'DBList');
 	}
 	/*
 	 * 获取网站数据库配置
