@@ -33,7 +33,9 @@ class UserCtrl extends Controller {
 		$this->loadView('user_add');
 	}
 	//编辑
-	function edit() {
+	function edit($id= 0) {
+		$user = Loader::load('model/User');
+		$this->vars['data'] = $user->selectOne($id);
 		
 		$this->loadView('user_edit');
 	}
@@ -44,7 +46,27 @@ class UserCtrl extends Controller {
 		
 	}
 	function update() {
+		if($_POST['name'])
+			$data['name'] = $_POST['name'];
+		if($_POST['nick'])
+			$data['nick'] = $_POST['nick'];
+		if($_POST['email'])
+			$data['email'] = $_POST['email'];
+		if($_POST['pwd'])
+			$data['password'] = $_POST['pwd'];
 		
+		if(empty($data))
+			$this->message(-1, '没有修改的内容', 1);
+		
+		$user = Loader::load('model/User');
+		$res = $user->update($data);
+		if(!empty($res['code'])) {
+			$this->message(-1, $res['msg'], 10+$res['code']);
+		} else if($res) {
+			$this->message(1, '操作成功');
+		} else {
+			$this->message(0, '操作失败');
+		}
 	}
 	function delete() {
 		

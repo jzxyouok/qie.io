@@ -33,7 +33,7 @@
             <td><{$data.result[n].nick}></td>
             <td><{$data.result[n].email}></td>
             <td class="center"><{$data.result[n].create_time}></td>
-            <td class="center manage"><a href="#" class="modify" title="编辑">编辑</a><a href="#" class="delete" title="删除">删除</a></td>
+            <td class="center manage"><a href="<{$admin_dir}>/index.php/user/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="#" class="delete" title="删除">删除</a></td>
           </tr>
           <{/section}>
             </tbody>

@@ -404,7 +404,7 @@ body.manage td.manage a {
 /*page*/
 /*login page,reg page, user-center page*/
 body.user .default-form, body.manage .default-form {
-    width:360px;
+    width:400px;
 }
 /*error page*/
 body.error .panel {width:758px;}

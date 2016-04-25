@@ -10,4 +10,13 @@
 
 class User extends Model {
 	protected $table = 'user';
+	public function selectOne($id = 0) {
+		if(empty($id) || $id < 1)
+			return array();
+		
+		$sql = "SELECT * FROM `{$this->table}` WHERE `id`={$id} LIMIT 1";
+		$db = Loader::load('Database');
+		$res = $db->query($sql);
+		return $res[0];
+	}
 }
