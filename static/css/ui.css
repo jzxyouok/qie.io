@@ -271,6 +271,21 @@ form .split-line .text {
     margin-top:10px;
     line-height: 1.5;
 }
+/*inline form*/
+.inline-form {
+    display: inline-block;
+}
+.inline-form .input-group {
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 10px;
+}
+.inline-form fieldset,.inline-form .form-button {
+    display: inline-block;
+}
+.inline-form .input-group input[type=text], .inline-form .input-group input[type=password], .inline-form .input-group select, .inline-form .input-group textarea {
+    width: auto;
+}
 /*manage ui*/
 body.manage a {
     color:#337ab7;

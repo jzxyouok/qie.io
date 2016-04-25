@@ -15,8 +15,12 @@ class UserCtrl extends Controller {
 	function index($now = 1) {
 		$row = (int)$_GET['row'] or $row = 20;
 		
+		$where = '';
+		if($_GET['word']) {
+			$where = ($_GET['type'] == 'name'?'`name`':'`nick`').' LIKE "'.$_GET['word'].'%"';
+		}
 		$user = Loader::load('model/User');
-		$this->vars['data'] = $user->select(array('now'=>$now, 'row'=>$row));
+		$this->vars['data'] = $user->select(array('where'=>$where, 'now'=>$now, 'row'=>$row));
 		$pagination = Loader::load('Pagination', array(array(
 			'sum'=>$this->vars['data']['sum'],
 			'row'=>$this->vars['data']['row'],

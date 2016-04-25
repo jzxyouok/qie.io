@@ -12,6 +12,24 @@
     <div class="panel default-panel">
       <h3 class="head">用户列表</h3>
       <div class="body">
+        <div class="search">
+          <form action="<{$admin_dir}>/index.php/user/" method="get" class="inline-form search-form">
+            <fieldset>
+              <div class="input-group"><label>关键字: <input type="text" name="word">
+              </label></div><div class="input-group">
+              类型:
+              <label>
+                <input type="radio" name="type" value="name" checked>
+                按用户名</label>
+              <label>
+                <input type="radio" name="type" value="nick">
+                按昵称</label></div>
+            </fieldset>
+            <div class="form-button">
+              <input type="submit" value="搜索">
+            </div>
+          </form>
+        </div>
         <table>
           <thead>
             <tr>
@@ -37,8 +55,12 @@
           </tr>
           <{/section}>
             </tbody>
+          
         </table>
-        <div class="pagination"><div class="info">共<{$data.sum}>个用户/<{$data.max}>页</div><div class="paging"><{$pagination}></div></div>
+        <div class="pagination">
+          <div class="info">共<{$data.sum}>个用户/<{$data.max}>页</div>
+          <div class="paging"><{$pagination}></div>
+        </div>
       </div>
     </div>
   </div>
@@ -56,6 +78,13 @@ $('.panel .body .manage a.delete').on('click', function(e){
 										location.href = location.href;
 									}}, 'json');
 	return false;
+});
+document.querySelector('form.search-form').addEventListener('submit', function(e){
+	var data = $u.getFormValues(this);
+	if(!data.word) {
+		e.preventDefault();
+		alert('请填写关键词');
+	}
 });
 </script>
 </body>
