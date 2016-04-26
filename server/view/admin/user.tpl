@@ -19,11 +19,11 @@
               </label></div><div class="input-group">
               类型:
               <label>
-                <input type="radio" name="type" value="name" checked>
+                <input type="radio" name="type" value="name"<{if !$smarty.get.type || $smarty.get.type == 'name'}> checked<{/if}>>
                 按用户名</label>
               <label>
-                <input type="radio" name="type" value="nick">
-                按昵称</label></div>
+                <input type="radio" name="type" value="nick"<{if $smarty.get.type == 'nick'}> checked<{/if}>>
+                按昵称</label></div><div class="input-group"><label><input type="checkbox" name="fuzzy" value="1"<{if $smarty.get.fuzzy}> checked<{/if}>> 模糊搜索</label></div>
             </fieldset>
             <div class="form-button">
               <input type="submit" value="搜索">

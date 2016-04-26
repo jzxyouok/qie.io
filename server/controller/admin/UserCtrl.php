@@ -17,7 +17,7 @@ class UserCtrl extends Controller {
 		
 		$where = '';
 		if($_GET['word']) {
-			$where = ($_GET['type'] == 'name'?'name':'nick').' LIKE "'.$_GET['word'].'%"';
+			$where = ($_GET['type'] == 'name'?'name':'nick').' LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"';
 		}
 		$user = Loader::load('model/User');
 		$this->vars['data'] = $user->select(array('where'=>$where, 'now'=>$now, 'row'=>$row));

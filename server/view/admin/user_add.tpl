@@ -47,7 +47,7 @@
               </label>
             </div>
           </fieldset>
-          <div class="form-button"><button type="submit">修改</button></div>
+          <div class="form-button"><button type="submit">添加</button></div>
         </form>
       </div>
     </div>
