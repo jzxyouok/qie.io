@@ -37,4 +37,16 @@ $(function(){
         }
     });
     /*初始化导航条 end*/
+    $('.select-table a.select').on('click', function(){
+        $(this).parents('.select-table').eq(0).find('input[type=checkbox]:not(":disabled")').each(function(){
+            this.checked = !this.checked;
+        });
+        return false;
+    });
+    $('.select-table a.unselect').on('click', function(){
+        $(this).parents('.select-table').eq(0).find('input[type=checkbox]:not(":disabled")').each(function(){
+            this.checked = false;
+        });
+        return false;
+    });
 });

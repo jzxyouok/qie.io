@@ -218,11 +218,17 @@ form .split-line .text {
     vertical-align: top;
     border-bottom: 1px solid #ddd;
 }
+.panel table tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
 .panel .center {
     text-align: center;
 }
 .panel .pagination .info {
     float: left;
+}
+.panel .pagination .info a {
+    margin:0 5px;
 }
 .panel .pagination {
     margin-top: 20px;

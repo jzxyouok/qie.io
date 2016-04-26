@@ -94,12 +94,20 @@ class UserCtrl extends Controller {
 			$this->message(0, '操作失败');
 		}
 	}
-	function delete($id = 0) {
-		if(empty($id) || $id < 1)
+	function delete($ids = 0) {
+		if(empty($ids))
+			$ids = $_POST['ids'];
+		
+		if(empty($ids))
 			$this->message(-1, '没有修改的内容', 1);
 		
+		if(false !== strpos($ids, ','))
+			$cfg = array('where'=>'`id` IN ('.addslashes($ids).')');
+		else
+			$cfg = array('where'=>'`id`='.(int)$ids, 'limit'=>1);
+		
 		$user = Loader::load('model/User');
-		$res = $user->delete(array('where'=>'`id`='.(int)$id, 'limit'=>1));
+		$res = $user->delete($cfg);
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {
