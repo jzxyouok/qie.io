@@ -30,8 +30,6 @@ class Model {
 			$cfg['field'] = '*';
 		if(empty($cfg['where']))
 			$cfg['where'] = '';
-		if(empty($cfg['order']))
-			$cfg['order'] = 'id DESC';
 		if(!isset($cfg['now']))
 			$data['now'] = 1;
 		else
@@ -70,9 +68,10 @@ class Model {
 			$data['now'] = $cfg['now'];
 		
 		$cfg['field'] = Database::setSelectField($cfg['field'], $this->table);
-		$cfg['order'] = Database::setSelectOrder($cfg['order'], $this->table);
+		if($cfg['order'])
+			$cfg['order'] = Database::setSelectOrder($cfg['order'], $this->table);
 		
-		$sql = "SELECT {$cfg['field']} FROM `{$this->table}`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"")." ORDER BY {$cfg['order']} LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
+		$sql = "SELECT {$cfg['field']} FROM `{$this->table}`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"")." LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
 		$data['result'] = $db->query($sql);
 		
 		return $data;

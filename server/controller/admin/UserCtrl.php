@@ -23,6 +23,7 @@ class UserCtrl extends Controller {
 		if($_GET['orderby']) {
 			$orderBy = strtr($_GET['orderby'], '_', ' ');
 		}
+		
 		$user = Loader::load('model/User');
 		$this->vars['data'] = $user->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
@@ -45,6 +46,32 @@ class UserCtrl extends Controller {
 		$this->vars['data'] = $user->selectOne($id);
 		
 		$this->loadView('user_edit');
+	}
+	//编辑
+	function admin($now = 1) {
+		$row = (int)$_GET['row'] or $row = 20;
+		
+		$where = '';
+		if($_GET['word']) {
+			$where = ($_GET['type'] == 'name'?'name':'nick').' LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"';
+		}
+		$orderBy = '';
+		if($_GET['orderby']) {
+			$orderBy = strtr($_GET['orderby'], '_', ' ');
+		}
+		
+		$user = Loader::load('model/User');
+		$this->vars['data'] = $user->selectAdmin(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
+		
+		$pagination = Loader::load('Pagination', array(array(
+			'sum'=>$this->vars['data']['sum'],
+			'row'=>$this->vars['data']['row'],
+			'now'=>$this->vars['data']['now'],
+			'uri'=>$this->profile['admin_dir'].'/index.php/user/'
+		)));
+		$this->vars['pagination'] = $pagination->get();
+		
+		$this->loadView('user');
 	}
 	/*
 	 * API
@@ -84,7 +111,12 @@ class UserCtrl extends Controller {
 			$psp = Loader::load('Passport');
 			$data['password'] = Passport::encode($_POST['pwd']);
 		}
-		
+		if($_POST['field'] && in_array($_POST['field'], array('name', 'nick', 'email'))) {
+			$data[$_POST['field']] = $_POST['value'];
+		}
+		if($data['name'] && !preg_match(RegExp::USERNAME, $data['name'])) {
+			unset($data['name']);
+		}
 		if(empty($data))
 			$this->message(-1, '没有修改的内容', 1);
 		

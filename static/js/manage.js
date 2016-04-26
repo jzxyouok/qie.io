@@ -37,6 +37,7 @@ $(function(){
         }
     });
     /*初始化导航条 end*/
+    /*选择按钮*/
     $('.select-table a.select').on('click', function(){
         $(this).parents('.select-table').eq(0).find('input[type=checkbox]:not(":disabled")').each(function(){
             this.checked = !this.checked;
@@ -49,4 +50,18 @@ $(function(){
         });
         return false;
     });
+    //快捷编辑
+    $('.panel table tbody td.edit input').on('change', function(){
+        $.ajax({url:this.dataset.action,
+            method: "post",
+            data: {"field":this.dataset.field,"value":this.value},
+            dataType: "json",
+            success: function(data){
+                if(data.status< 1) {
+                    alert(data.result);
+                }
+            },
+            error: function(xhr, data) {}
+        });
+    })
 });

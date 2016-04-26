@@ -218,6 +218,16 @@ form .split-line .text {
     vertical-align: top;
     border-bottom: 1px solid #ddd;
 }
+.panel table tbody td.edit input {
+    display: inline;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
 .panel table tbody tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }

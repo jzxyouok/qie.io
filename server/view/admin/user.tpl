@@ -40,7 +40,7 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th><a href="<{$admin_dir}>/index.php/user/?orderby=<{if $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.type}>&type=<{$smarty.get.type}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID<i class="fa <{if $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
+                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.type}>&type=<{$smarty.get.type}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID<i class="fa <{if $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>用户名</th>
                 <th>昵称</th>
                 <th>电子邮箱</th>
@@ -55,9 +55,9 @@
                   <input type="checkbox" value="<{$data.result[n].id}>">
                   <{$smarty.section.n.index+1}></label></td>
               <td class="center"><{$data.result[n].id}></td>
-              <td><{$data.result[n].name}></td>
-              <td><{$data.result[n].nick}></td>
-              <td><{$data.result[n].email}></td>
+              <td class="edit"><input data-action="<{$admin_dir}>/index.php/user/update/<{$data.result[n].id}>/" data-field="name" type="text" value="<{$data.result[n].name}>"></td>
+              <td class="edit"><input data-action="<{$admin_dir}>/index.php/user/update/<{$data.result[n].id}>/" data-field="nick" type="text" value="<{$data.result[n].nick}>"></td>
+              <td class="edit"><input data-action="<{$admin_dir}>/index.php/user/update/<{$data.result[n].id}>/" data-field="email" type="text" value="<{$data.result[n].email}>"></td>
               <td class="center"><{$data.result[n].create_time}></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/user/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/user/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
             </tr>
