@@ -60,7 +60,7 @@ class User extends Model {
 		if($cfg['order'])
 			$cfg['order'] = Database::setSelectOrder($cfg['order'], 'u');
 		
-		$sql = "SELECT `u`.`id`,`u`.`name`,`u`.`nick`,`u`.`email`,`u`.`create_time` FROM `user_admin` AS `ua` LEFT JOIN `user` AS `u` ON `ua`.`user_id`=`u`.`id`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"")." LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
+		$sql = "SELECT `u`.`id`,`u`.`name`,`u`.`nick`,`u`.`email`,`ua`.`grade` FROM `user_admin` AS `ua` LEFT JOIN `user` AS `u` ON `ua`.`user_id`=`u`.`id`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"")." LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
 		
 		$data['result'] = $db->query($sql);
 		
@@ -96,5 +96,13 @@ class User extends Model {
 		$cfg['where'] .= ' AND `id` NOT IN (SELECT `user_id` FROM `user_admin` WHERE `user_id` IN ('.$ids.'))';
 		
 		return parent::delete($cfg);
+	}
+	public function updateAdmin($id, $password) {
+		$psp = Loader::load('Passport');
+		return $psp->adminAdd((int)$id, $password);
+	}
+	public function deleteAdmin($id) {
+		$psp = Loader::load('Passport');
+		return $psp->adminDelete((int)$id);
 	}
 }

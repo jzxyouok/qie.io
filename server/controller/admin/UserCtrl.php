@@ -71,7 +71,12 @@ class UserCtrl extends Controller {
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
-		$this->loadView('user');
+		$this->loadView('user_admin');
+	}
+	function admin_edit($id = 1) {
+		$this->vars['id'] = (int)$id;
+		
+		$this->loadView('user_admin_edit');
 	}
 	/*
 	 * API
@@ -143,6 +148,31 @@ class UserCtrl extends Controller {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {
 			$this->message(1, $res);
+		} else {
+			$this->message(0, '操作失败');
+		}
+	}
+	function admin_update($id = 0) {
+		$password = $_POST['pwd'];
+		if(empty($password))
+			$this->message(-1, '没有修改的内容', 1);
+		
+		$user = Loader::load('model/User');
+		$res = $user->updateAdmin($id, $password);
+		if(!empty($res['code'])) {
+			$this->message(-1, $res['msg'], 10+$res['code']);
+		} else if($res) {
+			$this->message(1, '操作成功');
+		} else {
+			$this->message(0, '操作失败');
+		}
+	}
+	function admin_delete($id = 0) {
+		
+		if(!empty($res['code'])) {
+			$this->message(-1, $res['msg'], 10+$res['code']);
+		} else if($res) {
+			$this->message(1, '操作成功');
 		} else {
 			$this->message(0, '操作失败');
 		}

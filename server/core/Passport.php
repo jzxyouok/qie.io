@@ -520,28 +520,6 @@ class Passport extends Model {
 			return false;
 	}
 	/*
-	 * 添加后台管理员
-	 *
-	 * @param string $password 密码
-	 *
-	 * @return boolean
-	 */
-	public function adminAdd($userId, $password = 0, $grade = 1) {
-		if(empty($password))
-			return $this->error(1, '密码不能为空');
-		$userId = (int)$userId;
-		
-		$grade = (int)$grade;
-		
-		if($grade < $this->admin['grade'])
-			$grade = $this->admin['grade'];
-		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
-		$password = md5($code.trim($password));
-		$db = Loader::load('Database');
-		$sql = "INSERT `user_admin` (`user_id`,`password`,`code`,`grade`) VALUES ((SELECT `id` FROM `user` WHERE `id`={$userId} LIMIT 1),'{$password}','{$code}',{$grade})";
-		return $db->execute($sql);
-	}
-	/*
 	 * 管理后台退出
 	 *
 	 * @return boolean
@@ -578,5 +556,41 @@ class Passport extends Model {
 	 */
 	public function isAdmin() {
 		return !empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].(defined('SALT')?SALT:'').$_COOKIE['a_code'].$_COOKIE['a_grade']);
+	}
+	/*
+	 * 添加后台管理员
+	 *
+	 * @param string $password 密码
+	 *
+	 * @return boolean
+	 */
+	public function adminAdd($userId, $password = 0) {
+		if(empty($password))
+			return $this->error(1, '密码不能为空');
+		$userId = (int)$userId;
+		
+		$grade = (int)$grade;
+		
+		if($grade < $this->admin['grade'])
+			$grade = $this->admin['grade'];
+		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
+		$password = md5($code.trim($password));
+		$db = Loader::load('Database');
+		$sql = "INSERT `user_admin` (`user_id`,`password`,`code`,`grade`) VALUES ((SELECT `id` FROM `user` WHERE `id`={$userId} LIMIT 1),'{$password}','{$code}',(SELECT * FROM (SELECT `grade`+1 FROM `user_admin` WHERE `user_id`={$this->user['id']}) AS `tmp`))";
+		return $db->execute($sql);
+	}
+	/*
+	 * 添加后台管理员
+	 *
+	 * @param string $password 密码
+	 *
+	 * @return boolean
+	 */
+	public function adminDelete($userId) {
+		$userId = (int)$userId;
+		
+		$db = Loader::load('Database');
+		$sql = "DELETE FROM `user_admin` WHERE `user_id`=";
+		return $db->execute($sql);
 	}
 }
