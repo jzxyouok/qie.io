@@ -19,8 +19,12 @@ class UserCtrl extends Controller {
 		if($_GET['word']) {
 			$where = ($_GET['type'] == 'name'?'name':'nick').' LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"';
 		}
+		$orderBy = '';
+		if($_GET['orderby']) {
+			$orderBy = strtr($_GET['orderby'], '_', ' ');
+		}
 		$user = Loader::load('model/User');
-		$this->vars['data'] = $user->select(array('where'=>$where, 'now'=>$now, 'row'=>$row));
+		$this->vars['data'] = $user->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
 			'sum'=>$this->vars['data']['sum'],
 			'row'=>$this->vars['data']['row'],
@@ -101,13 +105,8 @@ class UserCtrl extends Controller {
 		if(empty($ids))
 			$this->message(-1, '没有修改的内容', 1);
 		
-		if(false !== strpos($ids, ','))
-			$cfg = array('where'=>'`id` IN ('.addslashes($ids).')');
-		else
-			$cfg = array('where'=>'`id`='.(int)$ids, 'limit'=>1);
-		
 		$user = Loader::load('model/User');
-		$res = $user->delete($cfg);
+		$res = $user->delete($ids);
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {

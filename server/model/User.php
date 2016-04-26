@@ -19,4 +19,28 @@ class User extends Model {
 		$res = $db->query($sql);
 		return $res[0];
 	}
+	public function delete($ids = array()) {
+		if(empty($ids))
+			return false;
+		
+		$cfg = array();
+		if(is_numeric($ids)) {
+			$cfg = array('where'=>'`id`='.(int)$ids, 'limit'=>1);
+		} else {
+			if(is_string($ids))
+				$ids = explode(',', $ids);
+			
+			while(list($k, $v) = each($ids)) {
+				if(!is_numeric($v))
+					unset($ids[$k]);
+			}
+			$cfg['limit'] = count($ids);
+			$ids = implode(',', $ids);
+			$cfg['where'] = '`id` IN ('.$ids.')';
+		}
+		//不能删除管理员
+		$cfg['where'] .= ' AND `id` NOT IN (SELECT `user_id` FROM `user_admin` WHERE `user_id` IN ('.$ids.'))';
+		
+		return parent::delete($cfg);
+	}
 }

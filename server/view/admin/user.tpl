@@ -40,7 +40,7 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>ID</th>
+                <th><a href="<{$admin_dir}>/index.php/user/?orderby=<{if $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.type}>&type=<{$smarty.get.type}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID<i class="fa <{if $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>用户名</th>
                 <th>昵称</th>
                 <th>电子邮箱</th>
