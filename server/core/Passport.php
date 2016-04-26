@@ -564,20 +564,23 @@ class Passport extends Model {
 	 *
 	 * @return boolean
 	 */
-	public function adminAdd($userId, $password = 0) {
+	public function adminUpdate($userId, $password = 0) {
 		if(empty($password))
 			return $this->error(1, '密码不能为空');
+			
 		$userId = (int)$userId;
 		
-		$grade = (int)$grade;
-		
-		if($grade < $this->admin['grade'])
-			$grade = $this->admin['grade'];
 		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
 		$password = md5($code.trim($password));
 		$db = Loader::load('Database');
 		$sql = "INSERT `user_admin` (`user_id`,`password`,`code`,`grade`) VALUES ((SELECT `id` FROM `user` WHERE `id`={$userId} LIMIT 1),'{$password}','{$code}',(SELECT * FROM (SELECT `grade`+1 FROM `user_admin` WHERE `user_id`={$this->user['id']}) AS `tmp`))";
-		return $db->execute($sql);
+		$res = $db->execute($sql);
+		if(!$res) {
+			$sql = "UPDATE `user_admin` SET `password`='{$password}',`code`='{$code}' WHERE `user_id`={$userId} AND `grade`>(SELECT * FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']}) AS `tmp`)";
+			$res = $db->execute($sql);
+		}
+		
+		return $res;
 	}
 	/*
 	 * 添加后台管理员

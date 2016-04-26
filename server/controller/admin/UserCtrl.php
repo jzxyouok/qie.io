@@ -158,7 +158,7 @@ class UserCtrl extends Controller {
 			$this->message(-1, '没有修改的内容', 1);
 		
 		$user = Loader::load('model/User');
-		$res = $user->updateAdmin($id, $password);
+		$res = $user->adminUpdate($id, $password);
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {

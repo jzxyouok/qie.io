@@ -97,11 +97,11 @@ class User extends Model {
 		
 		return parent::delete($cfg);
 	}
-	public function updateAdmin($id, $password) {
+	public function adminUpdate($id, $password) {
 		$psp = Loader::load('Passport');
-		return $psp->adminAdd((int)$id, $password);
+		return $psp->adminUpdate((int)$id, $password);
 	}
-	public function deleteAdmin($id) {
+	public function adminDelete($id) {
 		$psp = Loader::load('Passport');
 		return $psp->adminDelete((int)$id);
 	}
