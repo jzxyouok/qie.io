@@ -19,6 +19,13 @@ class User extends Model {
 		$res = $db->query($sql);
 		return $res[0];
 	}
+	/*
+	 * 删除用户
+	 *
+	 * @param array/int/string $ids
+	 *
+	 * @return int
+	 */
 	public function delete($ids = array()) {
 		if(empty($ids))
 			return false;

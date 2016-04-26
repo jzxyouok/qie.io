@@ -110,7 +110,7 @@ class UserCtrl extends Controller {
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {
-			$this->message(1, '操作成功');
+			$this->message(1, $res);
 		} else {
 			$this->message(0, '操作失败');
 		}
