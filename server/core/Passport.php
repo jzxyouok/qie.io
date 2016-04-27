@@ -713,10 +713,10 @@ class Passport extends Model {
 		$code = Util::randCode(4, '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ,./?#:@~[]{}-_=+)(*%$');
 		$password = md5($code.trim($password));
 		$db = Loader::load('Database');
-		$sql = "INSERT `user_admin` (`user_id`,`password`,`code`,`grade`) VALUES ((SELECT `id` FROM `user` WHERE `id`={$userId} LIMIT 1),'{$password}','{$code}',(SELECT * FROM (SELECT `grade`+1 FROM `user_admin` WHERE `user_id`={$this->user['id']}) AS `tmp`))";
+		$sql = "INSERT `user_admin` (`user_id`,`password`,`code`,`grade`) VALUES ((SELECT `id` FROM `user` WHERE `id`={$userId} LIMIT 1),'{$password}','{$code}',(SELECT * FROM (SELECT `grade`+1 FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp`))";
 		$res = $db->execute($sql);
 		if(!$res) {
-			$sql = "UPDATE `user_admin` SET `password`='{$password}',`code`='{$code}' WHERE `user_id`={$userId} AND `grade`>(SELECT * FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']}) AS `tmp`)";
+			$sql = "UPDATE `user_admin` SET `password`='{$password}',`code`='{$code}' WHERE `user_id`={$userId} AND `grade`>(SELECT * FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp`)";
 			$res = $db->execute($sql);
 		}
 		
