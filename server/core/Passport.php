@@ -615,8 +615,8 @@ class Passport extends Model {
 			return $this->error(3, '邮箱格式错误');
 		if($data['data']['password'])
 			$data['data']['password'] = self::encode($data['data']['password']);
-		//有隐患
-		$data['where'] = "`id`={$id} AND NOT EXISTS (SELECT `grade` FROM `user_admin` WHERE `user_id`={$id} AND `grade`<(SELECT * FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp`))";
+		
+		$data['where'] = "`id`={$id} AND EXISTS (SELECT `g1` FROM (SELECT `tmp1`.`grade` AS `g1`,`tmp2`.`grade` AS `g2` FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp1` LEFT JOIN (SELECT `grade` FROM `user_admin` WHERE `user_id`={$id} LIMIT 1) AS `tmp2` ON 1=1) AS `tmp` WHERE `g2` IS NULL OR `g1`<`g2`)";
 		
 		return parent::update($data);
 	}
