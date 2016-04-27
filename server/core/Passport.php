@@ -45,6 +45,8 @@ ALTER TABLE `user`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 INSERT INTO `user` (`id`, `name`, `password`, `nick`, `email`, `create_time`, `login_time`, `login_ip`, `tm`) VALUES
 (1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-04-19 11:27:43', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-04-19 09:27:43');
+INSERT INTO `user_admin` (`user_id`, `code`, `password`, `grade`) VALUES
+(1, 'xq1/', 'c816215b20af26b3697a0d563bd9ee8d', 0);
   */
 
 class PassportException extends Exception{}
