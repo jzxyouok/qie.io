@@ -606,12 +606,17 @@ class Passport extends Model {
 	 * 更新一个用户
 	 */
 	public function update($data = array()) {
+		$id = (int)$data['where'];
+		if($id < 1)
+			return $this->error(1, '请输入id');
 		if($data['data']['name'] && !preg_match(RegExp::USERNAME, $data['data']['name']))
-			return $this->error(1, '用户名格式错误');
+			return $this->error(2, '用户名格式错误');
 		if($data['data']['email'] && !preg_match(RegExp::EMAIL, $data['data']['email']))
-			return $this->error(2, '邮箱格式错误');
+			return $this->error(3, '邮箱格式错误');
 		if($data['data']['password'])
 			$data['data']['password'] = self::encode($data['data']['password']);
+		//有隐患
+		$data['where'] = "`id`={$id} AND NOT EXISTS (SELECT `grade` FROM `user_admin` WHERE `user_id`={$id} AND `grade`<(SELECT * FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp`))";
 		
 		return parent::update($data);
 	}

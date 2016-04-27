@@ -120,7 +120,7 @@ class UserCtrl extends Controller {
 			$this->message(-1, '没有修改的内容', 1);
 		
 		$psp = Loader::load('Passport');
-		$res = $psp->update(array('data'=>$data, 'where'=>'`id`='.(int)$id, 'limit'=>1));
+		$res = $psp->update(array('data'=>$data, 'where'=>$id, 'limit'=>1));
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {

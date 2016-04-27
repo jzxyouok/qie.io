@@ -26,8 +26,8 @@
         <li class="parent" data-active-url="^<{$admin_dir}>/index\.php/article/?$"><a href="#" title="文章管理"><i class="fa fa-pencil-square-o"></i>文章管理</a>
         <ul>
             <li><a href="<{$admin_dir}>/index.php/article/" title="文章列表">文章列表</a></li>
-            <li><a href="<{$admin_dir}>/index.php/article/add/" title="添加文章">添加用户</a></li>
-            <li><a href="<{$admin_dir}>/index.php/article/" title="分类列表">分类列表</a></li>
+            <li><a href="<{$admin_dir}>/index.php/article/add/" title="添加文章">添加文章</a></li>
+            <li><a href="<{$admin_dir}>/index.php/article/category/" title="分类列表">分类列表</a></li>
           </ul>
         </li>
       </ul>
