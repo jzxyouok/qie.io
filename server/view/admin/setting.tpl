@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>qie.io</title>
+<title>网站设定-qie.io</title>
 <{include file="../common/css.tpl"}>
 <style>
 body.manage .default-form {

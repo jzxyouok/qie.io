@@ -17,7 +17,7 @@
             <fieldset>
               <div class="input-group">
                 <label>关键字:
-                  <input type="text" name="word">
+                  <input type="text" name="word" placeholder="请填写关键词">
                 </label>
               </div>
               <div class="input-group"> 类型:

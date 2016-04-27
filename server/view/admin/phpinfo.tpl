@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>qie.io</title>
+<title>phpinfo-qie.io</title>
 <{include file="../common/css.tpl"}>
 </head>
 <body class="manage manage-article">

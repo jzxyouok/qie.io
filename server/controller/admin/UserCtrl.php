@@ -36,18 +36,18 @@ class UserCtrl extends Controller {
 		
 		$this->loadView('user');
 	}
-	//添加
+	//添加用户
 	function add() {
 		$this->loadView('user_add');
 	}
-	//编辑
+	//编辑用户
 	function edit($id= 0) {
 		$psp = Loader::load('Passport');
 		$this->vars['data'] = $psp->selectOne($id);
 		
 		$this->loadView('user_edit');
 	}
-	//编辑
+	//管理员列表
 	function admin($now = 1) {
 		$row = (int)$_GET['row'] or $row = 20;
 		
@@ -65,12 +65,13 @@ class UserCtrl extends Controller {
 			'sum'=>$this->vars['data']['sum'],
 			'row'=>$this->vars['data']['row'],
 			'now'=>$this->vars['data']['now'],
-			'uri'=>$this->profile['admin_dir'].'/index.php/user/'
+			'uri'=>$this->profile['admin_dir'].'/index.php/user/admin/'
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
 		$this->loadView('user_admin');
 	}
+	//编辑管理员
 	function admin_edit($id = 1) {
 		$this->vars['id'] = (int)$id;
 		
@@ -79,6 +80,7 @@ class UserCtrl extends Controller {
 	/*
 	 * API
 	 */
+	//添加用户
 	function insert() {
 		if($_POST['user_name'])
 			$data['name'] = $_POST['user_name'];
@@ -100,6 +102,7 @@ class UserCtrl extends Controller {
 			$this->message(0, '操作失败');
 		}
 	}
+	//更新用户
 	function update($id = 0) {
 		if($_POST['user_name'])
 			$data['name'] = $_POST['user_name'];
@@ -126,6 +129,7 @@ class UserCtrl extends Controller {
 			$this->message(0, '操作失败');
 		}
 	}
+	//删除用户
 	function delete($ids = 0) {
 		if(empty($ids))
 			$ids = $_POST['ids'];
@@ -143,6 +147,7 @@ class UserCtrl extends Controller {
 			$this->message(0, '操作失败');
 		}
 	}
+	//添加/更新管理员
 	function admin_update($id = 0) {
 		$password = $_POST['pwd'];
 		if(empty($password))
@@ -158,6 +163,7 @@ class UserCtrl extends Controller {
 			$this->message(0, '操作失败');
 		}
 	}
+	//删除管理员
 	function admin_delete($ids = 0) {
 		if(empty($ids))
 			$ids = $_POST['ids'];

@@ -21,6 +21,12 @@ CREATE TABLE `user` (
   `login_ip` varchar(100) DEFAULT NULL,
   `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `user_admin` (
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `code` char(4) NOT NULL DEFAULT '',
+  `password` char(32) NOT NULL DEFAULT '',
+  `grade` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `user_profile` (
   `user_id` int(11) NOT NULL,
   `profile` varchar(255) NOT NULL,
@@ -31,10 +37,14 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `name` (`name`),
   ADD UNIQUE KEY `nick` (`nick`),
   ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE `user_admin`
+  ADD PRIMARY KEY (`user_id`);
 ALTER TABLE `user_profile`
   ADD PRIMARY KEY (`user_id`);
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+INSERT INTO `user` (`id`, `name`, `password`, `nick`, `email`, `create_time`, `login_time`, `login_ip`, `tm`) VALUES
+(1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-04-19 11:27:43', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-04-19 09:27:43');
   */
 
 class PassportException extends Exception{}
@@ -83,6 +93,30 @@ class Passport extends Model {
 				$this->logout();
 			}
 		}
+	}
+	/*
+	 * 验证合法性
+	 *
+	 * @param string $id 用户id
+	 * @param string $name 用户名
+	 * @param string $auth 授权信息
+	 *
+	 * @return boolean
+	 */
+	public function verify($id, $name, $auth) {
+		if(empty($id) || !is_numeric($id) || self::MINIMUM_USER_ID > $id || empty($name) || !preg_match(RegExp::USERNAME, $name) || empty($auth))
+			return false;
+		
+		//[0]:auth,[1]:loginTime,[2]:expire,[3]:loginIP
+		$authArr = explode('_', $auth);
+		if(2 <= count($authArr) && $authArr[0] === md5(self::MY_SALT.(defined('SALT')?SALT:'').Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
+			//$this->expire>0时，可以实现强制重新登录
+			if($authArr[2] > 0 && ($this->loginTime < $authArr[1] || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
+				return false;
+			else
+				return $authArr;
+		} else
+			return false;
 	}
 	/*
 	 * 用户登陆
@@ -296,30 +330,6 @@ class Passport extends Model {
 			return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick'], 'auth'=>$this->auth);
 		}
 		return false;
-	}
-	/*
-	 * 验证合法性
-	 *
-	 * @param string $id 用户id
-	 * @param string $name 用户名
-	 * @param string $auth 授权信息
-	 *
-	 * @return boolean
-	 */
-	public function verify($id, $name, $auth) {
-		if(empty($id) || !is_numeric($id) || self::MINIMUM_USER_ID > $id || empty($name) || !preg_match(RegExp::USERNAME, $name) || empty($auth))
-			return false;
-		
-		//[0]:auth,[1]:loginTime,[2]:expire,[3]:loginIP
-		$authArr = explode('_', $auth);
-		if(2 <= count($authArr) && $authArr[0] === md5(self::MY_SALT.(defined('SALT')?SALT:'').Crypt::encrypt($id.$name).$authArr[1].$authArr[2])) {
-			//$this->expire>0时，可以实现强制重新登录
-			if($authArr[2] > 0 && ($this->loginTime < $authArr[1] || $this->loginTime > ($authArr[1] + ($this->expire>0?$this->expire:$authArr[2]))))
-				return false;
-			else
-				return $authArr;
-		} else
-			return false;
 	}
 	/*
 	 * 设置用户授权验证
