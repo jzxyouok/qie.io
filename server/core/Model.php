@@ -10,9 +10,9 @@
  *
  */
 class Model {
-	protected $table = '';
-	protected $error = array('code'=>0, 'msg'=>'');
-	const MAX_PAGE_NUM = 100;
+	protected $table = ''; //数据库表名称
+	protected $error = array('code'=>0, 'msg'=>''); //错误代码和信息
+	const MAX_PAGE_NUM = 100; //分页最大数
 	
 	protected function error($code= 0, $msg= '') {
 		$this->error = array('code'=>(int)$code, 'msg'=> (string)$msg);
@@ -25,11 +25,10 @@ class Model {
 	 *
 	 * @return array array('now'=>,'max'=>,'row'=>,'sum'=>,'result'=>)
 	 */
-	public function select($cfg = array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20)) {
+	public function select($cfg = array('field' => '*', 'where' => '', 'order' => '', 'now' => 1, 'row' => 20)) {
 		if(empty($cfg['field']))
 			$cfg['field'] = '*';
-		if(empty($cfg['where']))
-			$cfg['where'] = '';
+		
 		if(!isset($cfg['now']))
 			$data['now'] = 1;
 		else
@@ -49,7 +48,8 @@ class Model {
 		$data['max'] = 0;
 		
 		$db = Loader::load('Database');
-		$cfg['where'] = Database::setSelectWhere($cfg['where'], $this->table);
+		if($cfg['where'])
+			$cfg['where'] = Database::setSelectWhere($cfg['where'], $this->table);
 		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`".(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
 		$res = $db->query($sql);
 		$data['sum'] = (int)$res[0]['sum'];
@@ -67,7 +67,8 @@ class Model {
 		else
 			$data['now'] = $cfg['now'];
 		
-		$cfg['field'] = Database::setSelectField($cfg['field'], $this->table);
+		if($cfg['field'] != '*')
+			$cfg['field'] = Database::setSelectField($cfg['field'], $this->table);
 		if($cfg['order'])
 			$cfg['order'] = Database::setSelectOrder($cfg['order'], $this->table);
 		
@@ -92,7 +93,7 @@ class Model {
 	/*
 	 * 通用update
 	 *
-	 * @param array $cfg array('data'=>需要更新的数据,'where'=>更新的条件,'limit'=>更新的个数
+	 * @param array $cfg array('data'=>需要更新的数据,'where'=>更新的条件,'limit'=>更新的个数)
 	 *
 	 * @return boolean 
 	 */
@@ -105,7 +106,7 @@ class Model {
 	/*
 	 * 通用delete
 	 *
-	 * @param array $cfg array('where'=>删除的条件,'limit'=>删除的个数
+	 * @param array $cfg array('where'=>删除的条件,'limit'=>删除的个数)
 	 *
 	 * @return boolean 
 	 */

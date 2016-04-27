@@ -40,6 +40,7 @@ ALTER TABLE `user`
 class PassportException extends Exception{}
 
 class Passport extends Model {
+	protected $table = 'user';
 	private $user = array(); //用户数组
 	public static $users = array();
 	private $expire = 0; //cookie过期时间
@@ -297,37 +298,6 @@ class Passport extends Model {
 		return false;
 	}
 	/*
-	 * 密码加密方法
-	 */
-	public static function encode($password, $index = false) {
-		if(empty($password))
-			return false;
-			
-		$newPassword = '';
-		$len = strlen($password);
-		if(100 < $len) {
-			//密码最长只支持100位
-			$password = substr($password, 0, 100);
-			$len = 100;
-		}
-		
-		if($index === false) {
-			$index = mt_rand(0, $len);
-		}
-		if($index > 9) {
-			$index = 9; //保证密码是33位
-		}
-		if($index === 0) {
-			$newPassword = self::MY_SALT.$password;
-		} else if($index === $len) {
-			//$index不可能>$len
-			$newPassword = $password.self::MY_SALT;
-		} else {
-			$newPassword = substr($password, 0, $index).self::MY_SALT.substr($password, $index);
-		}
-		return $index.md5($newPassword);
-	}
-	/*
 	 * 验证合法性
 	 *
 	 * @param string $id 用户id
@@ -468,6 +438,37 @@ class Passport extends Model {
 		}
 	}
 	/*
+	 * 密码加密方法
+	 */
+	public static function encode($password, $index = false) {
+		if(empty($password))
+			return false;
+			
+		$newPassword = '';
+		$len = strlen($password);
+		if(100 < $len) {
+			//密码最长只支持100位
+			$password = substr($password, 0, 100);
+			$len = 100;
+		}
+		
+		if($index === false) {
+			$index = mt_rand(0, $len);
+		}
+		if($index > 9) {
+			$index = 9; //保证密码是33位
+		}
+		if($index === 0) {
+			$newPassword = self::MY_SALT.$password;
+		} else if($index === $len) {
+			//$index不可能>$len
+			$newPassword = $password.self::MY_SALT;
+		} else {
+			$newPassword = substr($password, 0, $index).self::MY_SALT.substr($password, $index);
+		}
+		return $index.md5($newPassword);
+	}
+	/*
 	 * 设置用户登陆cookie过期时间
 	 *
 	 * @param string $expire cookie失效时间，可以传入负数
@@ -558,13 +559,142 @@ class Passport extends Model {
 		return !empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].(defined('SALT')?SALT:'').$_COOKIE['a_code'].$_COOKIE['a_grade']);
 	}
 	/*
-	 * 添加后台管理员
+	 * 获取单个用户详细信息
 	 *
+	 * @param int $id
+	 *
+	 * @return array
+	 */
+	public function selectOne($id = 0) {
+		if(!is_numeric($id) || $id < 1)
+			return array();
+		
+		$sql = "SELECT * FROM `{$this->table}` WHERE `id`={$id} LIMIT 1";
+		$db = Loader::load('Database');
+		$res = $db->query($sql);
+		return $res[0];
+	}
+	/*
+	 * 插入一个用户
+	 */
+	public function insert($data) {
+		if(empty($data['name']) || !preg_match(RegExp::USERNAME, $data['name']))
+			return $this->error(1, '请输入用户名');
+		if(empty($data['nick']))
+			return $this->error(2, '请输入昵称');
+		if(empty($data['email']) || !preg_match(RegExp::EMAIL, $data['email']))
+			return $this->error(3, '邮箱格式错误');
+		if(empty($data['password']))
+			return $this->error(4, '请输入密码');
+		
+		$data['password'] = self::encode($data['password']);
+		return parent::insert($data);
+	}
+	/*
+	 * 更新一个用户
+	 */
+	public function update($data = array()) {
+		if($data['data']['name'] && !preg_match(RegExp::USERNAME, $data['data']['name']))
+			return $this->error(1, '用户名格式错误');
+		if($data['data']['email'] && !preg_match(RegExp::EMAIL, $data['data']['email']))
+			return $this->error(2, '邮箱格式错误');
+		if($data['data']['password'])
+			$data['data']['password'] = self::encode($data['data']['password']);
+		
+		return parent::update($data);
+	}
+	/*
+	 * 删除用户
+	 *
+	 * @param array/int/string $ids
+	 *
+	 * @return int
+	 */
+	public function delete($ids = array()) {
+		if(empty($ids))
+			return false;
+		
+		$cfg = array();
+		if(is_numeric($ids)) {
+			$cfg = array('where'=>'`id`='.(int)$ids, 'limit'=>1);
+		} else {
+			if(is_string($ids))
+				$ids = explode(',', $ids);
+			
+			while(list($k, $v) = each($ids)) {
+				if(!is_numeric($v))
+					unset($ids[$k]);
+			}
+			$cfg['limit'] = count($ids);
+			$ids = implode(',', $ids);
+			$cfg['where'] = '`id` IN ('.$ids.')';
+		}
+		//不能删除管理员
+		$cfg['where'] .= ' AND `id` NOT IN (SELECT `user_id` FROM `user_admin` WHERE `user_id` IN ('.$ids.'))';
+		
+		return parent::delete($cfg);
+	}
+	/*
+	 * 管理员列表
+	 */
+	public function selectAdmin($cfg) {
+		if(!isset($cfg['now']))
+			$data['now'] = 1;
+		else
+			$data['now'] = (int)$cfg['now'];
+		if(!isset($cfg['row']))
+			$data['row'] = 20;
+		else
+			$data['row'] = (int)$cfg['row'];
+		
+		if($data['row'] < 0)
+			$data['row'] = 0;
+		else if($data['row'] > self::MAX_PAGE_NUM)
+			$data['row'] = self::MAX_PAGE_NUM;
+		if($data['now'] < 1)
+			$data['now'] = 1;
+			
+		$data['max'] = 0;
+		
+		$db = Loader::load('Database');
+		if($cfg['where'])
+			$cfg['where'] = Database::setSelectWhere($cfg['where'], 'u');
+			
+		$sql = "SELECT COUNT(1) AS `sum` FROM `user_admin`".(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
+		$res = $db->query($sql);
+		$data['sum'] = (int)$res[0]['sum'];
+		if($data['sum']< 1) {
+			//如果查询为空
+			$data['result'] = array();
+			return $data;
+		}
+		
+		$data['max'] = ceil($data['sum']/$data['row']);
+		if($cfg['now'] > $data['max'])
+			$data['now'] = $cfg['now'];
+		else if($cfg['now'] < 1)
+			$data['now'] = 1;
+		else
+			$data['now'] = $cfg['now'];
+		
+		if($cfg['order'])
+			$cfg['order'] = Database::setSelectOrder($cfg['order'], false !== strpos($cfg['order'], 'id')?'u':'ua');
+		
+		$sql = "SELECT `u`.`id`,`u`.`name`,`u`.`nick`,`u`.`email`,`ua`.`grade` FROM `user_admin` AS `ua` LEFT JOIN `user` AS `u` ON `ua`.`user_id`=`u`.`id`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"")." LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
+		
+		$data['result'] = $db->query($sql);
+		
+		return $data;
+	}
+	/*
+	 * 添加/修改后台管理员
+	 *
+	 * @param int $userId
 	 * @param string $password 密码
 	 *
 	 * @return boolean
 	 */
-	public function adminUpdate($userId, $password = 0) {
+	public function updateAdmin($userId, $password = 0) {
 		if(empty($password))
 			return $this->error(1, '密码不能为空');
 			
@@ -583,17 +713,34 @@ class Passport extends Model {
 		return $res;
 	}
 	/*
-	 * 添加后台管理员
+	 * 删除后台管理员
 	 *
-	 * @param string $password 密码
+	 * @param string $ids 密码
 	 *
-	 * @return boolean
+	 * @return int
 	 */
-	public function adminDelete($userId) {
-		$userId = (int)$userId;
+	public function deleteAdmin($ids = array()) {
+		if(empty($ids))
+			return false;
 		
-		$db = Loader::load('Database');
-		$sql = "DELETE FROM `user_admin` WHERE `user_id`=";
-		return $db->execute($sql);
+		$cfg = array();
+		if(is_numeric($ids)) {
+			$cfg = array('where'=>'`user_id`='.(int)$ids, 'limit'=>1);
+		} else {
+			if(is_string($ids))
+				$ids = explode(',', $ids);
+			
+			while(list($k, $v) = each($ids)) {
+				if(!is_numeric($v))
+					unset($ids[$k]);
+			}
+			$cfg['limit'] = count($ids);
+			$ids = implode(',', $ids);
+			$cfg['where'] = '`user_id` IN ('.$ids.')';
+		}
+		
+		$cfg['where'] .= " AND `grade`>(SELECT * FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp`)";
+		$this->table = 'user_admin';
+		return parent::delete($cfg);
 	}
 }

@@ -17,11 +17,11 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.type}>&type=<{$smarty.get.type}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID<i class="fa <{if $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
+                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}>">ID<i class="fa <{if $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>用户名</th>
                 <th>昵称</th>
                 <th>电子邮箱</th>
-                <th>等级</th>
+                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'grade_desc'}>grade_asc<{else}>grade_desc<{/if}>">等级<i class="fa <{if $smarty.get.orderby == 'grade_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -43,7 +43,7 @@
             
           </table>
           <div class="pagination">
-            <div class="info">共<{$data.sum}>个用户/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/user/delete/" title="批量取消" class="delete-more">批量取消</a></div>
+            <div class="info">共<{$data.sum}>个用户/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/user/admin_delete/" title="批量取消" class="delete-more">批量取消</a></div>
             <div class="paging"><{$pagination}></div>
           </div>
         </div>
@@ -79,6 +79,7 @@ document.querySelector('a.delete-more').addEventListener('click', function(e) {
 				if(data.status< 1) {
 					alert(data.result);
 				} else {
+					alert('成功删除:'+data.result);
 					location.href = location.href;
 				}
 			},

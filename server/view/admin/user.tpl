@@ -40,7 +40,7 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.type}>&type=<{$smarty.get.type}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID<i class="fa <{if $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
+                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.type}>&type=<{$smarty.get.type}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID<i class="fa <{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>用户名</th>
                 <th>昵称</th>
                 <th>电子邮箱</th>
@@ -115,6 +115,7 @@ document.querySelector('a.delete-more').addEventListener('click', function(e) {
 				if(data.status< 1) {
 					alert(data.result);
 				} else {
+					alert('成功删除:'+data.result);
 					location.href = location.href;
 				}
 			},
