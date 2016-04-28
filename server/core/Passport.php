@@ -647,7 +647,7 @@ class Passport extends Model {
 			$cfg['where'] = '`id` IN ('.$ids.')';
 		}
 		//不能删除管理员
-		$cfg['where'] .= ' AND `id` NOT IN (SELECT `user_id` FROM `user_admin` WHERE `user_id` IN ('.$ids.'))';
+		$cfg['where'] .= ' AND `id` NOT IN (SELECT `user_id` FROM `user_admin` WHERE `user_id` IN ('.$ids.')) AND EXISTS (SELECT `grade` FROM `user_admin` WHERE `user_id`='.$this->user['id'].' LIMIT 1)';
 		
 		return parent::delete($cfg);
 	}
