@@ -15,4 +15,7 @@ class ArticleCtrl extends Controller {
 	function index() {
 		$this->loadView('article');
 	}
+	function add() {
+		$this->loadView('article_add');
+	}
 }

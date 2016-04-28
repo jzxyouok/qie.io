@@ -302,6 +302,9 @@ form .split-line .text {
 .inline-form .input-group input[type=text], .inline-form .input-group input[type=password], .inline-form .input-group select, .inline-form .input-group textarea {
     width: auto;
 }
+.mce-panel {
+    border-radius: 4px;
+}
 /*manage ui*/
 body.manage a {
     color:#337ab7;
