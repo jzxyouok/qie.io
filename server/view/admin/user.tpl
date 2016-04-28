@@ -59,7 +59,7 @@
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/user/update/<{$data.result[n].id}>/" data-field="nick" type="text" value="<{$data.result[n].nick}>"></td>
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/user/update/<{$data.result[n].id}>/" data-field="email" type="text" value="<{$data.result[n].email}>"></td>
               <td class="center"><{$data.result[n].create_time}></td>
-              <td class="center manage"><a href="<{$admin_dir}>/index.php/user/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/user/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a><a href="<{$admin_dir}>/index.php/user/admin_edit/<{$data.result[n].id}>/" title="设为管理员">设为管理员</a></td>
+              <td class="center manage"><a href="<{$admin_dir}>/index.php/user/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/user/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a><{if $admin_relogin}><a href="<{$admin_dir}>/index.php/user/admin_edit/<{$data.result[n].id}>/" title="设为管理员">设为管理员</a><{/if}></td>
             </tr>
             <{/section}>
               </tbody>

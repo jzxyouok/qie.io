@@ -616,7 +616,11 @@ class Passport extends Model {
 		if($data['data']['password'])
 			$data['data']['password'] = self::encode($data['data']['password']);
 		
-		$data['where'] = "`id`={$id} AND EXISTS (SELECT `g1` FROM (SELECT `tmp1`.`grade` AS `g1`,`tmp2`.`grade` AS `g2` FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp1` LEFT JOIN (SELECT `grade` FROM `user_admin` WHERE `user_id`={$id} LIMIT 1) AS `tmp2` ON 1=1) AS `tmp` WHERE `g2` IS NULL OR `g1`<`g2`)";
+		$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+		if($profile['admin_relogin'])
+			$data['where'] = "`id`={$id} AND EXISTS (SELECT `g1` FROM (SELECT `tmp1`.`grade` AS `g1`,`tmp2`.`grade` AS `g2` FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp1` LEFT JOIN (SELECT `grade` FROM `user_admin` WHERE `user_id`={$id} LIMIT 1) AS `tmp2` ON 1=1) AS `tmp` WHERE `g2` IS NULL OR `g1`<`g2`)";
+		else
+			$data['where'] = "`id`={$id}";
 		
 		return parent::update($data);
 	}
@@ -647,7 +651,9 @@ class Passport extends Model {
 			$cfg['where'] = '`id` IN ('.$ids.')';
 		}
 		//不能删除管理员
-		$cfg['where'] .= ' AND `id` NOT IN (SELECT `user_id` FROM `user_admin` WHERE `user_id` IN ('.$ids.')) AND EXISTS (SELECT `grade` FROM `user_admin` WHERE `user_id`='.$this->user['id'].' LIMIT 1)';
+		$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+		if($profile['admin_relogin'])
+			$cfg['where'] .= ' AND `id` NOT IN (SELECT `user_id` FROM `user_admin` WHERE `user_id` IN ('.$ids.')) AND EXISTS (SELECT `grade` FROM `user_admin` WHERE `user_id`='.$this->user['id'].' LIMIT 1)';
 		
 		return parent::delete($cfg);
 	}
