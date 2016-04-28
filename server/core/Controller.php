@@ -10,6 +10,7 @@
  *
  */
 class Controller {
+	const VERSION = '0.9';
 	protected $user = array();
 	protected $paramPos = 1; //自动调用方法的参数uri位置
 	protected $vars = array(); //页面模板需要的变量
@@ -83,6 +84,7 @@ class Controller {
 		$this->vars['homepage'] = $this->profile['homepage'];
 		$this->vars['user'] = $this->user;
 		$this->vars['token'] = $_SERVER['REQUEST_TIME'].Crypt::encrypt($_SERVER['REQUEST_TIME'], $this->dynamicCode); //系统安全码
+		$this->vars['version'] = self::VERSION;
 		
 		$view = Loader::load('View');
 		

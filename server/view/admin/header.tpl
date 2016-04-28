@@ -6,7 +6,7 @@
 </header>
 <div class="sidebar">
   <div class="wrap">
-    <div class="user-info"><span><i class="fa fa-user"></i><{$smarty.cookies.u_nick}>,</span><a href="<{$admin_dir}>/index.php/main/logout/">退出</a></div>
+    <div class="user-info"><span><i class="fa fa-user"></i><{$smarty.cookies.u_nick}>{<{$smarty.cookies.a_grade}>},</span><a href="<{$admin_dir}>/index.php/main/logout/">退出</a></div>
     <nav class="nav">
       <ul>
         <li class="parent" data-active-url="^<{$admin_dir}>(?:/(?:index\.php(?:/(?:(?:main|setting|phpinfo)/)?)?)?)?$"><a href="#" title="网站设定"><i class="fa fa-dashboard"></i>网站设定<span class="fa arrow"></span></a>
@@ -27,7 +27,8 @@
         <ul>
             <li><a href="<{$admin_dir}>/index.php/article/" title="文章列表">文章列表</a></li>
             <li><a href="<{$admin_dir}>/index.php/article/add/" title="添加文章">添加文章</a></li>
-            <li><a href="<{$admin_dir}>/index.php/article/category/" title="分类列表">分类列表</a></li>
+            <li><a href="<{$admin_dir}>/index.php/article/category/" title="分类管理">分类管理</a></li>
+            <li><a href="<{$admin_dir}>/index.php/article/tag/" title="标签管理">标签管理</a></li>
           </ul>
         </li>
       </ul>

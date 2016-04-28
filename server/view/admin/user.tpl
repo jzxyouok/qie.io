@@ -115,7 +115,7 @@ document.querySelector('a.delete-more').addEventListener('click', function(e) {
 				if(data.status< 1) {
 					alert(data.result);
 				} else {
-					alert('成功删除:'+data.result);
+					alert('成功删除: '+data.result);
 					location.href = location.href;
 				}
 			},
