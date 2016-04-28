@@ -1,11 +1,30 @@
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: 2016-04-28 12:34:23
+-- 服务器版本： 10.1.10-MariaDB
+-- PHP Version: 7.0.4
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Database: `qiezi`
+--
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `user`
+--
 
 CREATE TABLE `user` (
   `id` int(11) UNSIGNED NOT NULL,
@@ -19,8 +38,11 @@ CREATE TABLE `user` (
   `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `user` (`id`, `name`, `password`, `nick`, `email`, `create_time`, `login_time`, `login_ip`, `tm`) VALUES
-(1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-03-30 10:07:06', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-03-30 08:07:06');
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `user_admin`
+--
 
 CREATE TABLE `user_admin` (
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -29,8 +51,11 @@ CREATE TABLE `user_admin` (
   `grade` tinyint(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `user_admin` (`user_id`, `code`, `password`, `grade`) VALUES
-(1, 'qA-J', 'fc94e9c8f72e14941b962c2ec9eaad67', 0);
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `user_profile`
+--
 
 CREATE TABLE `user_profile` (
   `user_id` int(11) NOT NULL,
@@ -38,22 +63,39 @@ CREATE TABLE `user_profile` (
   `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Indexes for dumped tables
+--
 
+--
+-- Indexes for table `user`
+--
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
   ADD UNIQUE KEY `nick` (`nick`),
   ADD UNIQUE KEY `email` (`email`);
 
+--
+-- Indexes for table `user_admin`
+--
 ALTER TABLE `user_admin`
   ADD PRIMARY KEY (`user_id`);
 
+--
+-- Indexes for table `user_profile`
+--
 ALTER TABLE `user_profile`
   ADD PRIMARY KEY (`user_id`);
 
+--
+-- 在导出的表使用AUTO_INCREMENT
+--
 
+--
+-- 使用表AUTO_INCREMENT `user`
+--
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
