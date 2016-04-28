@@ -568,7 +568,8 @@ class Passport extends Model {
 	 * @return boolean
 	 */
 	public function isAdmin() {
-		return !empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].(defined('SALT')?SALT:'').$_COOKIE['a_code'].$_COOKIE['a_grade']);
+		$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+		return $this->user && (!$profile['admin_relogin'] || (!empty($_COOKIE['a_code']) && isset($_COOKIE['a_grade']) && !empty($_COOKIE['a_verify']) && $_COOKIE['a_verify'] == md5($_COOKIE['u_id'].(defined('SALT')?SALT:'').$_COOKIE['a_code'].$_COOKIE['a_grade'])));
 	}
 	/*
 	 * 获取单个用户详细信息
