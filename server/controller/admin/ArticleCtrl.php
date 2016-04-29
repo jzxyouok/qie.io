@@ -41,6 +41,8 @@ class ArticleCtrl extends Controller {
 		$this->loadView('article_add');
 	}
 	function edit($id = 0) {
+		$article = Loader::load('model/Article');
+		$this->vars['data'] = $article->selectOne($id);
 		$this->loadView('article_edit');
 	}
 	/*
@@ -103,6 +105,24 @@ class ArticleCtrl extends Controller {
 			
 		$res = $article->update(array('data'=>$data,'where'=>$id, 'limit'=>1));
 		
+		if(!empty($res['code'])) {
+			$this->message(-1, $res['msg'], 10+$res['code']);
+		} else if($res) {
+			$this->message(1, $res);
+		} else {
+			$this->message(0, '操作失败');
+		}
+	}
+	//删除
+	function delete($ids = 0) {
+		if(empty($ids))
+			$ids = $_POST['ids'];
+		
+		if(empty($ids))
+			$this->message(-1, '没有修改的内容', 1);
+		
+		$article = Loader::load('model/Article');
+		$res = $article->delete($ids);
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {

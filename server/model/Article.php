@@ -15,6 +15,15 @@
 class Article extends Model {
 	protected $table = 'article';
 	
+	public function selectOne($id) {
+		if(!is_numeric($id) || $id < 1)
+			return array();
+		
+		$sql = "SELECT * FROM `{$this->table}` WHERE `id`={$id} LIMIT 1";
+		$db = Loader::load('Database');
+		$res = $db->query($sql);
+		return $res[0];
+	}
 	public function insert($data) {
 		if(empty($data['title']) || empty($data['content']))
 			return false;
@@ -64,5 +73,27 @@ class Article extends Model {
 		
 		$cfg['where'] = '`id`='.(int)$cfg['where'];
 		return parent::update($cfg);
+	}
+	public function delete($ids = array()) {
+		if(empty($ids))
+			return false;
+		
+		$cfg = array();
+		if(is_numeric($ids)) {
+			$cfg = array('where'=>'`id`='.(int)$ids, 'limit'=>1);
+		} else {
+			if(is_string($ids))
+				$ids = explode(',', $ids);
+			
+			while(list($k, $v) = each($ids)) {
+				if(!is_numeric($v))
+					unset($ids[$k]);
+			}
+			$cfg['limit'] = count($ids);
+			$ids = implode(',', $ids);
+			$cfg['where'] = '`id` IN ('.$ids.')';
+		}
+		
+		return parent::delete($cfg);
 	}
 }

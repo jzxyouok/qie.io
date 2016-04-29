@@ -68,7 +68,7 @@
             
           </table>
           <div class="pagination">
-            <div class="info">共<{$data.sum}>篇文章/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/user/delete/" title="批量删除" class="delete-more">批量删除</a></div>
+            <div class="info">共<{$data.sum}>篇文章/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/article/delete/" title="批量删除" class="delete-more">批量删除</a></div>
             <div class="paging"><{$pagination}></div>
           </div>
         </div>
@@ -85,7 +85,45 @@ document.querySelector('form.search-form').addEventListener('submit', function(e
 		alert('请填写关键词');
 	}
 });
-
+$('.panel .body .manage a.delete').on('click', function(e){
+	if(!confirm('确认删除？'))
+		return false;
+		
+	$.get(this.href,function(data){
+									if(data.status< 1) {
+										alert(data.result);
+									} else {
+										location.href = location.href;
+									}}, 'json');
+	return false;
+});
+document.querySelector('a.delete-more').addEventListener('click', function(e) {
+	e.preventDefault();
+	
+	if(!confirm('确认全部删除？'))
+		return;
+	
+	var ids = [];
+	$(this).parents('.select-table').eq(0).find('input[type=checkbox]:checked').each(function(){
+  	if('' != $(this).val())
+			ids.push($(this).val());
+  });
+	
+	$.ajax({url:this.href,
+			method: "post",
+			data: {'ids':ids.join()},
+			dataType: 'json',
+			success: function(data){
+				if(data.status< 1) {
+					alert(data.result);
+				} else {
+					alert('成功删除: '+data.result);
+					location.href = location.href;
+				}
+			},
+			error: function(xhr, data) {}
+	});
+});
 </script>
 </body>
 </html>
