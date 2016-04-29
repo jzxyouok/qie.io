@@ -683,7 +683,7 @@ class Passport extends Model {
 		$db = Loader::load('Database');
 		if($cfg['where'])
 			$cfg['where'] = Database::setSelectWhere($cfg['where'], 'u');
-			
+		
 		$sql = "SELECT COUNT(1) AS `sum` FROM `user_admin`".(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
 		$res = $db->query($sql);
 		$data['sum'] = (int)$res[0]['sum'];
@@ -702,7 +702,7 @@ class Passport extends Model {
 			$data['now'] = $cfg['now'];
 		
 		if($cfg['order'])
-			$cfg['order'] = Database::setSelectOrder($cfg['order'], false !== strpos($cfg['order'], 'id')?'u':'ua');
+			$cfg['order'] = Database::setSelectOrder($cfg['order'], false !== strpos($cfg['order'], 'grade')?'ua':'u');
 		
 		$sql = "SELECT `u`.`id`,`u`.`name`,`u`.`nick`,`u`.`email`,`ua`.`grade` FROM `user_admin` AS `ua` LEFT JOIN `user` AS `u` ON `ua`.`user_id`=`u`.`id`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"")." LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
 		

@@ -12,7 +12,29 @@ class ArticleCtrl extends Controller {
 	protected $autoload = array('this'=>'hasAdminLogin');
 	
 	//首页
-	function index() {
+	function index($now = 1) {
+		$row = (int)$_GET['row'] or $row = 20;
+		
+		$where = '';
+		if($_GET['word']) {
+			$where = ($_GET['type'] == 'title'?'`title` LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"':'MATCH (`content`) AGAINST ("'.addslashes($_GET['word']).'" IN NATURAL LANGUAGE MODE)');
+		}
+		
+		$orderBy = 'id_desc';
+		if($_GET['orderby']) {
+			$orderBy = $_GET['orderby'];
+		}
+		$orderBy = strtr($orderBy, '_', ' ');
+		$article = Loader::load('model/Article');
+		$this->vars['data'] = $article->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
+		$pagination = Loader::load('Pagination', array(array(
+			'sum'=>$this->vars['data']['sum'],
+			'row'=>$this->vars['data']['row'],
+			'now'=>$this->vars['data']['now'],
+			'uri'=>$this->profile['admin_dir'].'/index.php/article/'
+		)));
+		$this->vars['pagination'] = $pagination->get();
+		
 		$this->loadView('article');
 	}
 	function add() {
@@ -25,7 +47,7 @@ class ArticleCtrl extends Controller {
 	 * API
 	 */
 	function insert() {
-		$article = Loader::load('Article');
+		$article = Loader::load('model/Article');
 		$data = array();
 		if($_POST['title'])
 			$data['title'] = $_POST['title'];
@@ -48,7 +70,7 @@ class ArticleCtrl extends Controller {
 		}
 	}
 	function update($id = 0) {
-		$article = Loader::load('Article');
+		$article = Loader::load('model/Article');
 		$data = array();
 		if($_POST['title'])
 			$data['title'] = $_POST['title'];

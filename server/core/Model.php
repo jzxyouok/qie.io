@@ -48,8 +48,6 @@ class Model {
 		$data['max'] = 0;
 		
 		$db = Loader::load('Database');
-		if($cfg['where'])
-			$cfg['where'] = Database::setSelectWhere($cfg['where'], $this->table);
 		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`".(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
 		$res = $db->query($sql);
 		$data['sum'] = (int)$res[0]['sum'];
@@ -66,11 +64,6 @@ class Model {
 			$data['now'] = 1;
 		else
 			$data['now'] = $cfg['now'];
-		
-		if($cfg['field'] != '*')
-			$cfg['field'] = Database::setSelectField($cfg['field'], $this->table);
-		if($cfg['order'])
-			$cfg['order'] = Database::setSelectOrder($cfg['order'], $this->table);
 		
 		$sql = "SELECT {$cfg['field']} FROM `{$this->table}`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"")." LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
 		$data['result'] = $db->query($sql);

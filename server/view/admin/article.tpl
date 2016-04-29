@@ -9,14 +9,80 @@
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">
-    <div class="panel default-form">
+    <div class="panel default-panel">
       <h3 class="head">文章管理</h3>
-      <div class="body"></div>
+      <div class="body">
+        <div class="search">
+          <form action="<{$admin_dir}>/index.php/article/" method="get" class="inline-form search-form">
+            <fieldset>
+              <div class="input-group">
+                <label>关键字:
+                  <input type="text" name="word" placeholder="请填写关键词">
+                </label>
+              </div>
+              <div class="input-group"> 类型:
+                <label> <input type="radio" name="type" value="title"<{if !$smarty.get.type || $smarty.get.type == 'title'}> checked<{/if}>>
+                  按标题</label>
+                <label> <input type="radio" name="type" value="content"<{if $smarty.get.type == 'content'}> checked<{/if}>>
+                  按正文</label>
+              </div>
+              <div class="input-group">
+                <label><input type="checkbox" name="fuzzy" value="1"<{if $smarty.get.fuzzy}> checked<{/if}>> 模糊搜索</label>
+              </div>
+            </fieldset>
+            <div class="form-button">
+              <input type="submit" value="搜索">
+            </div>
+          </form>
+        </div>
+        <div class="select-table">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>ID</th>
+                <th>标题</th>
+                <th>昵称</th>
+                <th>电子邮箱</th>
+                <th>注册时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            <{section loop=$data.result name=n}>
+            <tr>
+              <td class="center"><label>
+                  <input type="checkbox" value="<{$data.result[n].id}>">
+                  <{$smarty.section.n.index+1}></label></td>
+              <td class="center"><{$data.result[n].id}></td>
+              <td class="edit"><input data-action="<{$admin_dir}>/index.php/article/update/<{$data.result[n].id}>/" data-field="title" type="text" value="<{$data.result[n].title}>"></td>
+              <td class="edit"></td>
+              <td class="edit"></td>
+              <td class="center"><{$data.result[n].create_time}></td>
+              <td class="center manage"><a href="<{$admin_dir}>/index.php/article/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/article/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
+            </tr>
+            <{/section}>
+              </tbody>
+            
+          </table>
+          <div class="pagination">
+            <div class="info">共<{$data.sum}>篇文章/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/user/delete/" title="批量删除" class="delete-more">批量删除</a></div>
+            <div class="paging"><{$pagination}></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <{include file="./footer.tpl"}> </div>
-<{include file="../common/js.tpl"}>
+<{include file="../common/js.tpl"}> 
 <script>
+document.querySelector('form.search-form').addEventListener('submit', function(e){
+	var data = $u.getFormValues(this);
+	if(!data.word) {
+		e.preventDefault();
+		alert('请填写关键词');
+	}
+});
 
 </script>
 </body>
