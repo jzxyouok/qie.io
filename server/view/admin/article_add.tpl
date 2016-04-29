@@ -35,6 +35,14 @@
               </div>
               </label>
             </div>
+            <div class="input-group">
+              <label>
+              <div class="title">分类列表:</div>
+              <div class="control">
+                <select name="category_id"><option value="0">默认分类</option></select>
+              </div>
+              </label>
+            </div>
           </fieldset>
           <div class="form-button">
             <button type="submit">添加</button>
@@ -60,6 +68,26 @@ tinymce.init({
     '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
     '//www.tinymce.com/css/codepen.min.css'
   ]
+});
+document.querySelector('form').addEventListener('submit', function(e){
+	e.preventDefault();
+	
+	var data = $u.getFormValues(e.target);
+	data.content = tinyMCE.get(0).getContent();
+	
+	$.ajax({url:e.target.action,
+			method: e.target.method,
+			data: data,
+			dataType: 'json',
+			success: function(data){
+									if(data.status< 1) {
+										alert(data.result);
+									} else {
+										alert('添加成功');
+										e.target.reset();
+									}},
+			error: function(xhr, data) {}
+	})
 });
 </script>
 </body>

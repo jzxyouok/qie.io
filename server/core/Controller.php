@@ -29,6 +29,9 @@ class Controller {
 		$this->user = Loader::load('Passport')->getUser();
 		//加载网站配置文件
 		$this->profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+		$autoload = Loader::loadVar(APP_PATH.'/config/autoload.php', 'autoload');
+		if($autoload)
+			$this->autoload = array_merge($this->autoload, $autoload);
 		//autoload
 		foreach($this->autoload as $k => $v) {
 			$obj = $k == 'this'?$this:Loader::load($k);
