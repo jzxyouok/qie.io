@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016-04-29 04:48:10
+-- Generation Time: 2016-04-29 13:19:47
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -31,7 +31,13 @@ CREATE TABLE `article` (
   `title` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `category_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `counter` int(11) DEFAULT '0',
+  `counter` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `excerpt` varchar(300) DEFAULT NULL,
+  `author` char(64) DEFAULT NULL,
+  `from` varchar(100) DEFAULT NULL,
+  `href` varchar(255) DEFAULT NULL,
+  `cover` varchar(255) DEFAULT NULL,
+  `order` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
   `create_time` datetime NOT NULL,
   `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -116,9 +122,8 @@ CREATE TABLE `user_profile` (
 -- Indexes for table `article`
 --
 ALTER TABLE `article`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `title` (`title`);
-ALTER TABLE `article` ADD FULLTEXT KEY `content` (`content`);
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `article` ADD FULLTEXT KEY `title_content` (`title`,`content`);
 
 --
 -- Indexes for table `category`
@@ -163,12 +168,12 @@ ALTER TABLE `user_profile`
 -- 使用表AUTO_INCREMENT `article`
 --
 ALTER TABLE `article`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- 使用表AUTO_INCREMENT `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- 使用表AUTO_INCREMENT `tag`
 --

@@ -27,13 +27,16 @@ class Category extends Model {
 		return $res[0];
 	}
 	public function insert($data) {
-		if(empty($data['title']))
+		if(empty($data['name']))
 			return false;
-		$data['lock'] = (int)$data['lock'];
-		$sql = "INSERT INTO `sort` (`title`,`description`,`parent_id`,`depth`,`root_id`,`lock`,`create_time`) VALUES ('{$data['title']}','{$data['description']}',".(0 >= $data['parent_id'] ? "0,1,0":"(SELECT * FROM (SELECT `id` FROM `sort` WHERE `id`={$data['parent_id']}".($this->depth >0?" AND `depth`<{$this->depth}":"")." LIMIT 1) AS `tmp1`),(SELECT * FROM (SELECT `depth`+1 FROM `sort` WHERE `id`={$data['parent_id']} LIMIT 1) AS `tmp2`),(SELECT IF(`tmp3`.`root_id`>0,`tmp3`.`root_id`,{$data['parent_id']}) FROM (SELECT `root_id` FROM `sort` WHERE `id`={$data['parent_id']} LIMIT 1) AS `tmp3`)").",{$data['lock']},'".date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME'])."')";
+		
+		$data['name'] = trim($data['name']);
+		$data['description'] = trim($data['description']);
+		$data['parent_id'] = (int)$data['parent_id'];
+		$sql = "INSERT INTO `{$this->table}` (`name`,`description`,`parent_id`,`depth`,`root_id`,`create_time`) VALUES ('{$data['name']}','{$data['description']}',".(0 >= $data['parent_id'] ? "0,1,0":"(SELECT * FROM (SELECT `id` FROM `{$this->table}` WHERE `id`={$data['parent_id']}".($this->depth >0?" AND `depth`<{$this->depth}":"")." LIMIT 1) AS `tmp1`),(SELECT * FROM (SELECT `depth`+1 FROM `{$this->table}` WHERE `id`={$data['parent_id']} LIMIT 1) AS `tmp2`),(SELECT IF(`tmp3`.`root_id`>0,`tmp3`.`root_id`,{$data['parent_id']}) FROM (SELECT `root_id` FROM `{$this->table}` WHERE `id`={$data['parent_id']} LIMIT 1) AS `tmp3`)").",'".date(DATE_FORMAT, $_SERVER['REQUEST_TIME'])."')";
 		//echo $sql;
-		$this->db->query($sql);
-		$res = $this->db->insert_id();
+		$db = Loader::load('Database');
+		$res = $db->execute($sql);
 		if($data['parent_id'] == 0)
 			$this->fix();
 		return $res;
@@ -54,15 +57,16 @@ class Category extends Model {
 		if($depth > 100 || ($first && $id !== 0))
 			return 0;
 		$count = 0;
-		$sql = "SELECT `id` FROM `sort` WHERE `parent_id`={$id}";
-		$child = $this->db->query($sql)->result_array();
+		$db = Loader::load('Database');
+		$sql = "SELECT `id` FROM `{$this->table}` WHERE `parent_id`={$id}";
+		$child = $db->query($sql);
 		if($depth < 2)
 			$rootId = "`id`";
 		else
-			$rootId = "(SELECT * FROM (SELECT `root_id` FROM `sort` WHERE `id`={$id}) AS `tmp`)";
-		$sql = "UPDATE `sort` SET `depth`={$depth},`root_id`={$rootId} WHERE `parent_id`={$id}";
-		$this->db->query($sql);
-		$count += $this->db->affected_rows();
+			$rootId = "(SELECT * FROM (SELECT `root_id` FROM `{$this->table}` WHERE `id`={$id}) AS `tmp`)";
+		$sql = "UPDATE `{$this->table}` SET `depth`={$depth},`root_id`={$rootId} WHERE `parent_id`={$id}";
+		$res = $db->execute($sql);
+		$count += $res;
 		if(!empty($child)) {
 			$depth++;
 			foreach($child as $v) {

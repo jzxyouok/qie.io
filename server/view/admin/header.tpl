@@ -27,8 +27,13 @@
         <ul>
             <li><a href="<{$admin_dir}>/index.php/article/" title="文章列表">文章列表</a></li>
             <li><a href="<{$admin_dir}>/index.php/article/add/" title="添加文章">添加文章</a></li>
-            <li><a href="<{$admin_dir}>/index.php/article/category/" title="分类管理">分类管理</a></li>
             <li><a href="<{$admin_dir}>/index.php/article/tag/" title="标签管理">标签管理</a></li>
+          </ul>
+        </li>
+        <li class="parent" data-active-url="^<{$admin_dir}>/index\.php/category(?:/.*)?"><a href="#" title="分类管理"><i class="fa fa-pencil-square-o"></i>分类管理<span class="fa arrow"></span></a>
+        <ul>
+            <li><a href="<{$admin_dir}>/index.php/category/" title="分类列表">分类列表</a></li>
+            <li><a href="<{$admin_dir}>/index.php/category/add/" title="添加分类">添加分类</a></li>
           </ul>
         </li>
       </ul>
