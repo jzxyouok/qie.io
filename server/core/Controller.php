@@ -48,6 +48,7 @@ class Controller {
 		$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
 		$this->vars['theme'] = $this->profile['theme'];
 		$this->vars['admin_dir'] = $this->profile['admin_dir'];
+		$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
 		
 		$this->view(APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl');
 	}

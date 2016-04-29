@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016-04-28 12:34:23
+-- Generation Time: 2016-04-29 04:48:10
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -19,6 +19,51 @@ SET time_zone = "+00:00";
 --
 -- Database: `qiezi`
 --
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `article`
+--
+
+CREATE TABLE `article` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `category_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `counter` int(11) DEFAULT '0',
+  `create_time` datetime NOT NULL,
+  `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `category`
+--
+
+CREATE TABLE `category` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `root_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `depth` tinyint(3) UNSIGNED NOT NULL DEFAULT '1',
+  `lock` tinyint(1) NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '2012-02-18 00:00:00',
+  `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `tag`
+--
+
+CREATE TABLE `tag` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `text` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -68,6 +113,28 @@ CREATE TABLE `user_profile` (
 --
 
 --
+-- Indexes for table `article`
+--
+ALTER TABLE `article`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `title` (`title`);
+ALTER TABLE `article` ADD FULLTEXT KEY `content` (`content`);
+
+--
+-- Indexes for table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD KEY `parent` (`parent_id`,`id`);
+
+--
+-- Indexes for table `tag`
+--
+ALTER TABLE `tag`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -93,10 +160,25 @@ ALTER TABLE `user_profile`
 --
 
 --
+-- 使用表AUTO_INCREMENT `article`
+--
+ALTER TABLE `article`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- 使用表AUTO_INCREMENT `category`
+--
+ALTER TABLE `category`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- 使用表AUTO_INCREMENT `tag`
+--
+ALTER TABLE `tag`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
 -- 使用表AUTO_INCREMENT `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
