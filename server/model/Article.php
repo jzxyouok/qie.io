@@ -38,12 +38,13 @@ class Article extends Model {
 		return parent::insert($data);
 	}
 	public function update($cfg=array()) {
+		if(empty($cfg['data']))
+			return false;
+			
 		if($cfg['data']['title'])
 			$cfg['data']['title'] = addslashes(trim($cfg['data']['title']));
 		if($cfg['data']['content'])
 			$cfg['data']['content'] = addslashes(trim($cfg['data']['content']));
-		if($cfg['data']['category_id'])
-			$cfg['data']['category_id'] = (int)$cfg['data']['category_id'];
 		if($cfg['data']['excerpt'])
 			$cfg['data']['excerpt'] = addslashes(trim($cfg['data']['excerpt']));
 		if($cfg['data']['from'])
@@ -54,6 +55,12 @@ class Article extends Model {
 			$cfg['data']['cover'] = addslashes(trim($cfg['data']['cover']));
 		if($cfg['data']['author'])
 			$cfg['data']['author'] = addslashes(trim($cfg['data']['author']));
+		if(isset($cfg['data']['category_id']))
+			$cfg['data']['category_id'] = (int)$cfg['data']['category_id'];
+		if(isset($cfg['data']['counter']))
+			$cfg['data']['counter'] = (int)$cfg['data']['counter'];
+		if(isset($cfg['data']['order']))
+			$cfg['data']['order'] = (int)$cfg['data']['order'];
 		
 		$cfg['where'] = '`id`='.(int)$cfg['where'];
 		return parent::update($cfg);

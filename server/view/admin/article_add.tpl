@@ -43,6 +43,46 @@
               </div>
               </label>
             </div>
+            <div class="input-group">
+              <label>
+              <div class="title">简介:</div>
+              <div class="control">
+                <input type="text" name="excerpt">
+              </div>
+              </label>
+            </div>
+            <div class="input-group">
+              <label>
+              <div class="title">封面:</div>
+              <div class="control">
+                <input type="text" name="cover">
+              </div>
+              </label>
+            </div>
+            <div class="input-group">
+              <label>
+              <div class="title">作者:</div>
+              <div class="control">
+                <input type="text" name="author">
+              </div>
+              </label>
+            </div>
+            <div class="input-group">
+              <label>
+              <div class="title">来源:</div>
+              <div class="control">
+                <input type="text" name="from">
+              </div>
+              </label>
+            </div>
+            <div class="input-group">
+              <label>
+              <div class="title">跳转地址:</div>
+              <div class="control">
+                <input type="text" name="href">
+              </div>
+              </label>
+            </div>
           </fieldset>
           <div class="form-button">
             <button type="submit">添加</button>

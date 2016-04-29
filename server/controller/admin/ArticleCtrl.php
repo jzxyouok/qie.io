@@ -49,15 +49,20 @@ class ArticleCtrl extends Controller {
 	function insert() {
 		$article = Loader::load('model/Article');
 		$data = array();
-		if($_POST['title'])
-			$data['title'] = $_POST['title'];
-		if($_POST['content'])
-			$data['content'] = $_POST['content'];
+		$data['title'] = $_POST['title'];
+		$data['content'] = $_POST['content'];
 		$data['category_id'] = (int)$_POST['category_id'];
+		$data['excerpt'] = $_POST['excerpt'];
+		$data['author'] = $_POST['author'];
+		$data['from'] = $_POST['from'];
+		$data['href'] = $_POST['href'];
+		$data['cover'] = $_POST['cover'];
+		
 		if(empty($data['title']))
 			$this->message(-1, '请输入文章标题', 1);
 		if(empty($data['content']))
 			$this->message(-1, '请输入正文内容', 2);
+		
 			
 		$res = $article->insert($data);
 		
@@ -76,7 +81,25 @@ class ArticleCtrl extends Controller {
 			$data['title'] = $_POST['title'];
 		if($_POST['content'])
 			$data['content'] = $_POST['content'];
-		$data['category_id'] = (int)$_POST['category_id'];
+		if(isset($_POST['category_id']))
+			$data['category_id'] = (int)$_POST['category_id'];
+		if(isset($_POST['excerpt']))
+			$data['excerpt'] = $_POST['excerpt'];
+		if(isset($_POST['author']))
+			$data['author'] = $_POST['author'];
+		if(isset($_POST['from']))
+			$data['from'] = $_POST['from'];
+		if(isset($_POST['href']))
+			$data['href'] = $_POST['href'];
+		if(isset($_POST['cover']))
+			$data['cover'] = $_POST['cover'];
+		if(isset($_POST['counter']))
+			$data['counter'] = $_POST['counter'];
+		if(isset($_POST['order']))
+			$data['order'] = $_POST['order'];
+		if($_POST['field'] && in_array($_POST['field'], array('title', 'excerpt', 'author', 'from', 'href', 'cover', 'order', 'counter'))) {
+			$data[$_POST['field']] = $_POST['value'];
+		}
 			
 		$res = $article->update(array('data'=>$data,'where'=>$id, 'limit'=>1));
 		

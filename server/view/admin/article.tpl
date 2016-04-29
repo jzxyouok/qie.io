@@ -42,9 +42,10 @@
                 <th>#</th>
                 <th>ID</th>
                 <th>标题</th>
-                <th>昵称</th>
-                <th>电子邮箱</th>
-                <th>注册时间</th>
+                <th>分类id</th>
+                <th>浏览量</th>
+                <th>排序</th>
+                <th>编辑时间</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -56,8 +57,9 @@
                   <{$smarty.section.n.index+1}></label></td>
               <td class="center"><{$data.result[n].id}></td>
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/article/update/<{$data.result[n].id}>/" data-field="title" type="text" value="<{$data.result[n].title}>"></td>
-              <td class="edit"></td>
-              <td class="edit"></td>
+              <td><{$data.result[n].category_id}></td>
+              <td><{$data.result[n].counter}></td>
+              <td class="edit"><input data-action="<{$admin_dir}>/index.php/article/update/<{$data.result[n].id}>/" data-field="order" type="text" value="<{$data.result[n].order}>"></td>
               <td class="center"><{$data.result[n].create_time}></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/article/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/article/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
             </tr>
