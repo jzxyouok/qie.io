@@ -26,7 +26,7 @@
               <label>
               <div class="title">分类介绍:</div>
               <div class="control">
-                <input type="text" name="description" placeholder="请输入分类介绍" required>
+                <input type="text" name="description" placeholder="请输入分类介绍">
               </div>
               </label>
             </div>
@@ -34,7 +34,11 @@
               <label>
               <div class="title">上级分类:</div>
               <div class="control">
-                <select name="parent_id"><option value="0">一级分类</option></select>
+                <select name="parent_id"><option value="0">[0]一级分类</option>
+                <{section loop=$data.result name=n}>
+                <option value="<{$data.result[n].id}>">[<{$data.result[n].depth}>]<{$data.result[n].name}></option>
+                <{/section}>
+                </select>
               </div>
               </label>
             </div>

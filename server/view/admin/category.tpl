@@ -34,12 +34,9 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>ID</th>
-                <th>标题</th>
-                <th>分类id</th>
-                <th>浏览量</th>
-                <th>排序</th>
-                <th>编辑时间</th>
+                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID<i class="fa <{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
+                <th>名称</th>
+                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if !$smarty.get.orderby || $smarty.get.orderby == 'depth_desc'}>depth_asc<{else}>depth_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">层级<i class="fa <{if !$smarty.get.orderby || $smarty.get.orderby == 'depth_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -51,10 +48,7 @@
                   <{$smarty.section.n.index+1}></label></td>
               <td class="center"><{$data.result[n].id}></td>
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/category/update/<{$data.result[n].id}>/" data-field="name" type="text" value="<{$data.result[n].name}>"></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><{$data.result[n].create_time}></td>
+              <td class="center"><{$data.result[n].depth}></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/category/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/category/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
             </tr>
             <{/section}>

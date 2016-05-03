@@ -37,8 +37,10 @@ class Category extends Model {
 		//echo $sql;
 		$db = Loader::load('Database');
 		$res = $db->execute($sql);
-		if($data['parent_id'] == 0)
-			$this->fix();
+		if($res && $data['parent_id'] == 0) {
+			$sql = "UPDATE `{$this->table}` SET `root_id`=`id` WHERE `id`={$res} LIMIT 1";
+			$db->execute($sql);
+		}
 		return $res;
 	}
 	public function update($cfg=array()) {
@@ -50,27 +52,42 @@ class Category extends Model {
 		return parent::delete($cfg);
 	}
 	/*
-	 * 修复文章分类
+	 * 修复分类
 	 */
-	public function fix($id = 0, $depth = 1, $first = true) {
-		//最大支持100层级
-		if($depth > 100 || ($first && $id !== 0))
+	public function fix() {
+		$count = 0;
+		//修复根分类
+		$db = Loader::load('Database');
+		$sql = "SELECT `id` FROM `{$this->table}` WHERE `parent_id`=0";
+		$child = $db->query($sql);
+		$sql = "UPDATE `{$this->table}` SET `depth`=1,`root_id`=`id` WHERE `parent_id`=0";
+		$res = $db->execute($sql);
+		$count += $res;
+		if(!empty($child)) {
+			foreach($child as $v) {
+				$count += $this->fixTree($v['id'], 2, $v['id']);
+			}
+		}
+		return $count;
+	}
+	/*
+	 * 修复分类
+	 */
+	private function fixTree($id = 0, $depth = 2, $rootId = 0) {
+		if($depth> $this->depth)
 			return 0;
+			
 		$count = 0;
 		$db = Loader::load('Database');
 		$sql = "SELECT `id` FROM `{$this->table}` WHERE `parent_id`={$id}";
 		$child = $db->query($sql);
-		if($depth < 2)
-			$rootId = "`id`";
-		else
-			$rootId = "(SELECT * FROM (SELECT `root_id` FROM `{$this->table}` WHERE `id`={$id}) AS `tmp`)";
 		$sql = "UPDATE `{$this->table}` SET `depth`={$depth},`root_id`={$rootId} WHERE `parent_id`={$id}";
 		$res = $db->execute($sql);
 		$count += $res;
 		if(!empty($child)) {
 			$depth++;
 			foreach($child as $v) {
-				$count += $this->fix($v['id'], $depth, false);
+				$count += $this->fixTree($v['id'], $depth, $rootId);
 			}
 		}
 		return $count;

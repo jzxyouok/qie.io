@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>添加用户-qie.io</title>
+<title>编辑分类-qie.io</title>
 <{include file="../common/css.tpl"}>
 </head>
 <body class="manage manage-article">
@@ -10,39 +10,35 @@
 <div class="content">
   <div class="wrap">
     <div class="panel default-form">
-      <h3 class="head">添加用户</h3>
+      <h3 class="head">编辑分类</h3>
       <div class="body">
-        <form action="<{$admin_dir}>/index.php/user/insert/" method="post">
+        <form action="<{$admin_dir}>/index.php/category/update/<{$category.id}>/" method="post">
           <fieldset>
             <div class="input-group">
               <label>
-              <div class="title">用 户 名:</div>
+              <div class="title">分类名称</div>
               <div class="control">
-                <input type="text" name="user_name" placeholder="请输入用户名" autofocus required>
+                <input type="text" name="name" value="<{$category.name}>" placeholder="请输入分类名称" autofocus required>
               </div>
               </label>
             </div>
             <div class="input-group">
               <label>
-              <div class="title">密&nbsp; &nbsp; &nbsp; 码:</div>
+              <div class="title">分类介绍:</div>
               <div class="control">
-                <input type="text" name="pwd" placeholder="请输入密码" required>
+                <input type="text" name="description" value="<{$category.description}>" placeholder="请输入分类介绍">
               </div>
               </label>
             </div>
             <div class="input-group">
               <label>
-              <div class="title">电子邮箱:</div>
+              <div class="title">上级分类:</div>
               <div class="control">
-                <input type="text" name="email" placeholder="请输入电子邮箱" required>
-              </div>
-              </label>
-            </div>
-            <div class="input-group">
-              <label>
-              <div class="title">昵&nbsp; &nbsp; &nbsp; 称:</div>
-              <div class="control">
-                <input type="text" name="nick" required>
+                <select name="parent_id"><option value="0"<{if $category.parent_id == 0}> selected<{/if}>>[0]一级分类</option>
+                <{section loop=$data.result name=n}>
+                <option value="<{$data.result[n].id}>"<{if $category.parent_id == $data.result[n].id}> selected<{/if}>>[<{$data.result[n].depth}>]<{$data.result[n].name}></option>
+                <{/section}>
+                </select>
               </div>
               </label>
             </div>

@@ -12,14 +12,14 @@
 class Model {
 	protected $table = ''; //数据库表名称
 	protected $error = array('code'=>0, 'msg'=>''); //错误代码和信息
-	const MAX_PAGE_NUM = 100; //分页最大数
+	const MAX_PAGE_ROW = 100; //分页最大数
 	
 	protected function error($code= 0, $msg= '') {
 		$this->error = array('code'=>(int)$code, 'msg'=> (string)$msg);
 		return $this->error;
 	}
 	/*
-	 * 通用select
+	 * 通用数据库select
 	 *
 	 * @param array $cfg 配置。如果array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20)
 	 *
@@ -28,24 +28,6 @@ class Model {
 	public function select($cfg = array('field' => '*', 'where' => '', 'order' => '', 'now' => 1, 'row' => 20)) {
 		if(empty($cfg['field']))
 			$cfg['field'] = '*';
-		
-		if(!isset($cfg['now']))
-			$data['now'] = 1;
-		else
-			$data['now'] = (int)$cfg['now'];
-		if(!isset($cfg['row']))
-			$data['row'] = 20;
-		else
-			$data['row'] = (int)$cfg['row'];
-		
-		if($data['row'] < 0)
-			$data['row'] = 0;
-		else if($data['row'] > self::MAX_PAGE_NUM)
-			$data['row'] = self::MAX_PAGE_NUM;
-		if($data['now'] < 1)
-			$data['now'] = 1;
-			
-		$data['max'] = 0;
 		
 		$db = Loader::load('Database');
 		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`".(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
@@ -57,21 +39,29 @@ class Model {
 			return $data;
 		}
 		
-		$data['max'] = ceil($data['sum']/$data['row']);
-		if($cfg['now'] > $data['max'])
-			$data['now'] = $cfg['now'];
-		else if($cfg['now'] < 1)
-			$data['now'] = 1;
-		else
-			$data['now'] = $cfg['now'];
+		$data['row'] = (int)$cfg['row'];
+		if($data['row'] !== 0) {
+			if($data['row'] > self::MAX_PAGE_ROW) {
+				$data['row'] = self::MAX_PAGE_ROW;
+			}
+			$data['now'] = (int)$cfg['now'];
+			if($data['now'] < 1)
+				$data['now'] = 1;
+			
+			$data['max'] = 0;
 		
-		$sql = "SELECT {$cfg['field']} FROM `{$this->table}`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"")." LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
+			$data['max'] = ceil($data['sum']/$data['row']);
+			if($data['now'] > $data['max'])
+				$data['now'] = $data['max'];
+		}
+		
+		$sql = "SELECT {$cfg['field']} FROM `{$this->table}`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"").($data['row'] !== 0?" LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}":"");
 		$data['result'] = $db->query($sql);
 		
 		return $data;
 	}
 	/*
-	 * 通用insert
+	 * 通用数据库insert
 	 *
 	 * @param array $data 插入的数据
 	 *
@@ -84,7 +74,7 @@ class Model {
 		return $db->execute($sql);
 	}
 	/*
-	 * 通用update
+	 * 通用数据库update
 	 *
 	 * @param array $cfg array('data'=>需要更新的数据,'where'=>更新的条件,'limit'=>更新的个数)
 	 *
@@ -97,7 +87,7 @@ class Model {
 		return $db->execute($sql);
 	}
 	/*
-	 * 通用delete
+	 * 通用数据库delete
 	 *
 	 * @param array $cfg array('where'=>删除的条件,'limit'=>删除的个数)
 	 *

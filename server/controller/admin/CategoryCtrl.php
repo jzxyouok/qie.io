@@ -34,15 +34,20 @@ class CategoryCtrl extends Controller {
 			'uri'=>$this->profile['admin_dir'].'/index.php/category/'
 		)));
 		$this->vars['pagination'] = $pagination->get();
-		
+		$category->fix();
 		$this->loadView('category');
 	}
 	function add() {
+		$orderBy = '`depth` ASC';
+		$category = Loader::load('model/Category');
+		$this->vars['data'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
 		$this->loadView('category_add');
 	}
 	function edit($id = 0) {
+		$orderBy = '`depth` ASC';
 		$category = Loader::load('model/Category');
-		$this->vars['data'] = $category->selectOne($id);
+		$this->vars['category'] = $category->selectOne($id);
+		$this->vars['data'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
 		$this->loadView('category_edit');
 	}
 	/*
