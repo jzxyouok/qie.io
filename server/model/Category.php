@@ -33,7 +33,13 @@ class Category extends Model {
 		$data['name'] = trim($data['name']);
 		$data['description'] = trim($data['description']);
 		$data['parent_id'] = (int)$data['parent_id'];
-		$sql = "INSERT INTO `{$this->table}` (`name`,`description`,`parent_id`,`depth`,`root_id`,`create_time`) VALUES ('{$data['name']}','{$data['description']}',".(0 >= $data['parent_id'] ? "0,1,0":"(SELECT * FROM (SELECT `id` FROM `{$this->table}` WHERE `id`={$data['parent_id']}".($this->depth >0?" AND `depth`<{$this->depth}":"")." LIMIT 1) AS `tmp1`),(SELECT * FROM (SELECT `depth`+1 FROM `{$this->table}` WHERE `id`={$data['parent_id']} LIMIT 1) AS `tmp2`),(SELECT IF(`tmp3`.`root_id`>0,`tmp3`.`root_id`,{$data['parent_id']}) FROM (SELECT `root_id` FROM `{$this->table}` WHERE `id`={$data['parent_id']} LIMIT 1) AS `tmp3`)").",'".date(DATE_FORMAT, $_SERVER['REQUEST_TIME'])."')";
+		//$sql = "INSERT INTO `{$this->table}` (`name`,`description`,`parent_id`,`depth`,`root_id`,`create_time`) VALUES ('{$data['name']}','{$data['description']}',".(0 >= $data['parent_id'] ? "0,1,0":"(SELECT * FROM (SELECT `id` FROM `{$this->table}` WHERE `id`={$data['parent_id']}".($this->depth >0?" AND `depth`<{$this->depth}":"")." LIMIT 1) AS `tmp1`),(SELECT * FROM (SELECT `depth`+1 FROM `{$this->table}` WHERE `id`={$data['parent_id']} LIMIT 1) AS `tmp2`),(SELECT IF(`tmp3`.`root_id`>0,`tmp3`.`root_id`,{$data['parent_id']}) FROM (SELECT `root_id` FROM `{$this->table}` WHERE `id`={$data['parent_id']} LIMIT 1) AS `tmp3`)").",'".date(DATE_FORMAT, $_SERVER['REQUEST_TIME'])."')";
+		if(0 >= $data['parent_id']) {
+			$sql = "INSERT INTO `{$this->table}` (`name`,`description`,`parent_id`,`depth`,`root_id`,`create_time`) VALUES ('{$data['name']}','{$data['description']}',0,1,0,'".date(DATE_FORMAT, $_SERVER['REQUEST_TIME'])."')";
+		} else {
+			$sql = "INSERT INTO `{$this->table}` (`name`,`description`,`parent_id`,`depth`,`root_id`,`create_time`) SELECT `tmp`.`name`,`tmp`.`description`,`tmp`.`parent_id`,`tmp`.`depth`,`tmp`.`root_id`,`tmp`.`create_time` FROM (SELECT '{$data['name']}' AS `name`,'{$data['description']}' AS `description`,{$data['parent_id']} AS `parent_id`,`depth`+1 AS `depth`,`root_id`,'".date(DATE_FORMAT, $_SERVER['REQUEST_TIME'])."' AS `create_time` FROM `{$this->table}` WHERE `id`={$data['parent_id']}".($this->depth >0?" AND `depth`<{$this->depth}":"")." LIMIT 1) AS `tmp`";
+		}
+		
 		//echo $sql;
 		$db = Loader::load('Database');
 		$res = $db->execute($sql);
