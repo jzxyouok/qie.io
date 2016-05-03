@@ -88,13 +88,13 @@ class Category extends Model {
 	/*
 	 * 修复分类
 	 */
-	public function fix() {
+	public function fix($rootId = 0) {
 		$count = 0;
 		//修复根分类
 		$db = Loader::load('Database');
-		$sql = "SELECT `id` FROM `{$this->table}` WHERE `parent_id`=0";
+		$sql = "SELECT `id` FROM `{$this->table}` WHERE `parent_id`={$rootId}";
 		$child = $db->query($sql);
-		$sql = "UPDATE `{$this->table}` SET `depth`=1,`root_id`=`id` WHERE `parent_id`=0";
+		$sql = "UPDATE `{$this->table}` SET `depth`=1,`root_id`=`id` WHERE `parent_id`={$rootId}";
 		$res = $db->execute($sql);
 		$count += $res;
 		if(!empty($child)) {
@@ -108,7 +108,7 @@ class Category extends Model {
 	 * 修复分类
 	 */
 	private function fixTree($id = 0, $depth = 2, $rootId = 0) {
-		if($depth> $this->depth)
+		if($this->depth !== 0 && $depth> $this->depth)
 			return 0;
 			
 		$count = 0;
