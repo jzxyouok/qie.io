@@ -68,8 +68,11 @@ class CategoryCtrl extends Controller {
 		}
 	}
 	function update($id = 0) {
+		if(empty($_POST['name']))
+			$this->message(-1, '请输入名称', 1);
 		
-		
+		$category = Loader::load('model/Category');
+		$res = $category->update(array('where'=>$id, 'limit'=>1, 'data'=>array('name'=>$_POST['name'], 'description'=>$_POST['description'], 'parent_id'=>$_POST['parent_id'])));
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {
