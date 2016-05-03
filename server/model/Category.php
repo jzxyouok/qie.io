@@ -47,26 +47,31 @@ class Category extends Model {
 		$id = (int)$cfg['where'];
 		if($id <= 0 || empty($cfg['data']))
 			return false;
-			
+		
+		$limit = ' LIMIT 1';
 		$sql = "UPDATE `{$this->table}` SET ";
 		$tmp = '';
 		if(!empty($cfg['data']['name']))
-			$tmp .= ",`name`='{$cfg['data']['name']}'";
+			$tmp .= ",`{$this->table}`.`name`='{$cfg['data']['name']}'";
 		if(isset($cfg['data']['description']))
-			$tmp .= ",`description`='{$cfg['data']['description']}'";
+			$tmp .= ",`{$this->table}`.`description`='{$cfg['data']['description']}'";
 		if(isset($cfg['data']['parent_id'])) {
 			if($id == $cfg['data']['parent_id'])
 				return false;
 			if(0 ==$cfg['data']['parent_id'])
 				$tmp .= ",`root_id`=`id`,`parent_id`=0,`depth`=1";
-			else
-				$tmp .= ",`root_id`=(SELECT * FROM (SELECT `root_id` FROM `{$this->table}` WHERE `id`={$cfg['data']['parent_id']} LIMIT 1) AS `tmp1`),`parent_id`=(SELECT * FROM (SELECT `id` FROM `{$this->table}` WHERE `id`={$cfg['data']['parent_id']}".($this->depth >0?" AND `depth`<{$this->depth}":"")." LIMIT 1) AS `tmp2`),`depth`=(SELECT * FROM (SELECT `depth`+1 FROM `category` WHERE `id`={$cfg['data']['parent_id']} LIMIT 1) AS `tmp3`)";
+			else {
+				$sql = "UPDATE `{$this->table}` LEFT JOIN (SELECT `root_id`,`depth`+1 AS `depth` FROM `{$this->table}` WHERE `id`={$cfg['data']['parent_id']}".($this->depth >0?" AND `depth`<{$this->depth}":"")." LIMIT 1) AS `tmp` ON 1=1 SET ";
+				//$tmp .= ",`root_id`=(SELECT * FROM (SELECT `root_id` FROM `{$this->table}` WHERE `id`={$cfg['data']['parent_id']} LIMIT 1) AS `tmp1`),`parent_id`=(SELECT `id` FROM (SELECT `id` FROM `{$this->table}` WHERE `id`={$cfg['data']['parent_id']}".($this->depth >0?" AND `depth`<{$this->depth}":"")." LIMIT 1) AS `tmp2`),`depth`=(SELECT * FROM (SELECT `depth`+1 FROM `category` WHERE `id`={$cfg['data']['parent_id']} LIMIT 1) AS `tmp3`)";
+				$tmp .= ",`{$this->table}`.`root_id`=`tmp`.`root_id`,`{$this->table}`.`parent_id`={$cfg['data']['parent_id']},`{$this->table}`.`depth`=`tmp`.`depth`";
+				$limit = '';
+			}
 		}
 		
 		if(empty($tmp))
 			return false;	
-		$sql .= substr($tmp, 1)." WHERE `id`={$id} LIMIT 1";
-		echo $sql;
+		$sql .= substr($tmp, 1)." WHERE `{$this->table}`.`id`={$id}{$limit}";
+		
 		$db = Loader::load('Database');
 		return $db->execute($sql);
 	}

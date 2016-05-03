@@ -68,11 +68,20 @@ class CategoryCtrl extends Controller {
 		}
 	}
 	function update($id = 0) {
-		if(empty($_POST['name']))
+		if($_POST['name'])
+			$data['name'] = $_POST['name'];
+		if(isset($_POST['description']))
+			$data['description'] = $_POST['description'];
+		if(isset($_POST['parent_id']))
+			$data['parent_id'] = $_POST['parent_id'];
+		if($_POST['field'] && in_array($_POST['field'], array('name', 'description', 'parent_id'))) {
+			$data[$_POST['field']] = $_POST['value'];
+		}
+		if(empty($data['name']))
 			$this->message(-1, '请输入名称', 1);
 		
 		$category = Loader::load('model/Category');
-		$res = $category->update(array('where'=>$id, 'limit'=>1, 'data'=>array('name'=>$_POST['name'], 'description'=>$_POST['description'], 'parent_id'=>$_POST['parent_id'])));
+		$res = $category->update(array('where'=>$id, 'limit'=>1, 'data'=>$data));
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {
