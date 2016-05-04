@@ -38,16 +38,18 @@ class CategoryCtrl extends Controller {
 		$this->loadView('category');
 	}
 	function add() {
-		$orderBy = '`depth` ASC';
+		$orderBy = '`root_id` ASC';
 		$category = Loader::load('model/Category');
 		$this->vars['data'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
+		$this->vars['data']['result'] = Category::makeSelectList($this->vars['data']['result'], 0);
 		$this->loadView('category_add');
 	}
 	function edit($id = 0) {
-		$orderBy = '`depth` ASC';
+		$orderBy = '`root_id` ASC';
 		$category = Loader::load('model/Category');
 		$this->vars['category'] = $category->selectOne($id);
 		$this->vars['data'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
+		$this->vars['data']['result'] = Category::makeSelectList($this->vars['data']['result'], 0);
 		$this->loadView('category_edit');
 	}
 	/*

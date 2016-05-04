@@ -148,4 +148,37 @@ class Category extends Model {
 		}
 		return $count;
 	}
+	public static function makeTree($data, $rootId = 0) {
+		$tree = array();
+		while(list($k, $v) = each($data)) {
+			if($v['parent_id'] == $rootId) {
+				$tree[] = $v;
+				unset($data[$k]);
+			}
+		}
+		if($data && $tree) {
+			while(list($k, $v) = each($tree)) {
+				$tree[$k]['children'] = self::makeTree($data, $v['id']);
+			}
+		}
+		return $tree;
+	}
+	public static function makeSelectList($data, $rootId = 0) {
+		$list = array();
+		$children = array();
+		
+		while(list($k, $v) = each($data)) {
+			if($v['parent_id'] == $rootId) {
+				$list[] = $v;
+				unset($data[$k]);
+				$children = self::makeSelectList($data, $v['id']);
+				if($children) {
+					//var_dump('children', $v['id'], $children);
+					$list = array_merge($list, $children);
+				}
+			}
+		}
+		
+		return $list;
+	}
 }

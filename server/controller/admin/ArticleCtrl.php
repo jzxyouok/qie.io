@@ -38,11 +38,17 @@ class ArticleCtrl extends Controller {
 		$this->loadView('article');
 	}
 	function add() {
+		$category = Loader::load('model/Category');
+		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`root_id` ASC'));
+		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->loadView('article_add');
 	}
 	function edit($id = 0) {
 		$article = Loader::load('model/Article');
 		$this->vars['data'] = $article->selectOne($id);
+		$category = Loader::load('model/Category');
+		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`depth` ASC'));
+		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->loadView('article_edit');
 	}
 	/*

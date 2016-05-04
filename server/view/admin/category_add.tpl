@@ -34,10 +34,10 @@
               <label>
               <div class="title">上级分类:</div>
               <div class="control">
-                <select name="parent_id"><option value="0">[0] 一级分类</option>
-                <{section loop=$data.result name=n}>
-                <option value="<{$data.result[n].id}>">[<{$data.result[n].depth}>] <{$data.result[n].name}></option>
-                <{/section}>
+                <select name="parent_id"><option value="0">├一级分类</option>
+                  <{section loop=$data.result name=n}>
+                  <option value="<{$data.result[n].id}>"><{section loop=$data.result[n].depth name=nn}><{if $smarty.section.n.index == 0}>┌<{else if $smarty.section.n.index == $data.sum-1 && $smarty.section.nn.index==0}>└<{else if $smarty.section.nn.index == 0}>├<{else}>─<{/if}><{/section}><{$data.result[n].name}> [id:<{$data.result[n].id}>]</option>
+                  <{/section}>
                 </select>
               </div>
               </label>
