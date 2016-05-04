@@ -34,7 +34,7 @@ class CategoryCtrl extends Controller {
 			'uri'=>$this->profile['admin_dir'].'/index.php/category/'
 		)));
 		$this->vars['pagination'] = $pagination->get();
-		$category->fix();
+		//$category->fix();
 		$this->loadView('category');
 	}
 	function add() {
@@ -92,8 +92,14 @@ class CategoryCtrl extends Controller {
 	}
 	//删除
 	function delete($ids = 0) {
+		if(empty($ids))
+			$ids = $_POST['ids'];
 		
+		if(empty($ids))
+			$this->message(-1, '没有修改的内容', 1);
 		
+		$category = Loader::load('model/Category');
+		$res = $category->delete($ids);
 		if(!empty($res['code'])) {
 			$this->message(-1, $res['msg'], 10+$res['code']);
 		} else if($res) {

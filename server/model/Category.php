@@ -82,8 +82,30 @@ class Category extends Model {
 		return $db->execute($sql);
 	}
 	public function delete($ids = array()) {
-		
-		return parent::delete($cfg);
+		$count = 0;
+		if(is_numeric($ids)) {
+			$db = Loader::load('Database');
+			$sql = "DELETE FROM `{$this->table}` WHERE `id`={$ids} LIMIT 1";
+			$count += $db->execute($sql);
+			$sql = "SELECT `id` FROM `{$this->table}` WHERE `parent_id`={$ids}";
+			$child = $db->query($sql);
+			if($child) {
+				$sql = "DELETE FROM `{$this->table}` WHERE `parent_id`={$ids}";
+				$count += $db->execute($sql);
+				foreach($child as $v) {
+					$count += $this->delete($v['id']);
+				}
+			}
+		} else {
+			if(is_string($ids))
+				$ids = explode(',', $ids);
+			
+			while(list($k, $v) = each($ids)) {
+				if(is_numeric($v))
+					$count += $this->delete($v);
+			}
+		}
+		return $count;
 	}
 	/*
 	 * 修复分类

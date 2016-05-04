@@ -34,9 +34,9 @@
               <label>
               <div class="title">上级分类:</div>
               <div class="control">
-                <select name="parent_id"><option value="0">[0]一级分类</option>
+                <select name="parent_id"><option value="0">[0] 一级分类</option>
                 <{section loop=$data.result name=n}>
-                <option value="<{$data.result[n].id}>">[<{$data.result[n].depth}>]<{$data.result[n].name}></option>
+                <option value="<{$data.result[n].id}>">[<{$data.result[n].depth}>] <{$data.result[n].name}></option>
                 <{/section}>
                 </select>
               </div>
