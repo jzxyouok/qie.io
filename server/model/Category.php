@@ -1,15 +1,24 @@
 <?php
 /*
- * 文章类
+ * 分类类
  * 作者：陈贵标
  * 邮箱：48838096@qq.com
- * 创建时间：2016/04/29
- * 更新时间：2016/04/29
+ * 创建时间：2016/05/04
+ * 更新时间：2016/05/04
  * 
  */
  /*
   * database
- 
+ CREATE TABLE `category` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `root_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `depth` tinyint(3) UNSIGNED NOT NULL DEFAULT '1',
+  `create_time` datetime NOT NULL DEFAULT '2012-02-18 00:00:00',
+  `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
   */
 
 class Category extends Model {
@@ -17,6 +26,13 @@ class Category extends Model {
 	protected $defaultId = 0;
 	protected $table = 'category';
 	
+	/*
+	 * 查询单个分类信息
+	 *
+	 * @param int $id
+	 *
+	 * @return array
+	 */
 	public function selectOne($id) {
 		if(!is_numeric($id) || $id < 1)
 			return array();
@@ -26,6 +42,13 @@ class Category extends Model {
 		$res = $db->query($sql);
 		return $res[0];
 	}
+	/*
+	 * 插入一个新分类
+	 *
+	 * @param array $data
+	 *
+	 * @return int
+	 */
 	public function insert($data) {
 		if(empty($data['name']))
 			return false;
@@ -49,6 +72,13 @@ class Category extends Model {
 		}
 		return $res;
 	}
+	/*
+	 * 更新一个分类
+	 *
+	 * @param array $cfg array('where'=>int,'data'=>array)
+	 *
+	 * @return int
+	 */
 	public function update($cfg=array()) {
 		$id = (int)$cfg['where'];
 		if($id <= 0 || empty($cfg['data']))
@@ -81,6 +111,13 @@ class Category extends Model {
 		$db = Loader::load('Database');
 		return $db->execute($sql);
 	}
+	/*
+	 * 删除一个/多个分类
+	 *
+	 * @param array $ids array/int/string
+	 *
+	 * @return int
+	 */
 	public function delete($ids = array()) {
 		$count = 0;
 		if(is_numeric($ids)) {
@@ -109,6 +146,10 @@ class Category extends Model {
 	}
 	/*
 	 * 修复分类
+	 *
+	 * @param int $rootId
+	 *
+	 * @return int
 	 */
 	public function fix($rootId = 0) {
 		$count = 0;
@@ -127,7 +168,13 @@ class Category extends Model {
 		return $count;
 	}
 	/*
-	 * 修复分类
+	 * 修复分类树
+	 *
+	 * @param int $id
+	 * @param int $depth
+	 * @param int $rootId
+	 *
+	 * @return int
 	 */
 	private function fixTree($id = 0, $depth = 2, $rootId = 0) {
 		if($this->depth !== 0 && $depth> $this->depth)
@@ -148,6 +195,14 @@ class Category extends Model {
 		}
 		return $count;
 	}
+	/*
+	 * 生成分类树
+	 *
+	 * @param array $data 必须带parent_id信息
+	 * @param int $rootId 根分类id/上级分类id
+	 *
+	 * @return array
+	 */
 	public static function makeTree($data, $rootId = 0) {
 		$tree = array();
 		while(list($k, $v) = each($data)) {
@@ -163,6 +218,14 @@ class Category extends Model {
 		}
 		return $tree;
 	}
+	/*
+	 * 按层级(树)生成选择列表
+	 *
+	 * @param array $data 必须带parent_id信息
+	 * @param int $rootId 根分类id/上级分类id
+	 *
+	 * @return array
+	 */
 	public static function makeSelectList($data, $rootId = 0) {
 		$list = array();
 		$children = array();
@@ -173,7 +236,6 @@ class Category extends Model {
 				unset($data[$k]);
 				$children = self::makeSelectList($data, $v['id']);
 				if($children) {
-					//var_dump('children', $v['id'], $children);
 					$list = array_merge($list, $children);
 				}
 			}
