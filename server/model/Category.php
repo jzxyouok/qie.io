@@ -9,7 +9,7 @@
  */
  /*
   * database
- CREATE TABLE `category` (
+CREATE TABLE `category` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
@@ -18,7 +18,13 @@
   `depth` tinyint(3) UNSIGNED NOT NULL DEFAULT '1',
   `create_time` datetime NOT NULL DEFAULT '2012-02-18 00:00:00',
   `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD KEY `parent` (`parent_id`,`id`);
+ALTER TABLE `category`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
   */
 
 class Category extends Model {

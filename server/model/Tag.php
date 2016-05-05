@@ -45,7 +45,7 @@ class Tag extends Model {
 			}
 		}
 		$selectSql = "SELECT `id` FROM `{$this->table}` WHERE `word` IN (".substr($selectSql, 1).")";
-		$insertSql = "INSERT INTO `{$this->table}` (`word`) VALUES ".substr($insertSql, 1);
+		$insertSql = "INSERT IGNORE INTO `{$this->table}` (`word`) VALUES ".substr($insertSql, 1);
 		$db->execute($insertSql);
 		$res = $db->query($selectSql);
 		if($res) {

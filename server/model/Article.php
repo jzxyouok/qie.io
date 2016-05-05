@@ -28,9 +28,16 @@ class Article extends Model {
 		if(empty($data['title']) || empty($data['content']))
 			return false;
 		
+		$words = array();
 		$data['title'] = addslashes(trim($data['title']));
 		$data['content'] = trim($data['content']);
 		$data['category_id'] = (int)$data['category_id'];
+		if($data['keywords']) {
+			//处理tag
+			$tag = Loader::load('model/Tag');
+			$words = Tag::format($data['keywords']);
+			$data['keywords'] = implode(',', $words);
+		}
 		$data['excerpt'] = addslashes(trim($data['excerpt']));
 		$data['from'] = addslashes(trim($data['from']));
 		$data['href'] = addslashes(trim($data['href']));
@@ -44,7 +51,11 @@ class Article extends Model {
 			$data['author'] = $user['nick'];
 		}
 		
-		return parent::insert($data);
+		$res = parent::insert($data);
+		if($res && $data['keywords']) {
+			$tag->insert(array('words'=>$words,'target_table'=>'article','target_id'=>$res));
+		}
+		return $res;
 	}
 	public function update($cfg=array()) {
 		if(empty($cfg['data']))
@@ -82,8 +93,7 @@ class Article extends Model {
 		
 		$cfg['where'] = '`id`='.$id;
 		$res = parent::update($cfg);
-		//if($res && $cfg['data']['keywords']) {
-		if(true) {
+		if($res && $cfg['data']['keywords']) {
 			$tag->insert(array('words'=>$words,'target_table'=>'article','target_id'=>$id));
 		}
 		return $res;
