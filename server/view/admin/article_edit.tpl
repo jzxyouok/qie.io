@@ -41,7 +41,7 @@
               <div class="control">
                 <select name="category_id">
                   <{section loop=$category.result name=n}>
-                  <option value="<{$category.result[n].id}>"<{if $category.result[n].id == $data.category_id}> selected<{/if}>><{section loop=$category.result[n].depth name=nn}><{if $smarty.section.n.index == 0}>┌<{else if $smarty.section.n.index == $category.sum-1 && $smarty.section.nn.index==0}>└<{else if $smarty.section.nn.index == 0}>├<{else}>─<{/if}><{/section}><{$category.result[n].name}> [id:<{$category.result[n].id}>]</option>
+                  <option value="<{$category.result[n].id}>"<{if $category.result[n].id == $data.category_id}> selected<{/if}>><{section loop=$category.result[n].depth name=nn}><{if $smarty.section.n.index == 0}>┌<{else if $smarty.section.n.index == $category.sum-1 && $smarty.section.nn.index==0}>└<{else if $smarty.section.nn.index == 0}>├<{else}>─<{/if}><{/section}><{$category.result[n].name}></option>
                   <{/section}></select>
               </div>
               </label>

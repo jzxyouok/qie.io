@@ -17,11 +17,11 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}>">ID<i class="fa <{if $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
+                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}>">ID <i class="fa <{if $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>用户名</th>
                 <th>昵称</th>
                 <th>电子邮箱</th>
-                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'grade_desc'}>grade_asc<{else}>grade_desc<{/if}>">等级<i class="fa <{if $smarty.get.orderby == 'grade_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
+                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if $smarty.get.orderby == 'grade_desc'}>grade_asc<{else}>grade_desc<{/if}>">等级 <i class="fa <{if $smarty.get.orderby == 'grade_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>操作</th>
               </tr>
             </thead>
