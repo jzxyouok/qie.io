@@ -94,7 +94,7 @@ class Article extends Model {
 		$cfg['where'] = '`id`='.$id;
 		$res = parent::update($cfg);
 		if($res && $cfg['data']['keywords']) {
-			$tag->insert(array('words'=>$words,'target_table'=>'article','target_id'=>$id));
+			$tag->update(array('words'=>$words,'target_table'=>'article','target_id'=>$id));
 		}
 		return $res;
 	}

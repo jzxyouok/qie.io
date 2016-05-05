@@ -18,10 +18,7 @@ class Tag extends Model {
 	/*
 	 * 增加标签
 	 *
-	 * @param string/array $words 标签
-	 * @param string $targetTable 目标数据库表名
-	 * @param int $targetId 目标数据库表行id
-	 * @param int $max 保存标签最大数量
+	 * @param array $data array('words'=>string,'target_table'=>string,'target_id'=>int);
 	 *
 	 * @return boolean
 	 */
@@ -57,9 +54,71 @@ class Tag extends Model {
 		return false;
 	}
 	/*
+	 * 修改标签
+	 *
+	 * @param array $data array('words'=>string,'target_table'=>string,'target_id'=>int);
+	 *
+	 * @return boolean
+	 */
+	public function update($data = array()) {
+		if(empty($data['words']) || empty($data['target_table']) || empty($data['target_id']))
+			return false;
+			
+		$this->deleteRelation($data['target_table'], $data['target_id']);
+		return $this->insert($data);
+	}
+	/*
+	 * 删除标签
+	 *
+	 * @param string/array $ids 标签id
+	 *
+	 * @return boolean
+	 */
+	public function delete($ids = array()) {
+		if(empty($ids))
+			return false;
+		
+		$sql = array();
+		if(is_array($ids)) {
+			while(list($k, $v) = each($ids)) {
+				if(!is_numeric($v) || $v <= 0)
+					unset($ids[$k]);	
+			}
+			
+			$ids = implode(',', $ids);
+			$sql[] = "DELETE FROM `{$this->table}` WHERE `id` IN ({$ids})";
+			$sql[] = "DELETE FROM `{$this->table}_article` WHERE `tag_id` IN ({$ids})";
+		} else if(is_numeric($ids)) {
+			$sql[] = "DELETE FROM `{$this->table}` WHERE `id`={$ids} LIMIT 1"; //删除相册
+			$sql[] = "DELETE FROM `{$this->table}_article` WHERE `tag_id`={$ids}";
+		} else
+			return false;
+			
+		$db = Loader::load('Database');
+		return array_sum($db->commit($sql));
+	}
+	/*
+	 * 删除标签联系
+	 *
+	 * @param string $table 标签id
+	 * @param int 标签id
+	 *
+	 * @return boolean
+	 */
+	public function deleteRelation($table, $id) {
+		if(empty($table) || empty($id))
+			return false;
+		
+		$id = (int)$id;
+		$sql = "DELETE FROM `{$this->table}_{$table}` WHERE `target_id`={$id}";
+		$db = Loader::load('Database');
+		return $db->execute($sql);
+	}
+	/*
 	 * 格式化标签
 	 * 
 	 * @param string/array $words 标签
+	 * @param int $max 最大标签数量
 	 *
 	 * @return array
 	 */

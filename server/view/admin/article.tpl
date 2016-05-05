@@ -45,6 +45,7 @@
                 <th>分类id</th>
                 <th>浏览量</th>
                 <th>排序</th>
+                <th>关键词</th>
                 <th>编辑时间</th>
                 <th>操作</th>
               </tr>
@@ -60,6 +61,7 @@
               <td><{$data.result[n].category_id}></td>
               <td><{$data.result[n].counter}></td>
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/article/update/<{$data.result[n].id}>/" data-field="order" type="text" value="<{$data.result[n].order}>"></td>
+              <td><{$data.result[n].keywords}></td>
               <td class="center"><{$data.result[n].create_time}></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/article/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/article/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
             </tr>
