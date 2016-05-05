@@ -9,7 +9,10 @@
  */
  /*
   * database
- 
+--
+-- 表的结构 `user`
+--
+
 CREATE TABLE `user` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` char(36) NOT NULL,
@@ -21,28 +24,67 @@ CREATE TABLE `user` (
   `login_ip` varchar(100) DEFAULT NULL,
   `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `user_admin`
+--
+
 CREATE TABLE `user_admin` (
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
   `code` char(4) NOT NULL DEFAULT '',
   `password` char(32) NOT NULL DEFAULT '',
   `grade` tinyint(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `user_profile`
+--
+
 CREATE TABLE `user_profile` (
   `user_id` int(11) NOT NULL,
   `profile` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `user`
+--
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
   ADD UNIQUE KEY `nick` (`nick`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `user_admin`
+--
 ALTER TABLE `user_admin`
   ADD PRIMARY KEY (`user_id`);
+
+--
+-- Indexes for table `user_profile`
+--
 ALTER TABLE `user_profile`
   ADD PRIMARY KEY (`user_id`);
+
+--
+-- 在导出的表使用AUTO_INCREMENT
+--
+
+--
+-- 使用表AUTO_INCREMENT `user`
+--
 ALTER TABLE `user`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+	
 INSERT INTO `user` (`id`, `name`, `password`, `nick`, `email`, `create_time`, `login_time`, `login_ip`, `tm`) VALUES
 (1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-04-19 11:27:43', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-04-19 09:27:43');
 INSERT INTO `user_admin` (`user_id`, `code`, `password`, `grade`) VALUES

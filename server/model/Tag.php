@@ -9,7 +9,25 @@
  */
  /*
   * database
+CREATE TABLE `tag` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `word` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `tag`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `text` (`word`);
+	
+ALTER TABLE `tag`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+	
+CREATE TABLE `tag_article` (
+  `tag_id` int(11) UNSIGNED NOT NULL,
+  `target_id` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `tag_article`
+  ADD PRIMARY KEY (`tag_id`,`target_id`);
   */
 
 class Tag extends Model {
@@ -79,6 +97,9 @@ class Tag extends Model {
 			return false;
 		
 		$sql = array();
+		if(strpos($ids, ','))
+			$ids = explode(',', $ids);
+		
 		if(is_array($ids)) {
 			while(list($k, $v) = each($ids)) {
 				if(!is_numeric($v) || $v <= 0)
@@ -93,7 +114,7 @@ class Tag extends Model {
 			$sql[] = "DELETE FROM `{$this->table}_article` WHERE `tag_id`={$ids}";
 		} else
 			return false;
-			
+		
 		$db = Loader::load('Database');
 		return array_sum($db->commit($sql));
 	}

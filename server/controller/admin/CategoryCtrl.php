@@ -1,6 +1,6 @@
 <?php
 /*
- * 后台文章管理
+ * 分类管理
  * 
  * 作者：billchen
  * 邮箱：48838096@qq.com
@@ -17,7 +17,7 @@ class CategoryCtrl extends Controller {
 		
 		$where = '';
 		if($_GET['word']) {
-			$where = '`title` LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'];
+			$where = '`name` LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"';
 		}
 		
 		$orderBy = 'id_desc';

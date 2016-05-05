@@ -9,6 +9,10 @@
  */
  /*
   * database
+--
+-- 表的结构 `category`
+--
+
 CREATE TABLE `category` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -18,11 +22,27 @@ CREATE TABLE `category` (
   `depth` tinyint(3) UNSIGNED NOT NULL DEFAULT '1',
   `create_time` datetime NOT NULL DEFAULT '2012-02-18 00:00:00',
   `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `category`
+--
 ALTER TABLE `category`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
   ADD KEY `parent` (`parent_id`,`id`);
+
+--
+-- 在导出的表使用AUTO_INCREMENT
+--
+
+--
+-- 使用表AUTO_INCREMENT `category`
+--
 ALTER TABLE `category`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
   */

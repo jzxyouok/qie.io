@@ -100,7 +100,39 @@ class Database extends Model {
 	 * @return bool(array) 操作成功，返回数组，操作失败返回false
 	 */
 	public function commit($sql) {
+		if(empty($sql) || !is_array($sql))
+			return false;
+			
+		$flag = true;
+		$res = array();
+		$count = 0;
 		
+		$this->db->query('SET AUTOCOMMIT=0');
+		foreach($sql as $k => $v) {
+			if(empty($v))
+				continue;
+			if(!$this->db->query($v))
+				$flag = false;
+			if(!$flag)
+				break;
+			if(false !== stripos($sql, 'insert')) {
+				if($count = $this->db->insert_id)
+					$res[] = $count;
+				else
+					$res[] = $this->db->affected_rows;
+			} else
+				$res[] = $this->db->affected_rows;
+		}
+		
+		if($flag) {
+			$this->db->query('COMMIT');
+			$this->db->query('SET AUTOCOMMIT=1');
+			return $res;
+		} else {
+			$this->db->query('ROLLBACK');
+			$this->db->query('SET AUTOCOMMIT=1');
+			return false;
+		}
 	}
 	/*
 	 * 选择数据库
