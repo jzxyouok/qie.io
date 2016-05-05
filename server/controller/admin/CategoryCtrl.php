@@ -40,16 +40,16 @@ class CategoryCtrl extends Controller {
 	function add() {
 		$orderBy = '`root_id` ASC';
 		$category = Loader::load('model/Category');
-		$this->vars['data'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
-		$this->vars['data']['result'] = Category::makeSelectList($this->vars['data']['result'], 0);
+		$this->vars['category'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
+		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->loadView('category_add');
 	}
 	function edit($id = 0) {
 		$orderBy = '`root_id` ASC';
 		$category = Loader::load('model/Category');
-		$this->vars['category'] = $category->selectOne($id);
-		$this->vars['data'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
-		$this->vars['data']['result'] = Category::makeSelectList($this->vars['data']['result'], 0);
+		$this->vars['data'] = $category->selectOne($id);
+		$this->vars['category'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
+		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->loadView('category_edit');
 	}
 	/*

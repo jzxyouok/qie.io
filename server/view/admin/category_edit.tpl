@@ -12,13 +12,13 @@
     <div class="panel default-form">
       <h3 class="head">编辑分类</h3>
       <div class="body">
-        <form action="<{$admin_dir}>/index.php/category/update/<{$category.id}>/" method="post">
+        <form action="<{$admin_dir}>/index.php/category/update/<{$data.id}>/" method="post">
           <fieldset>
             <div class="input-group">
               <label>
               <div class="title">分类名称</div>
               <div class="control">
-                <input type="text" name="name" value="<{$category.name}>" placeholder="请输入分类名称" autofocus required>
+                <input type="text" name="name" value="<{$data.name}>" placeholder="请输入分类名称" autofocus required>
               </div>
               </label>
             </div>
@@ -26,7 +26,7 @@
               <label>
               <div class="title">分类介绍:</div>
               <div class="control">
-                <input type="text" name="description" value="<{$category.description}>" placeholder="请输入分类介绍">
+                <input type="text" name="description" value="<{$data.description}>" placeholder="请输入分类介绍">
               </div>
               </label>
             </div>
@@ -34,9 +34,9 @@
               <label>
               <div class="title">上级分类:</div>
               <div class="control">
-                <select name="parent_id"><option value="0"<{if $category.parent_id == 0}> selected<{/if}>>├一级分类</option>
-                  <{section loop=$data.result name=n}>
-                  <option value="<{$data.result[n].id}>"<{if $category.parent_id == $data.result[n].id}> selected<{/if}>><{section loop=$data.result[n].depth name=nn}><{if $smarty.section.n.index == 0}>┌<{else if $smarty.section.n.index == $data.sum-1 && $smarty.section.nn.index==0}>└<{else if $smarty.section.nn.index == 0}>├<{else}>─<{/if}><{/section}><{$data.result[n].name}> [id:<{$data.result[n].id}>]</option>
+                <select name="parent_id"><option value="0"<{if $data.parent_id == 0}> selected<{/if}>>├一级分类</option>
+                  <{section loop=$category.result name=n}>
+                  <option value="<{$category.result[n].id}>"<{if $data.parent_id == $category.result[n].id}> selected<{/if}>><{section loop=$category.result[n].depth name=nn}><{if $smarty.section.n.index == 0}>┌<{else if $smarty.section.n.index == $category.sum-1 && $smarty.section.nn.index==0}>└<{else if $smarty.section.nn.index == 0}>├<{else}>─<{/if}><{/section}><{$category.result[n].name}> [id:<{$category.result[n].id}>]</option>
                   <{/section}>
                 </select>
               </div>
