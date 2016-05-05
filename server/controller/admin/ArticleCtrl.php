@@ -60,6 +60,7 @@ class ArticleCtrl extends Controller {
 		$data['title'] = $_POST['title'];
 		$data['content'] = $_POST['content'];
 		$data['category_id'] = (int)$_POST['category_id'];
+		$data['keywords'] = $_POST['keywords'];
 		$data['excerpt'] = $_POST['excerpt'];
 		$data['author'] = $_POST['author'];
 		$data['from'] = $_POST['from'];
@@ -91,6 +92,8 @@ class ArticleCtrl extends Controller {
 			$data['content'] = $_POST['content'];
 		if(isset($_POST['category_id']))
 			$data['category_id'] = (int)$_POST['category_id'];
+		if(isset($_POST['keywords']))
+			$data['keywords'] = $_POST['keywords'];
 		if(isset($_POST['excerpt']))
 			$data['excerpt'] = $_POST['excerpt'];
 		if(isset($_POST['author']))
@@ -105,7 +108,7 @@ class ArticleCtrl extends Controller {
 			$data['counter'] = $_POST['counter'];
 		if(isset($_POST['order']))
 			$data['order'] = $_POST['order'];
-		if($_POST['field'] && in_array($_POST['field'], array('title', 'excerpt', 'author', 'from', 'href', 'cover', 'order', 'counter'))) {
+		if($_POST['field'] && in_array($_POST['field'], array('title', 'keywords', 'excerpt', 'author', 'from', 'href', 'cover', 'order', 'counter'))) {
 			$data[$_POST['field']] = $_POST['value'];
 		}
 			

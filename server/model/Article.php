@@ -49,11 +49,20 @@ class Article extends Model {
 	public function update($cfg=array()) {
 		if(empty($cfg['data']))
 			return false;
-			
+		
+		$id = (int)$cfg['where'];
+		$words = array();
 		if($cfg['data']['title'])
 			$cfg['data']['title'] = addslashes(trim($cfg['data']['title']));
 		if($cfg['data']['content'])
 			$cfg['data']['content'] = addslashes(trim($cfg['data']['content']));
+		if($cfg['data']['keywords']) {
+			//处理tag
+			$tag = Loader::load('model/Tag');
+			$words = Tag::format($cfg['data']['keywords']);
+			$cfg['data']['keywords'] = implode(',', $words);
+		}
+			$cfg['data']['keywords'] = addslashes(str_replace('，',',', trim($cfg['data']['keywords'])));
 		if($cfg['data']['excerpt'])
 			$cfg['data']['excerpt'] = addslashes(trim($cfg['data']['excerpt']));
 		if($cfg['data']['from'])
@@ -71,8 +80,13 @@ class Article extends Model {
 		if(isset($cfg['data']['order']))
 			$cfg['data']['order'] = (int)$cfg['data']['order'];
 		
-		$cfg['where'] = '`id`='.(int)$cfg['where'];
-		return parent::update($cfg);
+		$cfg['where'] = '`id`='.$id;
+		$res = parent::update($cfg);
+		//if($res && $cfg['data']['keywords']) {
+		if(true) {
+			$tag->insert(array('words'=>$words,'target_table'=>'article','target_id'=>$id));
+		}
+		return $res;
 	}
 	public function delete($ids = array()) {
 		if(empty($ids))

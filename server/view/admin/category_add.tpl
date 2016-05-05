@@ -36,7 +36,7 @@
               <div class="control">
                 <select name="parent_id"><option value="0">├一级分类</option>
                   <{section loop=$category.result name=n}>
-                  <option value="<{$category.result[n].id}>"><{section loop=$category.result[n].depth name=nn}><{if $smarty.section.n.index == 0}>┌<{else if $smarty.section.n.index == $category.sum-1 && $smarty.section.nn.index==0}>└<{else if $smarty.section.nn.index == 0}>├<{else}>─<{/if}><{/section}><{$category.result[n].name}> [<{$category.result[n].root_id}>,<{$category.result[n].parent_id}>,<{$category.result[n].id}>]</option>
+                  <option value="<{$category.result[n].id}>"><{section loop=$category.result[n].depth name=nn}><{if $smarty.section.n.index == 0}>┌<{else if $smarty.section.n.index == $category.sum-1 && $smarty.section.nn.index==0}>└<{else if $smarty.section.nn.index == 0}>├<{else}>─<{/if}><{/section}><{$category.result[n].name}> [<{$category.result[n].id}>,<{$category.result[n].parent_id}>,<{$category.result[n].root_id}>]</option>
                   <{/section}>
                 </select>
               </div>

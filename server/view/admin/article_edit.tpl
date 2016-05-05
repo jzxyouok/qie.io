@@ -48,6 +48,14 @@
             </div>
             <div class="input-group">
               <label>
+              <div class="title">关键词:</div>
+              <div class="control">
+                <input type="text" name="keywords" value="<{$data.keywords}>">
+              </div>
+              </label>
+            </div>
+            <div class="input-group">
+              <label>
               <div class="title">简介:</div>
               <div class="control">
                 <input type="text" name="excerpt" value="<{$data.excerpt}>">
@@ -116,6 +124,10 @@ document.querySelector('form').addEventListener('submit', function(e){
 	
 	var data = $u.getFormValues(e.target);
 	data.content = tinyMCE.get(0).getContent();
+	if(data.content.replace(/<\/?\w+>/ig, '') == document.getElementById('content').placeholder) {
+		alert('请输入正文');
+		return;
+	}
 	
 	$.ajax({url:e.target.action,
 			method: e.target.method,
