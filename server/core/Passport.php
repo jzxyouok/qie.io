@@ -94,7 +94,7 @@ INSERT INTO `user_admin` (`user_id`, `code`, `password`, `grade`) VALUES
 class PassportException extends Exception{}
 
 class Passport extends Model {
-	protected $table = 'user';
+	public $table = 'user';
 	private $user = array(); //用户数组
 	public static $users = array();
 	private $expire = 0; //cookie过期时间

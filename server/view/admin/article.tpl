@@ -13,7 +13,7 @@
       <h3 class="head">文章管理</h3>
       <div class="body">
         <div class="search">
-          <form action="<{$admin_dir}>/index.php/article/" method="get" class="inline-form search-form">
+          <form id="search_form" class="inline-form search-form" action="<{$admin_dir}>/index.php/article/" method="get">
             <fieldset>
               <div class="input-group">
                 <label>关键字:
@@ -80,13 +80,6 @@
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}> 
 <script>
-document.querySelector('form.search-form').addEventListener('submit', function(e){
-	var data = $u.getFormValues(this);
-	if(!data.word) {
-		e.preventDefault();
-		alert('请填写关键词');
-	}
-});
 $('.panel .body .manage a.delete').on('click', function(e){
 	if(!confirm('确认删除？'))
 		return false;

@@ -13,8 +13,14 @@
   */
 
 class Article extends Model {
-	protected $table = 'article';
+	public $table = 'article';
 	
+	public function select($cfg) {
+		if(false !== strpos($cfg['where'], 'tag_id')) {
+			$cfg['tables'] = array('tag_'.$this->table=>array('alias'=>'', 'type'=>'RIGHT JOIN', 'on'=>'`tag_'.$this->table.'`.`target_id`=`'.$this->table.'`.`id`'));
+		}
+		return parent::select($cfg);
+	}
 	public function selectOne($id) {
 		if(!is_numeric($id) || $id < 1)
 			return array();
@@ -93,10 +99,10 @@ class Article extends Model {
 		
 		$cfg['where'] = '`id`='.$id;
 		$res = parent::update($cfg);
-		if($res && $cfg['data']['keywords']) {
-			$tag->update(array('words'=>$words,'target_table'=>'article','target_id'=>$id));
+		if($cfg['data']['keywords']) {
+			$res2 = $tag->update(array('words'=>$words,'target_table'=>'article','target_id'=>$id));
 		}
-		return $res;
+		return $res || $res2;
 	}
 	public function delete($ids = array()) {
 		if(empty($ids))

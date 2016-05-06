@@ -50,7 +50,7 @@ ALTER TABLE `category`
 class Category extends Model {
 	protected $depth = 3;
 	protected $defaultId = 0;
-	protected $table = 'category';
+	public $table = 'category';
 	
 	/*
 	 * 查询单个分类信息

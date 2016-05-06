@@ -44,6 +44,24 @@ class TagCtrl extends Controller {
 	 * api
 	 */
 	//删除
+	function insert() {
+		if(empty($_POST['words']))
+			$this->message(-1, '请输入内容', 1);
+		try {
+			$tag = Loader::load('model/Tag');
+			$res = $tag->insert(array('words'=>$_POST['words'],'format'=>true));
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
+		}
+	}
+	//删除
 	function delete($ids = 0) {
 		if(empty($ids))
 			$ids = $_POST['ids'];

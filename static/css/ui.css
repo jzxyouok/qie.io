@@ -435,7 +435,7 @@ body.manage>.content>.wrap {
 body.manage>.content .panel {
     border-color:#ddd;
     text-align: left;
-    margin:0 auto;
+    margin:0 auto 20px;
 }
 body.manage td.manage a {
     margin:0 5px;

@@ -22,7 +22,9 @@ class ArticleCtrl extends Controller {
 		if($_GET['word']) {
 			$where = ($_GET['type'] == 'title'?'`title` LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"':'MATCH (`content`) AGAINST ("'.addslashes($_GET['word']).'" IN NATURAL LANGUAGE MODE)');
 		}
-		
+		if($_GET['tag_id']) {
+			$where = '`tag_id`='.(int)$_GET['tag_id'];
+		}
 		$orderBy = 'id_desc';
 		if($_GET['orderby']) {
 			$orderBy = $_GET['orderby'];

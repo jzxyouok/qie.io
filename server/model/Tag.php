@@ -31,8 +31,18 @@ ALTER TABLE `tag_article`
   */
 
 class Tag extends Model {
-	protected $table = 'tag';
+	public $table = 'tag';
+	private $relationTables = array('article');
 	
+	public function select($cfg = array()) {
+		$cfg['field'] = "`{$this->table}`.*";
+		
+		foreach($this->relationTables as $v) {
+			$cfg['field'] .= ",(SELECT COUNT(1) FROM `{$this->table}_{$v}` WHERE `tag_id`=`{$this->table}`.`id`) AS `{$v}_sum`";
+			//$tables[$this->table.'_'.$v] = array('alias'=>'', 'type'=>'LEFT JOIN', 'on'=> '`'.$this->table.'`.`id`=`'.$this->table.'_'.$v.'`.`tag_id`');
+		}
+		return parent::select($cfg);
+	}
 	/*
 	 * 增加标签
 	 *
@@ -41,12 +51,13 @@ class Tag extends Model {
 	 * @return boolean
 	 */
 	public function insert($data = array()) {
-		if(empty($data['words']) || empty($data['target_table']) || empty($data['target_id']))
+		if(empty($data['words']))
 			return false;
 			
 		if($data['format']) {
-			self::format($data['words'], $data['max']?$data['max']:5);
+			$data['words'] = self::format($data['words'], $data['max']?$data['max']:5);
 		}
+		
 		$relation = array();
 		//保存标签
 		$db = Loader::load('Database');
@@ -59,17 +70,20 @@ class Tag extends Model {
 				$insertSql .= ",('{$v}')";
 			}
 		}
-		$selectSql = "SELECT `id` FROM `{$this->table}` WHERE `word` IN (".substr($selectSql, 1).")";
 		$insertSql = "INSERT IGNORE INTO `{$this->table}` (`word`) VALUES ".substr($insertSql, 1);
-		$db->execute($insertSql);
-		$res = $db->query($selectSql);
-		if($res) {
-			foreach($res as $v)
-				$relation[] = array('target_id'=>$data['target_id'], 'tag_id'=>(int)$v['id']);
-			return $db->execute("INSERT IGNORE INTO `{$this->table}_{$data['target_table']}` ".Database::setInsertField($relation));
+		$res = $db->execute($insertSql);
+		
+		if(!empty($data['target_table']) && !empty($data['target_id']) && in_array($data['target_table'], $this->relationTables)) {
+			$selectSql = "SELECT `id` FROM `{$this->table}` WHERE `word` IN (".substr($selectSql, 1).")";
+			$res = $db->query($selectSql);
+			if($res) {
+				foreach($res as $v)
+					$relation[] = array('target_id'=>$data['target_id'], 'tag_id'=>(int)$v['id']);
+				return $db->execute("INSERT IGNORE INTO `{$this->table}_{$data['target_table']}` ".Database::setInsertField($relation));
+			}
 		}
 		
-		return false;
+		return $res;
 	}
 	/*
 	 * 修改标签
@@ -79,10 +93,12 @@ class Tag extends Model {
 	 * @return boolean
 	 */
 	public function update($data = array()) {
-		if(empty($data['words']) || empty($data['target_table']) || empty($data['target_id']))
+		if(empty($data['words']))
 			return false;
+		
+		if(!empty($data['target_table']) && !empty($data['target_id']) && in_array($data['target_table'], $this->relationTables))
+			$this->deleteRelation($data['target_table'], $data['target_id']);
 			
-		$this->deleteRelation($data['target_table'], $data['target_id']);
 		return $this->insert($data);
 	}
 	/*
@@ -108,10 +124,12 @@ class Tag extends Model {
 			
 			$ids = implode(',', $ids);
 			$sql[] = "DELETE FROM `{$this->table}` WHERE `id` IN ({$ids})";
-			$sql[] = "DELETE FROM `{$this->table}_article` WHERE `tag_id` IN ({$ids})";
+			foreach($this->relationTables as $v)
+				$sql[] = "DELETE FROM `{$this->table}_{$v}` WHERE `tag_id` IN ({$ids})";
 		} else if(is_numeric($ids)) {
 			$sql[] = "DELETE FROM `{$this->table}` WHERE `id`={$ids} LIMIT 1"; //删除相册
-			$sql[] = "DELETE FROM `{$this->table}_article` WHERE `tag_id`={$ids}";
+			foreach($this->relationTables as $v)
+				$sql[] = "DELETE FROM `{$this->table}_{$v}` WHERE `tag_id`={$ids}";
 		} else
 			return false;
 		
@@ -127,7 +145,7 @@ class Tag extends Model {
 	 * @return boolean
 	 */
 	public function deleteRelation($table, $id) {
-		if(empty($table) || empty($id))
+		if(empty($table) || empty($id) || !in_array($table, $this->relationTables))
 			return false;
 		
 		$id = (int)$id;

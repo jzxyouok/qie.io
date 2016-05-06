@@ -10,7 +10,7 @@
  *
  */
 class Model {
-	protected $table = ''; //数据库表名称
+	public $table = ''; //数据库表名称
 	protected $error = array('code'=>0, 'msg'=>''); //错误代码和信息
 	const MAX_PAGE_ROW = 100; //分页最大数
 	
@@ -21,16 +21,23 @@ class Model {
 	/*
 	 * 通用数据库select
 	 *
-	 * @param array $cfg 配置。如果array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20)
+	 * @param array $cfg 配置。如果array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20, 'tables'=>array('tablename'=>array('alias'=>'', 'type'=>'LEFT JOIN', 'on'=> 'table1.id=table2.id')))
 	 *
 	 * @return array array('now'=>,'max'=>,'row'=>,'sum'=>,'result'=>)
 	 */
-	public function select($cfg = array('field' => '*', 'where' => '', 'order' => '', 'now' => 1, 'row' => 20)) {
+	public function select($cfg = array('field' => '*', 'where' => '', 'tables'=>array(), 'order' => '', 'now' => 1, 'row' => 20)) {
 		if(empty($cfg['field']))
 			$cfg['field'] = '*';
 		
+		$table = '';
+		if($cfg['tables']) {
+			foreach($cfg['tables'] as $k => $v) {
+					$table .= " {$v['type']} `{$k}`".($v['alias']?" AS `{$v['alias']}`":"")." ON {$v['on']}";
+			}
+		}
+		
 		$db = Loader::load('Database');
-		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`".(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
+		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`".(!empty($table)?$table:"").(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
 		$res = $db->query($sql);
 		$data['sum'] = (int)$res[0]['sum'];
 		if($data['sum']< 1) {
@@ -55,7 +62,7 @@ class Model {
 				$data['now'] = $data['max'];
 		}
 		
-		$sql = "SELECT {$cfg['field']} FROM `{$this->table}`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"").($data['row'] !== 0?" LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}":"");
+		$sql = "SELECT {$cfg['field']} FROM `{$this->table}`".(!empty($table)?$table:"").(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"").($data['row'] !== 0?" LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}":"");
 		$data['result'] = $db->query($sql);
 		
 		return $data;

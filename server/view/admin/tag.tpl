@@ -9,11 +9,27 @@
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">
+    <div class="panel default-form">
+      <h3 class="head">添加标签</h3>
+        <form class="body" action="<{$admin_dir}>/index.php/tag/insert/" method="post">
+          <fieldset>
+            <div class="input-group">
+              <label>
+              <div class="title">标签名称</div>
+              <div class="control">
+                <input type="text" name="words" placeholder="请输入标签名称" required>
+              </div>
+              </label>
+            </div>
+          </fieldset>
+          <div class="form-button"><button type="submit">添加</button></div>
+        </form>
+      </div>
     <div class="panel default-panel">
       <h3 class="head">标签管理</h3>
       <div class="body">
         <div class="search">
-          <form action="<{$admin_dir}>/index.php/tag/" method="get" class="inline-form search-form">
+          <form id="search_form" class="inline-form search-form" action="<{$admin_dir}>/index.php/tag/" method="get">
             <fieldset>
               <div class="input-group">
                 <label>关键字:
@@ -36,6 +52,7 @@
                 <th>#</th>
                 <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID <i class="fa <{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>名称</th>
+                <th>数量</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -47,6 +64,7 @@
                   <{$smarty.section.n.index+1}></label></td>
               <td class="center"><{$data.result[n].id}></td>
               <td class="center"><{$data.result[n].word}></td>
+              <td class="center"><a href="<{$admin_dir}>/index.php/article/?tag_id=<{$data.result[n].id}>"><{$data.result[n].article_sum}></a></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/tag/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
             </tr>
             <{/section}>
@@ -64,6 +82,23 @@
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}> 
 <script>
+document.querySelector('.default-form form').addEventListener('submit', function(e){
+	e.preventDefault();
+	var data = $u.getFormValues(this);
+	
+	$.ajax({url:this.action,
+			method: this.method,
+			data: data,
+			dataType: 'json',
+			success: function(data){
+									if(data.status< 1) {
+										alert(data.result);
+									} else {
+										location.href = location.href;
+									}},
+			error: function(xhr, data) {}
+	})
+});
 $('.panel .body .manage a.delete').on('click', function(e){
 	if(!confirm('确认删除？'))
 		return false;

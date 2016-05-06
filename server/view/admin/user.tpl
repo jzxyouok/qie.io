@@ -13,7 +13,7 @@
       <h3 class="head">用户列表</h3>
       <div class="body">
         <div class="search">
-          <form action="<{$admin_dir}>/index.php/user/" method="get" class="inline-form search-form">
+          <form id="search_form" class="inline-form search-form" action="<{$admin_dir}>/index.php/user/" method="get">
             <fieldset>
               <div class="input-group">
                 <label>关键字:
@@ -87,13 +87,6 @@ $('.panel .body .manage a.delete').on('click', function(e){
 										location.href = location.href;
 									}}, 'json');
 	return false;
-});
-document.querySelector('form.search-form').addEventListener('submit', function(e){
-	var data = $u.getFormValues(this);
-	if(!data.word) {
-		e.preventDefault();
-		alert('请填写关键词');
-	}
 });
 document.querySelector('a.delete-more').addEventListener('click', function(e) {
 	e.preventDefault();
