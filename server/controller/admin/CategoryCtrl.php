@@ -11,6 +11,9 @@
 class CategoryCtrl extends Controller {
 	protected $autoload = array('this'=>'hasAdminLogin');
 	
+	/*
+	 * page
+	 */
 	//首页
 	function index($now = 1) {
 		$row = (int)$_GET['row'] or $row = 20;
@@ -37,6 +40,7 @@ class CategoryCtrl extends Controller {
 		//$category->fix();
 		$this->loadView('category');
 	}
+	//添加分类
 	function add() {
 		$orderBy = '`root_id` ASC';
 		$category = Loader::load('model/Category');
@@ -44,6 +48,7 @@ class CategoryCtrl extends Controller {
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->loadView('category_add');
 	}
+	//修改分类
 	function edit($id = 0) {
 		$orderBy = '`root_id` ASC';
 		$category = Loader::load('model/Category');
@@ -53,22 +58,28 @@ class CategoryCtrl extends Controller {
 		$this->loadView('category_edit');
 	}
 	/*
-	 * API
+	 * api
 	 */
+	//插入分类
 	function insert() {
 		if(empty($_POST['name']))
 			$this->message(-1, '请输入名称', 1);
 		
-		$category = Loader::load('model/Category');
-		$res = $category->insert(array('name'=>$_POST['name'], 'description'=>$_POST['description'], 'parent_id'=>$_POST['parent_id']));
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$category = Loader::load('model/Category');
+			$res = $category->insert(array('name'=>$_POST['name'], 'description'=>$_POST['description'], 'parent_id'=>$_POST['parent_id']));
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
+	//更新分类
 	function update($id = 0) {
 		if($_POST['name'])
 			$data['name'] = $_POST['name'];
@@ -82,17 +93,21 @@ class CategoryCtrl extends Controller {
 		if(empty($data['name']))
 			$this->message(-1, '请输入名称', 1);
 		
-		$category = Loader::load('model/Category');
-		$res = $category->update(array('where'=>$id, 'limit'=>1, 'data'=>$data));
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$category = Loader::load('model/Category');
+			$res = $category->update(array('where'=>$id, 'limit'=>1, 'data'=>$data));
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
-	//删除
+	//删除分类
 	function delete($ids = 0) {
 		if(empty($ids))
 			$ids = $_POST['ids'];
@@ -100,14 +115,18 @@ class CategoryCtrl extends Controller {
 		if(empty($ids))
 			$this->message(-1, '没有修改的内容', 1);
 		
-		$category = Loader::load('model/Category');
-		$res = $category->delete($ids);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$category = Loader::load('model/Category');
+			$res = $category->delete($ids);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 }

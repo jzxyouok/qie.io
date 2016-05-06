@@ -7,7 +7,7 @@
 
 class UserCtrl extends Controller {
 	/*
-	 * 页面
+	 * page
 	 */
 	//登录页
 	function index() {
@@ -36,7 +36,7 @@ class UserCtrl extends Controller {
 		$this->loadView('user_center');
 	}
 	/*
-	 * 接口
+	 * api
 	 */
 	//登录
 	public function login() {

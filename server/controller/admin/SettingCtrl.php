@@ -1,6 +1,6 @@
 <?php
 /*
- * 后台网站设定管理
+ * 网站设定管理
  * 
  * 作者：billchen
  * 邮箱：48838096@qq.com
@@ -11,6 +11,9 @@
 class SettingCtrl extends Controller {
 	protected $autoload = array('this'=>'hasAdminLogin');
 	
+	/*
+	 * page
+	 */
 	//首页
 	function index() {
 		$setting = Loader::load('Setting');
@@ -19,6 +22,9 @@ class SettingCtrl extends Controller {
 		$this->vars['db_config'] = $_GET['db_config'] && (isset($this->vars['database'][$_GET['db_config']]) || $_GET['db_config']=='add_profile')?$_GET['db_config']:$this->vars['profile']['db_config'];
 		$this->loadView('setting');
 	}
+	/*
+	 * api
+	 */
 	//更新profile
 	public function update() {
 		$data = array();
@@ -47,19 +53,23 @@ class SettingCtrl extends Controller {
 			$data['salt'] = $_POST['salt'];
 		if(isset($_POST['db_config']))
 			$data['db_config'] = $_POST['db_config'];
+			
+		try{
+			$setting = Loader::load('Setting');
+			$res = $setting->setProfile($data);
 		
-		$setting = Loader::load('Setting');
-		$res = $setting->setProfile($data);
-		
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1);
-		} else {
-			$this->message(0,'更新失败');
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1);
+			} else {
+				$this->message(0,'更新失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
-	//添加/更新database
+	//添加/更新database设定
 	public function update_db() {
 		$setting = Loader::load('Setting');
 		$db = $setting->getDatabase();
@@ -83,16 +93,20 @@ class SettingCtrl extends Controller {
 		$db[$profileName]['charset'] = trim($_POST['charset']);
 		$db[$profileName]['prefix'] = '';
 		
-		$res = $setting->setDatabase($db);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1);
-		} else {
-			$this->message(0,'更新失败');
+		try{
+			$res = $setting->setDatabase($db);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1);
+			} else {
+				$this->message(0,'更新失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
-	//测试database
+	//测试database设定
 	public function check_db() {
 		try {
 			$db = Loader::load('Database', array(false));
@@ -109,7 +123,7 @@ class SettingCtrl extends Controller {
 			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
-	//添加database
+	//删除database设定
 	public function delete_db($profileName) {
 		$setting = Loader::load('Setting');
 		$db = $setting->getDatabase();
@@ -119,14 +133,18 @@ class SettingCtrl extends Controller {
 		if($profileName == $profile['db_config'])
 			$this->message(-1, '不能删除默认配置');
 			
-		unset($db[$profileName]);
-		$res = $setting->setDatabase($db);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1);
-		} else {
-			$this->message(0,'删除失败');
+		try{
+			unset($db[$profileName]);
+			$res = $setting->setDatabase($db);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1);
+			} else {
+				$this->message(0,'删除失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 }

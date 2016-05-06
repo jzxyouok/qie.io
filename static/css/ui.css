@@ -342,6 +342,9 @@ body.manage>.header>.control-panel .fa {
     vertical-align: middle;
     font-size: 1.5em;
 }
+body.manage>.header>.control-panel a, body.manage>.header>.control-panel span {
+    margin-right: 10px;
+}
 body.manage>.sidebar {
     width:300px;
     height: 100%;
@@ -357,7 +360,6 @@ body.manage>.sidebar .user-info {
     padding:0 20px;
 }
 body.manage>.sidebar .user-info span {
-    margin-right: 1em;
     max-width: 210px;
     display: inline-block;
     overflow: hidden;
@@ -365,7 +367,10 @@ body.manage>.sidebar .user-info span {
     text-overflow: ellipsis;
     vertical-align: middle;
 }
-body.manage>.sidebar .user-info i {
+body.manage>.sidebar .user-info sup {
+    line-height: 1;
+}
+body.manage>.sidebar .user-info i, body.manage>.sidebar .user-info span, body.manage>.sidebar .user-info a {
     margin-right:.5em;
 }
 body.manage>.sidebar .nav li {

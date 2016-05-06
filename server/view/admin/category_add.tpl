@@ -5,7 +5,7 @@
 <title>添加分类-qie.io</title>
 <{include file="../common/css.tpl"}>
 </head>
-<body class="manage manage-article">
+<body class="manage manage-category category-add">
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">

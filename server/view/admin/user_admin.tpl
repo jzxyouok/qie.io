@@ -5,7 +5,7 @@
 <title>管理员列表-qie.io</title>
 <{include file="../common/css.tpl"}>
 </head>
-<body class="manage manage-article">
+<body class="manage manage-user user-admin">
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">

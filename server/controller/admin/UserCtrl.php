@@ -11,6 +11,9 @@
 class UserCtrl extends Controller {
 	protected $autoload = array('this'=>'hasAdminLogin');
 	
+	/*
+	 * page
+	 */
 	//首页
 	function index($now = 1) {
 		$row = (int)$_GET['row'] or $row = 20;
@@ -78,7 +81,7 @@ class UserCtrl extends Controller {
 		$this->loadView('user_admin_edit');
 	}
 	/*
-	 * API
+	 * api
 	 */
 	//添加用户
 	function insert() {
@@ -92,14 +95,18 @@ class UserCtrl extends Controller {
 			$data['password'] = $_POST['pwd'];
 		}
 			
-		$psp = Loader::load('Passport');
-		$res = $psp->insert($data);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, '操作成功');
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$psp = Loader::load('Passport');
+			$res = $psp->insert($data);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, '操作成功');
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 	//更新用户
@@ -119,14 +126,18 @@ class UserCtrl extends Controller {
 		if(empty($data))
 			$this->message(-1, '没有修改的内容', 1);
 		
-		$psp = Loader::load('Passport');
-		$res = $psp->update(array('data'=>$data, 'where'=>$id, 'limit'=>1));
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, '操作成功');
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$psp = Loader::load('Passport');
+			$res = $psp->update(array('data'=>$data, 'where'=>$id, 'limit'=>1));
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, '操作成功');
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 	//删除用户
@@ -137,14 +148,18 @@ class UserCtrl extends Controller {
 		if(empty($ids))
 			$this->message(-1, '没有修改的内容', 1);
 		
-		$psp = Loader::load('Passport');
-		$res = $psp->delete($ids);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$psp = Loader::load('Passport');
+			$res = $psp->delete($ids);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 	//添加/更新管理员
@@ -153,14 +168,18 @@ class UserCtrl extends Controller {
 		if(empty($password))
 			$this->message(-1, '没有修改的内容', 1);
 		
-		$psp = Loader::load('Passport');
-		$res = $psp->updateAdmin($id, $password);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, '操作成功');
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$psp = Loader::load('Passport');
+			$res = $psp->updateAdmin($id, $password);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, '操作成功');
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 	//删除管理员
@@ -170,15 +189,19 @@ class UserCtrl extends Controller {
 		
 		if(empty($ids))
 			$this->message(-1, '没有修改的内容', 1);
-			
-		$psp = Loader::load('Passport');
-		$res = $psp->deleteAdmin($ids);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+		
+		try {	
+			$psp = Loader::load('Passport');
+			$res = $psp->deleteAdmin($ids);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 }

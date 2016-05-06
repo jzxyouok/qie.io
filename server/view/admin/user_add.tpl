@@ -5,7 +5,7 @@
 <title>添加用户-qie.io</title>
 <{include file="../common/css.tpl"}>
 </head>
-<body class="manage manage-article">
+<body class="manage manage-user user-add">
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">

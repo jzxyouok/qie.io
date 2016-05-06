@@ -11,8 +11,15 @@
 class PhpinfoCtrl extends Controller {
 	protected $autoload = array('this'=>'hasAdminLogin');
 	
+	/*
+	 * page
+	 */
 	//phpinfo
 	function index() {
 		$this->loadView('phpinfo');
+	}
+	//iframe
+	function iframe() {
+		phpinfo();
 	}
 }

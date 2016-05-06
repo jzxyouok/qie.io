@@ -11,6 +11,9 @@
 class ArticleCtrl extends Controller {
 	protected $autoload = array('this'=>'hasAdminLogin');
 	
+	/*
+	 * page
+	 */
 	//首页
 	function index($now = 1) {
 		$row = (int)$_GET['row'] or $row = 20;
@@ -37,12 +40,14 @@ class ArticleCtrl extends Controller {
 		
 		$this->loadView('article');
 	}
+	//添加文章
 	function add() {
 		$category = Loader::load('model/Category');
 		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`root_id` ASC'));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->loadView('article_add');
 	}
+	//修改文章
 	function edit($id = 0) {
 		$article = Loader::load('model/Article');
 		$this->vars['data'] = $article->selectOne($id);
@@ -52,10 +57,10 @@ class ArticleCtrl extends Controller {
 		$this->loadView('article_edit');
 	}
 	/*
-	 * API
+	 * api
 	 */
+	//插入文章
 	function insert() {
-		$article = Loader::load('model/Article');
 		$data = array();
 		$data['title'] = $_POST['title'];
 		$data['content'] = $_POST['content'];
@@ -72,19 +77,23 @@ class ArticleCtrl extends Controller {
 		if(empty($data['content']))
 			$this->message(-1, '请输入正文内容', 2);
 		
-			
-		$res = $article->insert($data);
+		try {
+			$article = Loader::load('model/Article');
+			$res = $article->insert($data);
 		
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
+	//更新文章
 	function update($id = 0) {
-		$article = Loader::load('model/Article');
 		$data = array();
 		if($_POST['title'])
 			$data['title'] = $_POST['title'];
@@ -111,18 +120,23 @@ class ArticleCtrl extends Controller {
 		if($_POST['field'] && in_array($_POST['field'], array('title', 'keywords', 'excerpt', 'author', 'from', 'href', 'cover', 'order', 'counter'))) {
 			$data[$_POST['field']] = $_POST['value'];
 		}
-			
-		$res = $article->update(array('data'=>$data,'where'=>$id, 'limit'=>1));
 		
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$article = Loader::load('model/Article');	
+			$res = $article->update(array('data'=>$data,'where'=>$id, 'limit'=>1));
+		
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
-	//删除
+	//删除文章
 	function delete($ids = 0) {
 		if(empty($ids))
 			$ids = $_POST['ids'];
@@ -130,14 +144,18 @@ class ArticleCtrl extends Controller {
 		if(empty($ids))
 			$this->message(-1, '没有修改的内容', 1);
 		
-		$article = Loader::load('model/Article');
-		$res = $article->delete($ids);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$article = Loader::load('model/Article');
+			$res = $article->delete($ids);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 }

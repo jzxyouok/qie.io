@@ -15,17 +15,30 @@ class MainCtrl extends Controller {
 		parent::__construct($startTime);
 		$this->isAdmin = $this->hasAdminLogin(false);
 	}
+	/*
+	 * page
+	 */
 	//管理界面首页
 	function index() {
 		if(empty($this->user))
 			header('Location: /index.php/user/');
 		
 		if($this->isAdmin) {
-			$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
 			$this->loadView('main');
 		} else
 			$this->loadView('login');
 	}
+	//修改密码
+	function edit() {
+		if(empty($this->user) || !$this->isAdmin)
+			header('Location: /index.php/user/');
+		
+		$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
+		$this->loadView('main_edit');
+	}
+	/*
+	 * api
+	 */
 	//登录接口（二次验证）
 	public function login() {
 		if(empty($_POST['captcha'])) {

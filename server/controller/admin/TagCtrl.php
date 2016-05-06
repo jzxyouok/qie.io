@@ -11,6 +11,9 @@
 class TagCtrl extends Controller {
 	protected $autoload = array('this'=>'hasAdminLogin');
 	
+	/*
+	 * page
+	 */
 	//首页
 	function index($now = 1) {
 		$row = (int)$_GET['row'] or $row = 20;
@@ -37,6 +40,9 @@ class TagCtrl extends Controller {
 		
 		$this->loadView('tag');
 	}
+	/*
+	 * api
+	 */
 	//删除
 	function delete($ids = 0) {
 		if(empty($ids))
@@ -44,15 +50,18 @@ class TagCtrl extends Controller {
 		
 		if(empty($ids))
 			$this->message(-1, '没有修改的内容', 1);
-		
-		$tag = Loader::load('model/Tag');
-		$res = $tag->delete($ids);
-		if(!empty($res['code'])) {
-			$this->message(-1, $res['msg'], 10+$res['code']);
-		} else if($res) {
-			$this->message(1, $res);
-		} else {
-			$this->message(0, '操作失败');
+		try {
+			$tag = Loader::load('model/Tag');
+			$res = $tag->delete($ids);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
 }

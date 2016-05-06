@@ -9,7 +9,7 @@
 	width: 80%;
 }
 </style>
-</head><body class="manage manage-article">
+</head><body class="manage manage-article article-add">
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">

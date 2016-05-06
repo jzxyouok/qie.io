@@ -10,7 +10,7 @@
 }
 </style>
 </head>
-<body class="manage manage-article">
+<body class="manage manage-article article-edit">
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">

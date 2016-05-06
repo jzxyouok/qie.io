@@ -54,6 +54,9 @@ hr {
 i {
     font-style: normal;
 }
+sup, sub {
+    line-height: 1;
+}
 /*一些常用的class
 不需要可以删除
 */
