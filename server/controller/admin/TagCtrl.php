@@ -82,4 +82,22 @@ class TagCtrl extends Controller {
 			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
+	//清理
+	function clean($table='article') {
+		if(empty($table))
+			$this->message(-1, '没有修改的内容', 1);
+		try {
+			$tag = Loader::load('model/Tag');
+			$res = $tag->clean($table);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
+		}
+	}
 }

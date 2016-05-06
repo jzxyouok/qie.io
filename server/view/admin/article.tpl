@@ -63,7 +63,7 @@
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/article/update/<{$data.result[n].id}>/" data-field="order" type="text" value="<{$data.result[n].order}>"></td>
               <td><{$data.result[n].keywords}></td>
               <td class="center"><{$data.result[n].create_time}></td>
-              <td class="center manage"><a href="<{$admin_dir}>/index.php/article/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/article/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
+              <td class="center manage"><a href="<{$admin_dir}>/index.php/article/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/article/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a><a href="<{$admin_dir}>/index.php/article/fix_tag/<{$data.result[n].id}>/<{$data.result[n].keywords|strtr:'，':','}>/" class="ajax" title="修复tag">修复tag</a></td>
             </tr>
             <{/section}>
               </tbody>

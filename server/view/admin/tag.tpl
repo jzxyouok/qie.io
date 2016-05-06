@@ -52,7 +52,7 @@
                 <th>#</th>
                 <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID <i class="fa <{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>名称</th>
-                <th>数量</th>
+                <th>文章数量</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -72,7 +72,7 @@
             
           </table>
           <div class="pagination">
-            <div class="info">共<{$data.sum}>个标签/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/tag/delete/" title="批量删除" class="delete-more">批量删除</a></div>
+            <div class="info">共<{$data.sum}>个标签/<{$data.max}>页 <!--a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/tag/delete/" title="批量删除" class="delete-more">批量删除</a--><a href="<{$admin_dir}>/index.php/tag/clean/article/" title="清理文章无效tag" class="clean">清理</a></div>
             <div class="paging"><{$pagination}></div>
           </div>
         </div>
@@ -111,6 +111,16 @@ $('.panel .body .manage a.delete').on('click', function(e){
 									}}, 'json');
 	return false;
 });
+$('.panel .body .pagination a.clean').on('click', function(e){	
+	$.get(this.href,function(data){
+									if(data.status< 1) {
+										alert(data.result);
+									} else {
+										location.href = location.href;
+									}}, 'json');
+	return false;
+});
+/*
 document.querySelector('a.delete-more').addEventListener('click', function(e) {
 	e.preventDefault();
 	
@@ -137,7 +147,7 @@ document.querySelector('a.delete-more').addEventListener('click', function(e) {
 			},
 			error: function(xhr, data) {}
 	});
-});
+});*/
 </script>
 </body>
 </html>

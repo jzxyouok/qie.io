@@ -144,12 +144,32 @@ class Tag extends Model {
 	 *
 	 * @return boolean
 	 */
-	public function deleteRelation($table, $id) {
-		if(empty($table) || empty($id) || !in_array($table, $this->relationTables))
+	public function deleteRelation($table, $ids) {
+		if(empty($table) || empty($ids) || !in_array($table, $this->relationTables))
 			return false;
 		
-		$id = (int)$id;
-		$sql = "DELETE FROM `{$this->table}_{$table}` WHERE `target_id`={$id}";
+		if(!is_array($ids)) {
+			$where = '`target_id`='.(int)$ids;
+		} else {
+			$where = '`target_id` IN ('.implode(',', $ids).')';
+		}
+		$sql = "DELETE FROM `{$this->table}_{$table}` WHERE {$where}";
+		$db = Loader::load('Database');
+		
+		return $db->execute($sql);
+	}
+	/*
+	 * 清理无效tag连接
+	 *
+	 * @param string $table
+	 *
+	 * @return int
+	 */
+	public function clean($table) {
+		if(empty($table) || !in_array($table, $this->relationTables))
+			return false;
+		
+		$sql = "DELETE FROM `{$this->table}_{$table}` WHERE NOT EXISTS (SELECT * FROM `{$table}` WHERE `id`=`{$this->table}_{$table}`.`target_id`)";
 		$db = Loader::load('Database');
 		return $db->execute($sql);
 	}

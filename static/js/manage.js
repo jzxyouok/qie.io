@@ -71,5 +71,15 @@ $(function(){
             },
             error: function(xhr, data) {}
         });
-    })
+    });
+    //按钮转ajax
+    $('.panel .body .manage a.ajax').on('click', function(e){
+        $.get(this.href,function(data){
+            if(data.status< 1) {
+                alert(data.result);
+            } else {
+                location.href = location.href;
+            }}, 'json');
+        return false;
+    });
 });

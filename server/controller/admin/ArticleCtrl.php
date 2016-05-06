@@ -160,4 +160,24 @@ class ArticleCtrl extends Controller {
 			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
+	//修复文章tag
+	function fix_tag($id = 0) {
+		$words = urldecode($this->segments[$this->paramPos+1]);
+		if(empty($id) || empty($words))
+			$this->message(-1, '没有修改的内容', 1);
+		
+		try {
+			$article = Loader::load('model/Article');
+			$res = $article->fixTag($words,$id);
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
+		}
+	}
 }

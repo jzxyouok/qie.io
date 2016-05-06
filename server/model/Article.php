@@ -120,10 +120,22 @@ class Article extends Model {
 					unset($ids[$k]);
 			}
 			$cfg['limit'] = count($ids);
-			$ids = implode(',', $ids);
-			$cfg['where'] = '`id` IN ('.$ids.')';
+			$cfg['where'] = '`id` IN ('.implode(',', $ids).')';
 		}
 		
-		return parent::delete($cfg);
+		$res = parent::delete($cfg);
+		if($res) {
+			$tag = Loader::load('model/Tag');
+			$tag->deleteRelation('article', $ids);
+		}
+		
+		return $res;
+	}
+	public function fixTag($words, $id) {
+		if(empty($words) || empty($id))
+			return false;
+		
+		$tag = Loader::load('model/Tag');
+		return $tag->update(array('words'=>$words,'format'=>true,'target_table'=>'article','target_id'=>$id));
 	}
 }
