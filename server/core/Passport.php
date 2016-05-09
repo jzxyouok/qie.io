@@ -704,53 +704,10 @@ class Passport extends Model {
 	 * 管理员列表
 	 */
 	public function selectAdmin($cfg) {
-		if(!isset($cfg['now']))
-			$data['now'] = 1;
-		else
-			$data['now'] = (int)$cfg['now'];
-		if(!isset($cfg['row']))
-			$data['row'] = 20;
-		else
-			$data['row'] = (int)$cfg['row'];
+		$cfg['field'] = array(array('name'=>$this->table,'column'=>'*'),array('name'=>'user_admin','column'=>'grade'));
+		$cfg['tables'] = array(array('name'=>'user_admin','type'=>'RIGHT JOIN', 'on'=>'`user_admin`.`user_id`=`'.$this->table.'`.`id`'));
 		
-		if($data['row'] < 0)
-			$data['row'] = 0;
-		else if($data['row'] > self::MAX_PAGE_NUM)
-			$data['row'] = self::MAX_PAGE_NUM;
-		if($data['now'] < 1)
-			$data['now'] = 1;
-			
-		$data['max'] = 0;
-		
-		$db = Loader::load('Database');
-		if($cfg['where'])
-			$cfg['where'] = Database::setSelectWhere($cfg['where'], 'u');
-		
-		$sql = "SELECT COUNT(1) AS `sum` FROM `user_admin`".(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
-		$res = $db->query($sql);
-		$data['sum'] = (int)$res[0]['sum'];
-		if($data['sum']< 1) {
-			//如果查询为空
-			$data['result'] = array();
-			return $data;
-		}
-		
-		$data['max'] = ceil($data['sum']/$data['row']);
-		if($cfg['now'] > $data['max'])
-			$data['now'] = $cfg['now'];
-		else if($cfg['now'] < 1)
-			$data['now'] = 1;
-		else
-			$data['now'] = $cfg['now'];
-		
-		if($cfg['order'])
-			$cfg['order'] = Database::setSelectOrder($cfg['order'], false !== strpos($cfg['order'], 'grade')?'ua':'u');
-		
-		$sql = "SELECT `u`.`id`,`u`.`name`,`u`.`nick`,`u`.`email`,`ua`.`grade` FROM `user_admin` AS `ua` LEFT JOIN `user` AS `u` ON `ua`.`user_id`=`u`.`id`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"")." LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}";
-		
-		$data['result'] = $db->query($sql);
-		
-		return $data;
+		return parent::select($cfg);
 	}
 	/*
 	 * 添加/修改后台管理员

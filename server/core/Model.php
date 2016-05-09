@@ -24,51 +24,11 @@ class Model {
 	 * @param array $cfg 配置。如果array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20, 'tables'=>array
 	 *                   
 array (
-  'where' => '`tag_id`=1',
-  'order' => 
-  array (
-    0 => 
-    array (
-      'name' => 'article',
-      'by' => 'id desc',
-    ),
-    1 => 
-    array (
-      'name' => 'category',
-      'by' => 'id desc',
-    ),
-  ),
-  'field' => 
-  array (
-    0 => 
-    array (
-      'name' => 'article',
-      'column' => '*',
-    ),
-    1 => 
-    array (
-      'name' => 'category',
-      'field' => 'name',
-      'column' => 'category_name',
-    ),
-  ),
-  'tables' => 
-  array (
-    0 => 
-    array (
-      'name' => 'category',
-      'type' => 'LEFT JOIN',
-      'on' => '`article`.`category_id`=`category`.`id`',
-    ),
-    1 => 
-    array (
-      'name' => 'tag_article',
-      'alias' => '',
-      'type' => 'RIGHT JOIN',
-      'on' => '`tag_article`.`target_id`=`article`.`id`',
-    ),
-  ),
-)
+  'field' => array (0 => array ('name' => 'article','column' => '*'),1 => array ('name' => 'category','column' => 'category_name', 'alias'=>'')),
+  'tables' => array (0 => array ('name' => 'category','type' => 'LEFT JOIN','on' => '`article`.`category_id`=`category`.`id`'),1 => array ('name' => 'tag_article','alias' => '','type' => 'RIGHT JOIN','on' => '`tag_article`.`target_id`=`article`.`id`')),
+  'where' => array (0 => array ('type' => 'and','name' => 'article','field' => 'title','condition' => ' LIKE "飞洒%"'),1 => array ('name' => 'article','field' => 'category_id','condition' => '=1','type' => 'and'), array('condition'=>'MATCH (`content`) AGAINST ("something" IN NATURAL LANGUAGE MODE)')),
+  'order' => array (0 => array ('name' => 'article','by' => 'id desc'),1 => array ('name' => 'category','by' => 'id desc'))
+	)
 	 *
 	 * @return array array('now'=>,'max'=>,'row'=>,'sum'=>,'result'=>)
 	 */

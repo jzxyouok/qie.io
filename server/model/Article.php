@@ -21,13 +21,23 @@ class Article extends Model {
 		//处理内联
 		$cfg['tables'] = array(array('name'=>'category','type'=>'LEFT JOIN', 'on'=>'`article`.`category_id`=`category`.`id`'));
 		if(false !== strpos($cfg['where'], 'tag_id')) {
-			$cfg['tables'][] = array('name'=>'tag_'.$this->table,'alias'=>'', 'type'=>'RIGHT JOIN', 'on'=>'`tag_'.$this->table.'`.`target_id`=`'.$this->table.'`.`id`');
+			
 		}
 		//处理where
 		while(list($k, $v) = each($cfg['where'])) {
-			if($v['field']) {
-				$cfg['where'][$k]['type'] = 'AND';
-				$cfg['where'][$k]['name'] = $this->table;
+			switch($v['field']) {
+				case 'tag_id': {
+					$cfg['where'][$k]['type'] = 'AND';
+					$cfg['where'][$k]['name'] = 'tag_'.$this->table;
+					$cfg['tables'][] = array('name'=>'tag_'.$this->table,'alias'=>'', 'type'=>'RIGHT JOIN', 'on'=>'`tag_'.$this->table.'`.`target_id`=`'.$this->table.'`.`id`');
+				}
+				break;
+				case 'title':
+				case 'category_id': {
+					$cfg['where'][$k]['type'] = 'AND';
+					$cfg['where'][$k]['name'] = $this->table;
+				}
+				default: break;
 			}
 		}
 		//处理order，以空格( )分割

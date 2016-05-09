@@ -29,11 +29,13 @@ class ArticleCtrl extends Controller {
 		if($_GET['category_id']) {
 			$where[] = array('field'=>'category_id','condition'=>'='.(int)$_GET['category_id']);
 		}
+		
 		$orderBy = 'id_desc';
 		if($_GET['orderby']) {
 			$orderBy = $_GET['orderby'];
 		}
 		$orderBy = strtr($orderBy, '_', ' ');
+		
 		$article = Loader::load('model/Article');
 		$this->vars['data'] = $article->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
