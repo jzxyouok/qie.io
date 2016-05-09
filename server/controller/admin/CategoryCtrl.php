@@ -38,7 +38,7 @@ class CategoryCtrl extends Controller {
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		//$category->fix();
-		$this->loadView('category');
+		$this->view('category');
 	}
 	//添加分类
 	function add() {
@@ -46,7 +46,7 @@ class CategoryCtrl extends Controller {
 		$category = Loader::load('model/Category');
 		$this->vars['category'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
-		$this->loadView('category_add');
+		$this->view('category_add');
 	}
 	//修改分类
 	function edit($id = 0) {
@@ -55,7 +55,7 @@ class CategoryCtrl extends Controller {
 		$this->vars['data'] = $category->selectOne($id);
 		$this->vars['category'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
-		$this->loadView('category_edit');
+		$this->view('category_edit');
 	}
 	/*
 	 * api

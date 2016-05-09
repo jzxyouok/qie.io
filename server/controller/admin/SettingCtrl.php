@@ -20,7 +20,7 @@ class SettingCtrl extends Controller {
 		$this->vars['profile'] = $setting->getProfile();
 		$this->vars['database'] = $setting->getDatabase();
 		$this->vars['db_config'] = $_GET['db_config'] && (isset($this->vars['database'][$_GET['db_config']]) || $_GET['db_config']=='add_profile')?$_GET['db_config']:$this->vars['profile']['db_config'];
-		$this->loadView('setting');
+		$this->view('setting');
 	}
 	/*
 	 * api

@@ -37,18 +37,18 @@ class UserCtrl extends Controller {
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
-		$this->loadView('user');
+		$this->view('user');
 	}
 	//添加用户
 	function add() {
-		$this->loadView('user_add');
+		$this->view('user_add');
 	}
 	//编辑用户
 	function edit($id= 0) {
 		$psp = Loader::load('Passport');
 		$this->vars['data'] = $psp->selectOne($id);
 		
-		$this->loadView('user_edit');
+		$this->view('user_edit');
 	}
 	//管理员列表
 	function admin($now = 1) {
@@ -72,13 +72,13 @@ class UserCtrl extends Controller {
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
-		$this->loadView('user_admin');
+		$this->view('user_admin');
 	}
 	//编辑管理员
 	function admin_edit($id = 1) {
 		$this->vars['id'] = (int)$id;
 		
-		$this->loadView('user_admin_edit');
+		$this->view('user_admin_edit');
 	}
 	/*
 	 * api

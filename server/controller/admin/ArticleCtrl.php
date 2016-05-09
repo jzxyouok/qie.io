@@ -25,6 +25,9 @@ class ArticleCtrl extends Controller {
 		if($_GET['tag_id']) {
 			$where = '`tag_id`='.(int)$_GET['tag_id'];
 		}
+		if($_GET['category_id']) {
+			$where = '`category_id`='.(int)$_GET['category_id'];
+		}
 		$orderBy = 'id_desc';
 		if($_GET['orderby']) {
 			$orderBy = $_GET['orderby'];
@@ -40,14 +43,14 @@ class ArticleCtrl extends Controller {
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
-		$this->loadView('article');
+		$this->view('article');
 	}
 	//添加文章
 	function add() {
 		$category = Loader::load('model/Category');
 		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`root_id` ASC'));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
-		$this->loadView('article_add');
+		$this->view('article_add');
 	}
 	//修改文章
 	function edit($id = 0) {
@@ -56,7 +59,7 @@ class ArticleCtrl extends Controller {
 		$category = Loader::load('model/Category');
 		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`depth` ASC'));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
-		$this->loadView('article_edit');
+		$this->view('article_edit');
 	}
 	/*
 	 * api

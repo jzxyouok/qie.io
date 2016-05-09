@@ -58,7 +58,7 @@
                   <{$smarty.section.n.index+1}></label></td>
               <td class="center"><{$data.result[n].id}></td>
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/article/update/<{$data.result[n].id}>/" data-field="title" type="text" value="<{$data.result[n].title}>"></td>
-              <td><{$data.result[n].category_id}></td>
+              <td><a href="<{$admin_dir}>/index.php/article/?category_id=<{$data.result[n].category_id}>" title="<{$data.result[n].category_name}>[<{$data.result[n].category_id}>]"><{$data.result[n].category_name}></a></td>
               <td><{$data.result[n].counter}></td>
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/article/update/<{$data.result[n].id}>/" data-field="order" type="text" value="<{$data.result[n].order}>"></td>
               <td><{$data.result[n].keywords}></td>

@@ -16,7 +16,7 @@ class Controller {
 	protected $vars = array(); //页面模板需要的变量
 	protected $funcs = array(); //页面模板需要的函数
 	protected $classes = array(); //页面模板需要的类
-	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf";
+	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf"; //生成页面token
 	protected $profile = array(); //config/profile
 	protected $autoload = array(); //自动执行,array('this'=>'isAdmin','Passport'=>'isAdmin');
 	protected $autoloadResult = array();
@@ -30,7 +30,7 @@ class Controller {
 		//加载网站配置文件
 		$this->profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
 		$autoload = Loader::loadVar(APP_PATH.'/config/autoload.php', 'autoload');
-		if($autoload)
+		if($autoload && is_array($autoload))
 			$this->autoload = array_merge($this->autoload, $autoload);
 		//autoload
 		foreach($this->autoload as $k => $v) {
@@ -39,50 +39,35 @@ class Controller {
 		}
 	}
 	/*
-	 * 加载view文件夹视图
-	 *
-	 * @param string $tpl 视图文件地址 
-	 */
-	public function loadView($tpl = '') {
-		if(empty($tpl))
-			return false;
-		
-		//assign
-		$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
-		$this->vars['theme'] = $this->profile['theme'];
-		$this->vars['admin_dir'] = $this->profile['admin_dir'];
-		$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
-		
-		$this->view(APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl');
-	}
-	/*
-	 * 加载theme文件夹视图(用户主题)
-	 * 
-	 * @param string $tpl 视图文件地址 
-	 */
-	public function loadTheme($tpl = '') {
-		if(empty($tpl))
-			return false;
-		
-		//确定用户主题文件夹
-		if(!empty($_COOKIE['theme']) && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
-			$this->profile['theme'] = $_COOKIE['theme'];
-		
-		//assign
-		$this->vars['icp'] = $this->profile['icp'];
-		$this->vars['analytics'] = $this->profile['analytics'];
-		
-		$this->view(DOCUMENT_ROOT.'/theme/'.$this->profile['theme'].'/'.$tpl.'.tpl');
-	}
-	/*
 	 * 加载视图文件
 	 * 
 	 * @param string $tpl 视图文件地址 
 	 */
-	public function view($tpl = '') {
+	public function view($tpl = '', $type = 'view') {
+		switch($type) {
+			case 'theme': {
+				//确定用户主题文件夹
+				if(!empty($_COOKIE['theme']) && is_dir(DOCUMENT_ROOT."/theme/{$_COOKIE['theme']}"))
+					$this->profile['theme'] = $_COOKIE['theme'];
+		
+				//assign
+				$this->vars['icp'] = $this->profile['icp'];
+				$this->vars['analytics'] = $this->profile['analytics'];
+				$tpl = DOCUMENT_ROOT.'/theme/'.$this->profile['theme'].'/'.$tpl.'.tpl';
+			}
+			break;
+			default: {
+				//assign
+				$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
+				$this->vars['theme'] = $this->profile['theme'];
+				$this->vars['admin_dir'] = $this->profile['admin_dir'];
+				$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
+				$tpl = APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl';
+			}
+		}
 		if(!file_exists($tpl))
 			return false;
-		
+			
 		$this->vars['title'] = $this->profile['title']?$this->profile['title']:'默认网站';
 		$this->vars['meta'] = $this->profile['meta'];
 		$this->vars['homepage'] = $this->profile['homepage'];

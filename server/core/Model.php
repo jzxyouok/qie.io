@@ -22,6 +22,9 @@ class Model {
 	 * 通用数据库select
 	 *
 	 * @param array $cfg 配置。如果array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20, 'tables'=>array('tablename'=>array('alias'=>'', 'type'=>'LEFT JOIN', 'on'=> 'table1.id=table2.id')))
+	 *                   field = array('article'=>'*','category'=>array('name','category_name'))，key:表名 value:列名，如果value是数组，0是列名，1是别名。也可以用array($this->table=>'*','category'=>'name` AS `category_name')
+	 *                   table = array ('category' => array ('type' => 'LEFT JOIN','on' => '`article`.`category_id`=`category`.`id`','alias'=>''))
+	 *                   order = array('article'=>'id desc','category'=>'id asc')
 	 *
 	 * @return array array('now'=>,'max'=>,'row'=>,'sum'=>,'result'=>)
 	 */
@@ -29,15 +32,45 @@ class Model {
 		if(empty($cfg['field']))
 			$cfg['field'] = '*';
 		
+		$field = '';
 		$table = '';
+		$order = '';
+		$where = '';
+		//处理field
+		if(!empty($cfg['field'])) {
+			if(is_array($cfg['field'])) {
+				foreach($cfg['field'] as $k=>$v) {
+					$field .= ',`'.$k.'`.'.($v == '*'?'*':(is_array($v)?'`'.$v[0].'` AS `'.$v[1].'`':'`'.$v.'`'));
+				}
+				$field = substr($field, 1);
+			} else
+				$field = $cfg['field'];
+		} else
+			$field = '*';
+		//处理table连接
 		if($cfg['tables']) {
 			foreach($cfg['tables'] as $k => $v) {
-					$table .= " {$v['type']} `{$k}`".($v['alias']?" AS `{$v['alias']}`":"")." ON {$v['on']}";
+				$table .= " {$v['type']} `{$k}`".($v['alias']?" AS `{$v['alias']}`":"")." ON {$v['on']}";
 			}
+		}
+		//处理where
+		if(!empty($cfg['where'])) {
+			$where = " WHERE {$cfg['where']}";
+		}
+		//处理order
+		if(!empty($cfg['order'])) {
+			if(is_array($cfg['order'])) {
+				foreach($cfg['order'] as $k=>$v) {
+					$vv = explode(' ', $v);
+					$order .= ",`{$k}`.`{$vv[0]}` {$vv[1]}";
+				}
+				$order = ' ORDER BY '.substr($order, 1);
+			} else
+				$order = " ORDER BY {$cfg['order']}";
 		}
 		
 		$db = Loader::load('Database');
-		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`".(!empty($table)?$table:"").(!empty($cfg["where"])?" WHERE {$cfg['where']}":"");
+		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`{$table}{$where}";
 		$res = $db->query($sql);
 		$data['sum'] = (int)$res[0]['sum'];
 		if($data['sum']< 1) {
@@ -62,7 +95,7 @@ class Model {
 				$data['now'] = $data['max'];
 		}
 		
-		$sql = "SELECT {$cfg['field']} FROM `{$this->table}`".(!empty($table)?$table:"").(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['order'])?" ORDER BY {$cfg['order']}":"").($data['row'] !== 0?" LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}":"");
+		$sql = "SELECT {$field} FROM `{$this->table}`{$table}{$where}{$order}".($data['row'] !== 0?" LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}":"");
 		$data['result'] = $db->query($sql);
 		
 		return $data;

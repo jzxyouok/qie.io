@@ -24,9 +24,9 @@ class MainCtrl extends Controller {
 			header('Location: /index.php/user/');
 		
 		if($this->isAdmin) {
-			$this->loadView('main');
+			$this->view('main');
 		} else
-			$this->loadView('login');
+			$this->view('login');
 	}
 	//修改密码
 	function edit() {
@@ -34,7 +34,7 @@ class MainCtrl extends Controller {
 			header('Location: /index.php/user/');
 		
 		$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
-		$this->loadView('main_edit');
+		$this->view('main_edit');
 	}
 	/*
 	 * api

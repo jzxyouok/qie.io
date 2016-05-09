@@ -38,7 +38,7 @@ class TagCtrl extends Controller {
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
-		$this->loadView('tag');
+		$this->view('tag');
 	}
 	/*
 	 * api

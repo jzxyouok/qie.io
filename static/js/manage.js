@@ -38,13 +38,15 @@ $(function(){
     });
     /*初始化导航条 end*/
     /*搜索form*/
-    document.getElementById('search_form').addEventListener('submit', function(e){
-        var data = $u.getFormValues(e.target || e.srcElement);
-        if(!data.word) {
-            e.preventDefault();
-            alert('请填写关键词');
-        }
-    });
+    var node = document.getElementById('search_form');
+    if(node)
+        node.addEventListener('submit', function(e){
+            var data = $u.getFormValues(e.target || e.srcElement);
+            if(!data.word) {
+                e.preventDefault();
+                alert('请填写关键词');
+            }
+        });
     /*选择按钮*/
     $('.select-table a.select').on('click', function(){
         $(this).parents('.select-table').eq(0).find('input[type=checkbox]:not(":disabled")').each(function(){
