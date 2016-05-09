@@ -16,18 +16,22 @@ class Article extends Model {
 	public $table = 'article';
 	
 	public function select($cfg) {
+		//处理field
+		$cfg['field'] = array(array('name'=>$this->table,'column'=>'*'),array('name'=>'category','column'=>'name','alias'=>'category_name'));
 		//处理内联
+		$cfg['tables'] = array(array('name'=>'category','type'=>'LEFT JOIN', 'on'=>'`article`.`category_id`=`category`.`id`'));
 		if(false !== strpos($cfg['where'], 'tag_id')) {
-			$cfg['tables'] = array('tag_'.$this->table=>array('alias'=>'', 'type'=>'RIGHT JOIN', 'on'=>'`tag_'.$this->table.'`.`target_id`=`'.$this->table.'`.`id`'));
+			$cfg['tables'][] = array('name'=>'tag_'.$this->table,'alias'=>'', 'type'=>'RIGHT JOIN', 'on'=>'`tag_'.$this->table.'`.`target_id`=`'.$this->table.'`.`id`');
 		}
-		if($cfg['tables'])
-			$cfg['tables'] = array_merge(array('category'=>array('type'=>'LEFT JOIN', 'on'=>'`article`.`category_id`=`category`.`id`')), $cfg['tables']);
-		else
-			$cfg['tables'] = array('category'=>array('type'=>'LEFT JOIN', 'on'=>'`article`.`category_id`=`category`.`id`'));
+		//处理where
+		while(list($k, $v) = each($cfg['where'])) {
+			if($v['field']) {
+				$cfg['where'][$k]['type'] = 'AND';
+				$cfg['where'][$k]['name'] = $this->table;
+			}
+		}
 		//处理order，以空格( )分割
-		$order = explode(' ', $cfg['order']);
-		$cfg['order'] = array($this->table=>$cfg['order'],'category'=>'id asc');
-		$cfg['field'] = array($this->table=>'*','category'=>'name` AS `category_name');
+		$cfg['order'] = array(array('name'=>$this->table,'by'=>$cfg['order']));
 		
 		return parent::select($cfg);
 	}

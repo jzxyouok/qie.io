@@ -18,15 +18,16 @@ class ArticleCtrl extends Controller {
 	function index($now = 1) {
 		$row = (int)$_GET['row'] or $row = 20;
 		
-		$where = '';
+		$where = array();
 		if($_GET['word']) {
-			$where = ($_GET['type'] == 'title'?'`title` LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"':'MATCH (`content`) AGAINST ("'.addslashes($_GET['word']).'" IN NATURAL LANGUAGE MODE)');
+			//$where[] = ($_GET['type'] == 'title'?array('name'=>'article','field'=>'title'`` LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"':);
+			$where[] = ($_GET['type'] == 'title'?array('field'=>'title','condition'=>' LIKE "'.($_GET['fuzzy']?'%':'').$_GET['word'].'%"'):array('condition'=>'MATCH (`content`) AGAINST ("'.addslashes($_GET['word']).'" IN NATURAL LANGUAGE MODE)'));
 		}
 		if($_GET['tag_id']) {
-			$where = '`tag_id`='.(int)$_GET['tag_id'];
+			$where[] = array('field'=>'tag_id','condition'=>'='.(int)$_GET['tag_id']);
 		}
 		if($_GET['category_id']) {
-			$where = '`category_id`='.(int)$_GET['category_id'];
+			$where[] = array('field'=>'category_id','condition'=>'='.(int)$_GET['category_id']);
 		}
 		$orderBy = 'id_desc';
 		if($_GET['orderby']) {
