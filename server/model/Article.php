@@ -17,7 +17,7 @@ class Article extends Model {
 	
 	public function select($cfg) {
 		//处理field
-		$cfg['field'] = array(array('name'=>$this->table,'column'=>'*'),array('name'=>'category','column'=>'name','alias'=>'category_name'));
+		$cfg['field'] = array(array('table'=>$this->table,'column'=>'*'),array('table'=>'category','column'=>'name','alias'=>'category_name'));
 		//处理内联
 		$cfg['tables'] = array(array('name'=>'category','type'=>'LEFT JOIN', 'on'=>'`article`.`category_id`=`category`.`id`'));
 		if(false !== strpos($cfg['where'], 'tag_id')) {
@@ -28,20 +28,20 @@ class Article extends Model {
 			switch($v['field']) {
 				case 'tag_id': {
 					$cfg['where'][$k]['type'] = 'AND';
-					$cfg['where'][$k]['name'] = 'tag_'.$this->table;
+					$cfg['where'][$k]['table'] = 'tag_'.$this->table;
 					$cfg['tables'][] = array('name'=>'tag_'.$this->table,'alias'=>'', 'type'=>'RIGHT JOIN', 'on'=>'`tag_'.$this->table.'`.`target_id`=`'.$this->table.'`.`id`');
 				}
 				break;
 				case 'title':
 				case 'category_id': {
 					$cfg['where'][$k]['type'] = 'AND';
-					$cfg['where'][$k]['name'] = $this->table;
+					$cfg['where'][$k]['table'] = $this->table;
 				}
 				default: break;
 			}
 		}
 		//处理order，以空格( )分割
-		$cfg['order'] = array(array('name'=>$this->table,'by'=>$cfg['order']));
+		$cfg['order'] = array(array('table'=>$this->table,'by'=>$cfg['order']));
 		
 		return parent::select($cfg);
 	}

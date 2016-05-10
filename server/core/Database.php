@@ -102,8 +102,7 @@ class Database extends Model {
 	public function commit($sql) {
 		if(empty($sql) || !is_array($sql))
 			return false;
-			
-		$flag = true;
+		
 		$res = array();
 		$count = 0;
 		
@@ -111,10 +110,13 @@ class Database extends Model {
 		foreach($sql as $k => $v) {
 			if(empty($v))
 				continue;
-			if(!$this->db->query($v))
-				$flag = false;
-			if(!$flag)
-				break;
+			if(!$this->db->query($v)){
+				//执行失败
+				$this->db->query('ROLLBACK');
+				$this->db->query('SET AUTOCOMMIT=1');
+				return false;
+			}
+			
 			if(false !== stripos($sql, 'insert')) {
 				if($count = $this->db->insert_id)
 					$res[] = $count;
@@ -124,15 +126,9 @@ class Database extends Model {
 				$res[] = $this->db->affected_rows;
 		}
 		
-		if($flag) {
-			$this->db->query('COMMIT');
-			$this->db->query('SET AUTOCOMMIT=1');
-			return $res;
-		} else {
-			$this->db->query('ROLLBACK');
-			$this->db->query('SET AUTOCOMMIT=1');
-			return false;
-		}
+		$this->db->query('COMMIT');
+		$this->db->query('SET AUTOCOMMIT=1');
+		return $res;
 	}
 	/*
 	 * 选择数据库
@@ -157,14 +153,14 @@ class Database extends Model {
 	/*
 	 * 设置select语句的field字段
 	 *
-	 * @param array $fields array (0 => array ('name' => 'article','column' => '*','alias'=>''), 1 => array ('name' => 'category','field' => 'name','column' => 'category_name','alias'=>''))
+	 * @param array $fields array (0 => array ('table' => 'article','column' => '*','alias'=>''), 1 => array ('table' => 'category','field' => 'table','column' => 'category_name','alias'=>''))
 	 *
 	 * @return string
 	 */
 	public static function setSelectField($param = array()) {
 		$field = array();
 		foreach($param as $v) {
-			$field[] = '`'.$v['name'].'`.'.($v['column'] == '*'?'*':'`'.$v['column'].'`').($v['alias']?' AS `'.$v['alias'].'`':'');
+			$field[] = ($v['table']?'`'.$v['table'].'`.':'').($v['column'] == '*'?'*':'`'.$v['column'].'`').($v['alias']?' AS `'.$v['alias'].'`':'');
 		}
 		return implode(',', $field);
 	}
@@ -206,40 +202,40 @@ class Database extends Model {
 	 * @return string
 	 */
 	public static function setUpdateField($param = array()) {
-		$field = '';
+		$field = array();
 		foreach($param as $k => $v) {
-			$field .= ",`{$k}`=" . (is_int($v)||is_float($v)?$v:"'{$v}'"); //$field .= ",`{$k}`=" . (preg_match("/^\d+$/", $v) ? $v : "'".trim($v)."'");
+			$field[] = "`{$k}`=" . (is_int($v)||is_float($v)?$v:"'{$v}'"); //$field .= ",`{$k}`=" . (preg_match("/^\d+$/", $v) ? $v : "'".trim($v)."'");
 		}
 		if(!empty($field))
-			return substr($field, 1);
+			return implode(',', $field);
 		else
 			return '';
 	}
 	/*
 	 * 设置select语句的where字段
 	 *
-	 * @param array $param array ( 0 => array ('type' => 'and','name' => 'article','field' => 'title','condition' => ' LIKE "飞洒%"'),1 => array ('name' => 'article','field' => 'category_id','condition' => '=1','type' => 'and'))
+	 * @param array $param array ( 0 => array ('type' => 'and','table' => 'article','field' => 'title','condition' => ' LIKE "飞洒%"'),1 => array ('table' => 'article','field' => 'category_id','condition' => '=1','type' => 'and'))
 	 *
 	 * @return string
 	 */
 	public static function setSelectWhere($param = array()) {
 		//如果条件已and开头
 		$where = '';
-		$first = array();
+		$len = -1;
 		foreach($param as $v) {
-			if(empty($first))
-				$first = $v;
-			$where[] = ($v['type']?$v['type'].' ':'').($v['name']?'`'.$v['name'].'`.':'').($v['field']?'`'.$v['field'].'`':'').$v['condition'];
+			if($len === -1)
+				$len = strlen($v['type'])+1;
+			$where[] = ($v['type']?$v['type'].' ':'').($v['table']?'`'.$v['table'].'`.':'').($v['field']?'`'.$v['field'].'`':'').$v['condition'];
 		}
-		if($first['type'])
-			return substr(implode(' ', $where), strlen($first['type'])+1);
+		if($len>0)
+			return substr(implode(' ', $where), $len);
 		else
 			return implode(' ', $where);
 	}
 	/*
 	 * 设置select语句的order字段
 	 *
-	 * @param array $param array (0 => array ('name' => 'article','by' => 'id desc'),1 => array ('name' => 'category','by' => 'id desc'))
+	 * @param array $param array (0 => array ('table' => 'article','by' => 'id desc'),1 => array ('table' => 'category','by' => 'id desc'))
 	 *
 	 * @return string
 	 */
@@ -247,7 +243,7 @@ class Database extends Model {
 		$order = array();
 		foreach($param as $v) {
 			$vv = explode(' ', $v['by']);
-			$order[] = "`{$v['name']}`.`{$vv[0]}` {$vv[1]}";
+			$order[] = "`{$v['table']}`.`{$vv[0]}` {$vv[1]}";
 		}
 		
 		return implode(',', $order);

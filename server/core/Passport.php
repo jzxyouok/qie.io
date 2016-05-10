@@ -704,7 +704,7 @@ class Passport extends Model {
 	 * 管理员列表
 	 */
 	public function selectAdmin($cfg) {
-		$cfg['field'] = array(array('name'=>$this->table,'column'=>'*'),array('name'=>'user_admin','column'=>'grade'));
+		$cfg['field'] = array(array('table'=>$this->table,'column'=>'*'),array('table'=>'user_admin','column'=>'grade'));
 		$cfg['tables'] = array(array('name'=>'user_admin','type'=>'RIGHT JOIN', 'on'=>'`user_admin`.`user_id`=`'.$this->table.'`.`id`'));
 		
 		return parent::select($cfg);
