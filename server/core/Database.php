@@ -192,7 +192,7 @@ class Database extends Model {
 			}
 		}
 		
-		return '('.implode(',', $key).')' . ' VALUES ' . ($counter == 0?'('.implode(',', $value).')':implode(',', $value));
+		return '('.implode(',', $key).')' . ' VALUES ' . (!$hasKey == 0?'('.implode(',', $value).')':implode(',', $value));
 	}
 	/*
 	 * 设置update语句的字段

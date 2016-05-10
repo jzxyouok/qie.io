@@ -59,9 +59,7 @@
             <tbody>
             <{section loop=$data.result name=n}>
             <tr>
-              <td class="center"><label>
-                  <input type="checkbox" value="<{$data.result[n].id}>">
-                  <{$smarty.section.n.index+1}></label></td>
+              <td class="center"><{$smarty.section.n.index+1}></td>
               <td class="center"><{$data.result[n].id}></td>
               <td class="center"><{$data.result[n].word}></td>
               <td class="center"><a href="<{$admin_dir}>/index.php/article/?tag_id=<{$data.result[n].id}>"><{$data.result[n].article_sum}></a></td>
