@@ -15,14 +15,18 @@
 class Article extends Model {
 	public $table = 'article';
 	
+	/*
+	 * 查询文章列表
+	 *
+	 * @param array $cfg array('field'=>,'tables'=>,'order'=>,'row'=>int,'now'=>int)
+	 *
+	 * @return array
+	 */
 	public function select($cfg) {
 		//处理field
 		$cfg['field'] = array(array('table'=>$this->table,'column'=>'*'),array('table'=>'category','column'=>'name','alias'=>'category_name'));
 		//处理内联
 		$cfg['tables'] = array(array('name'=>'category','type'=>'LEFT JOIN', 'on'=>'`article`.`category_id`=`category`.`id`'));
-		if(false !== strpos($cfg['where'], 'tag_id')) {
-			
-		}
 		//处理where
 		while(list($k, $v) = each($cfg['where'])) {
 			switch($v['field']) {
@@ -41,10 +45,17 @@ class Article extends Model {
 			}
 		}
 		//处理order，以空格( )分割
-		$cfg['order'] = array(array('table'=>$this->table,'by'=>$cfg['order']));
+		$cfg['order'] = array(array('by'=>$cfg['order']));
 		
 		return parent::select($cfg);
 	}
+	/*
+	 * 查询单个文章
+	 *
+	 * @param int $id 文章id
+	 *
+	 * @return array
+	 */
 	public function selectOne($id) {
 		if(!is_numeric($id) || $id < 1)
 			return array();
@@ -54,6 +65,13 @@ class Article extends Model {
 		$res = $db->query($sql);
 		return $res[0];
 	}
+	/*
+	 * 插入新文章
+	 *
+	 * @param array $cfg 
+	 *
+	 * @return int
+	 */
 	public function insert($data) {
 		if(empty($data['title']) || empty($data['content']))
 			return false;
@@ -87,6 +105,13 @@ class Article extends Model {
 		}
 		return $res;
 	}
+	/*
+	 * 更新文章
+	 *
+	 * @param array $cfg array('data'=>array,'where'=>int)
+	 *
+	 * @return int
+	 */
 	public function update($cfg=array()) {
 		if(empty($cfg['data']))
 			return false;
@@ -128,6 +153,13 @@ class Article extends Model {
 		}
 		return $res || $res2;
 	}
+	/*
+	 * 删除文章
+	 *
+	 * @param array/string/int $ids id数组或者,分割
+	 *
+	 * @return int
+	 */
 	public function delete($ids = array()) {
 		if(empty($ids))
 			return false;
@@ -155,6 +187,14 @@ class Article extends Model {
 		
 		return $res;
 	}
+	/*
+	 * 更新文章tag
+	 *
+	 * @param array/string $words
+	 * @param int $id
+	 *
+	 * @return int
+	 */
 	public function fixTag($words, $id) {
 		if(empty($words) || empty($id))
 			return false;

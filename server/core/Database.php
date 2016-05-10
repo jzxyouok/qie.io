@@ -243,7 +243,7 @@ class Database extends Model {
 		$order = array();
 		foreach($param as $v) {
 			$vv = explode(' ', $v['by']);
-			$order[] = "`{$v['table']}`.`{$vv[0]}` {$vv[1]}";
+			$order[] = ($v['table']?"`{$v['table']}`.":"")."`{$vv[0]}` {$vv[1]}";
 		}
 		
 		return implode(',', $order);
