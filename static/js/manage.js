@@ -47,6 +47,16 @@ $(function(){
                 alert('请填写关键词');
             }
         });
+    //点击table变换checkbox
+    node = document.querySelector('.select-table table');
+    if(node)
+        node.addEventListener('click', function(e){
+            if(e.target.nodeName.toLowerCase() == 'td') {
+                var checkbox = e.target.parentNode.querySelector('input[type=checkbox]');
+                if(checkbox)
+                    checkbox.checked = !checkbox.checked;
+            }
+        });
     /*选择按钮*/
     $('.select-table a.select').on('click', function(){
         $(this).parents('.select-table').eq(0).find('input[type=checkbox]:not(":disabled")').each(function(){
