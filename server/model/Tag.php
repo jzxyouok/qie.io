@@ -79,6 +79,7 @@ class Tag extends Model {
 			if($res) {
 				foreach($res as $v)
 					$relation[] = array('target_id'=>$data['target_id'], 'tag_id'=>(int)$v['id']);
+				
 				return $db->execute("INSERT IGNORE INTO `{$this->table}_{$data['target_table']}` ".Database::setInsertField($relation));
 			}
 		}
