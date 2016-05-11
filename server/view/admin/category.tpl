@@ -38,6 +38,7 @@
                 <th>名称</th>
                 <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if !$smarty.get.orderby || $smarty.get.orderby == 'depth_desc'}>depth_asc<{else}>depth_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">层级 <i class="fa <{if !$smarty.get.orderby || $smarty.get.orderby == 'depth_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
                 <th>上一级ID</th>
+                <th>文章数量</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -51,6 +52,7 @@
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/category/update/<{$data.result[n].id}>/" data-field="name" type="text" value="<{$data.result[n].name}>"></td>
               <td class="center"><{$data.result[n].depth}></td>
               <td class="center"><{$data.result[n].parent_id}></td>
+              <td class="center"><{$data.result[n].article_sum}></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/category/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/category/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
             </tr>
             <{/section}>

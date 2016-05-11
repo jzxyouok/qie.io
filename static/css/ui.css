@@ -11,6 +11,10 @@ body {
     line-height: 1.42857143;
     color: #333;
 }
+/*class*/
+.center {
+    text-align:center;
+}
 /*form*/
 form {
     text-align: center;
@@ -444,6 +448,7 @@ body.manage td.manage a {
 /*login page,reg page, user-center page*/
 body.user .default-form, body.manage .default-form {
     width:400px;
+    margin:0 auto;
 }
 /*error page*/
 body.error .panel {width:758px;}

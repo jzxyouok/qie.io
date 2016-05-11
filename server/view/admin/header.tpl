@@ -34,11 +34,13 @@
             <li><a href="<{$admin_dir}>/index.php/category/add/" title="添加分类">添加分类</a></li>
           </ul>
         </li>
-        <li data-active-url="^<{$admin_dir}>/index\.php/tag(?:/.*)?"><a href="<{$admin_dir}>/index.php/tag/" title="标签管理"><i class="fa fa-tags"></i>标签管理<!--span class="fa arrow"></span--></a>
-        <!--ul>
-            <li><a href="<{$admin_dir}>/index.php/tag/" title="标签列表">标签列表</a></li>
-            <li><a href="<{$admin_dir}>/index.php/tag/add/" title="添加标签">添加标签</a></li>
-          </ul-->
+        <li data-active-url="^<{$admin_dir}>/index\.php/tag(?:/.*)?"><a href="<{$admin_dir}>/index.php/tag/" title="标签管理"><i class="fa fa-tags"></i>标签管理</a>
+        </li>
+        <li class="parent" data-active-url="^<{$admin_dir}>/index\.php/upload(?:/.*)?"><a href="＃" title="文件管理"><i class="fa fa-tags"></i>文件管理<span class="fa arrow"></span></a>
+        <ul>
+            <li><a href="<{$admin_dir}>/index.php/upload/" title="文件列表">文件列表</a></li>
+            <li><a href="<{$admin_dir}>/index.php/upload/add/" title="上传文件">上传文件</a></li>
+          </ul>
         </li>
       </ul>
     </nav>

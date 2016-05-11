@@ -87,7 +87,7 @@ class App {
 			$ctrlName{0} = strtoupper($ctrlName{0});
 			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl', array(), false);
 			if(!$controller)
-				self::error('找不到控制器对象::controller not found', $request);
+				self::error('App::__construct: controller not found');
 			$controller->processStart = $process_start;
 			$controller->dir = $dir;
 			$controller->segments = $segments;
@@ -100,7 +100,7 @@ class App {
 			if(!is_callable(array($controller, $method))) {
 				$method = 'index';
 				if(!is_callable(array($controller, $method)))
-					self::error('找不到对象方法::method not found', array($request, $controller)); //错误处理，找不到对象方法。
+					self::error('App::__construct: method not found'); //错误处理，找不到对象方法。
 				
 				$param = $position + 1;
 			}

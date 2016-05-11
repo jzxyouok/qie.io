@@ -51,7 +51,14 @@ class Category extends Model {
 	protected $depth = 3;
 	protected $defaultId = 0;
 	public $table = 'category';
-	
+
+	public function select($cfg = array()) {
+		$cfg['field'] = "`{$this->table}`.*";
+		
+		$cfg['field'] .= ",(SELECT COUNT(1) FROM `article` WHERE `category_id`=`{$this->table}`.`id`) AS `article_sum`";
+
+		return parent::select($cfg);
+	}
 	/*
 	 * 查询单个分类信息
 	 *

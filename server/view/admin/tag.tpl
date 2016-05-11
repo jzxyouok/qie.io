@@ -9,9 +9,9 @@
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">
-    <div class="panel default-form">
-      <h3 class="head">添加标签</h3>
-        <form class="body" action="<{$admin_dir}>/index.php/tag/insert/" method="post">
+    <div class="panel default-panel center">
+      <h3 class="head">添加标签</h3><div class="body">
+        <form class="default-form" action="<{$admin_dir}>/index.php/tag/insert/" method="post">
           <fieldset>
             <div class="input-group">
               <label>
@@ -23,7 +23,7 @@
             </div>
           </fieldset>
           <div class="form-button"><button type="submit">添加</button></div>
-        </form>
+        </form></div>
       </div>
     <div class="panel default-panel">
       <h3 class="head">标签管理</h3>
@@ -80,7 +80,7 @@
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}> 
 <script>
-document.querySelector('.default-form form').addEventListener('submit', function(e){
+document.querySelector('.default-form').addEventListener('submit', function(e){
 	e.preventDefault();
 	var data = $u.getFormValues(this);
 	

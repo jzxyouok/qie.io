@@ -90,7 +90,7 @@ $(function(){
             if(data.status< 1) {
                 alert(data.result);
             } else {
-                location.href = location.href;
+                alert(data.result?data.result:'操作成功');
             }}, 'json');
         return false;
     });
