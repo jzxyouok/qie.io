@@ -29,10 +29,10 @@ class Controller {
 		$this->user = Loader::load('Passport')->getUser();
 		//加载网站配置文件
 		$this->profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+		//autoload
 		$autoload = Loader::loadVar(APP_PATH.'/config/autoload.php', 'autoload');
 		if($autoload && is_array($autoload))
 			$this->autoload = array_merge($this->autoload, $autoload);
-		//autoload
 		foreach($this->autoload as $k => $v) {
 			$obj = $k == 'this'?$this:Loader::load($k);
 			$this->autoloadResult[$k][$v] = $obj->$v();
@@ -66,7 +66,7 @@ class Controller {
 			}
 		}
 		if(!file_exists($tpl))
-			return false;
+			throw new Exception('Controller::view: template file not exists');
 			
 		$this->vars['title'] = $this->profile['title']?$this->profile['title']:'默认网站';
 		$this->vars['meta'] = $this->profile['meta'];
@@ -138,7 +138,7 @@ class Controller {
 	public function message($status, $result = '', $error = '') {
 		if(empty($_GET['jsoncallback'])) {
 			if(isset($_GET['x']))
-				echo '<script>document.domain = "'.$_SERVER['HTTP_HOST'].'";</script>'; //javascript cross domain
+				echo '<script>document.domain = "'.$_SERVER['SERVER_NAME'].'";</script>'; //javascript cross domain
 			exit(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error)));
 		} else
 			exit($_GET['jsoncallback'].'('.(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error))).')');

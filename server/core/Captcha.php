@@ -53,7 +53,7 @@ class Captcha {
 	 */
 	public function createImage($width = 80, $height = 20) {
 		if(!function_exists("imagecreate"))
-			throw new CaptchaException('GD库不支持');
+			throw new CaptchaException('Captcha::createImage: GD库不存在');
 		
 		//验证码句柄
 		$c = ip2long(Util::getIP());

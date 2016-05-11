@@ -15,8 +15,11 @@ class App {
 	 */
 	function __construct($process_start = 0) {
 		try {
-			if(!class_exists('Loader'))
+			if(!class_exists('Loader')) {
+				if(!file_exists(APP_PATH.'/core/Loader.php'))
+					exit('App::__construct(): Loader not exists');
 				require(APP_PATH.'/core/Loader.php');
+			}
 			
 			/*
 			 * 设定环境变量

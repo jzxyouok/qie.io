@@ -205,7 +205,6 @@ class Passport extends Model {
 		$this->user['nick'] = $res[0]['nick'];
 		//设置cookie和auth
 		$this->setAuth();
-		$this->setCookie();
 		//存储最近5个登陆ip
 		$res = explode(',', $res[0]['login_ip']);
 		if(empty($res[0]))
@@ -265,7 +264,6 @@ class Passport extends Model {
 			$this->user['name'] = $name;
 			$this->user['nick'] = $nick;
 			$this->setAuth();
-			$this->setCookie();
 			
 			return array('id'=>$this->user['id'], 'name'=>$this->user['name'], 'nick'=>$this->user['nick']);
 		}
@@ -763,7 +761,10 @@ class Passport extends Model {
 		}
 		
 		$cfg['where'] .= " AND `grade`>(SELECT * FROM (SELECT `grade` FROM `user_admin` WHERE `user_id`={$this->user['id']} LIMIT 1) AS `tmp`)";
+		$table = $this->table;
 		$this->table = 'user_admin';
-		return parent::delete($cfg);
+		$res = parent::delete($cfg);
+		$this->table = $table;
+		return $res;
 	}
 }

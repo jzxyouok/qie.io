@@ -139,7 +139,6 @@ array (
 	 */
 	public function delete($cfg = array('where'=>'','limit'=>0)) {
 		$db = Loader::load('Database');
-		$field = Database::setUpdateField($cfg['data'], $this->table);
 		$sql = "DELETE FROM `{$this->table}`".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['limit'])?" LIMIT {$cfg['limit']}":"");
 		return $db->execute($sql);
 	}

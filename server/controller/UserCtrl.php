@@ -64,13 +64,18 @@ class UserCtrl extends Controller {
 		
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res === false) {
+				//数据库保存失败
+				$this->message(0, '登录失败');
 			} else {
+				$psp->setCookie();
 				if($_GET['url']) {
 					header("Location: {$_GET['url']}");
 					exit;
 				}
 				
 				$this->message(1, array('id'=>$res['id'], 'name'=>$res['name'], 'nick'=>$res['nick']));
+				
 			}
 		} catch(Exception $e) {
 			$this->message(-1, $e->getMessage(), $e->getCode());
@@ -123,6 +128,7 @@ class UserCtrl extends Controller {
 				//数据库保存失败
 				$this->message(0, '注册失败');
 			} else {
+				$psp->setCookie();
 				if($_GET['url']) {
 					header("Location: {$_GET['url']}");
 					exit;

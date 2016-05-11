@@ -34,7 +34,7 @@ class Store {
 		//写文件
 		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, DIRECTORY_SEPARATOR) === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
 		if(!$fp = fopen($path, "w+"))
-			throw new StoreException('打开文件失败');
+			throw new StoreException('Store::write: 打开文件失败');
 		$value = "<?php\r\n".$value;
 		do {
 			$counter++;
@@ -65,7 +65,7 @@ class Store {
 	public function read($path) {
 		if(empty($path))
 			return false;
-			
+		
 		$path = ((false === strpos($path, DOCUMENT_ROOT) && strpos($path, DIRECTORY_SEPARATOR) === 0) ? DOCUMENT_ROOT . $path : $path) . self::EXP;
 		if(!file_exists($path))
 			return false;

@@ -23,7 +23,7 @@ class Database extends Model {
 				
 			$DBList = Loader::loadVar(APP_PATH.'/config/database.php', 'DBList');
 			if(empty($DBList) || empty($DBList[$db]))
-				throw new DatabaseException('the db option is missing.');
+				throw new DatabaseException('Database::__construct: the db option is missing.');
 		
 			$this->connect($DBList[$db]);
 		}
@@ -31,7 +31,7 @@ class Database extends Model {
 	public function connect($option) {
 		$this->db = new MySQLi($option['host'], $option['user'], $option['password'], $option['db'], $option['port']);
 		if($this->db->connect_errno)
-			throw new DatabaseException('mysqli connect failed:'.$this->db->connect_errno);
+			throw new DatabaseException('Database::connect: '.$this->db->connect_errno);
 		if(!empty($option['charset']))
 			$this->db->set_charset($option['charset']);
 	}
