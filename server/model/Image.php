@@ -22,7 +22,8 @@ class Image extends Model {
 				'bmp'	=>	array('image/bmp', 'image/x-windows-bmp'),
 				'jpeg'	=>	array('image/jpeg', 'image/pjpeg'),
 				'jpe'	=>	array('image/jpeg', 'image/pjpeg'));
-		$file->dir = DOCUMENT_ROOT.'/user_files/upload/' . date("Ymd");
+		$file->dir = '/user_files/upload/image/' . date("Ymd");
 		$res = $file->transfer($image);
+		return $res;
 	}
 }

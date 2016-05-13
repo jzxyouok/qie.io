@@ -23,7 +23,7 @@ class File extends Model {
 	public $mimes = array(); //允许的extension(key)和mime(value)
 	public $maxSize = 5242880; //5M
 	public $timeout = 600; //上传超时时间
-	public $dir = DOCUMENT_ROOT.'/user_files/upload/';
+	public $dir = '/user_files/upload/';
 	
 	/*
 	 * 上传所有文件
@@ -34,6 +34,7 @@ class File extends Model {
 	 * @return array
 	 */
 	public function transfer($file = null, $md5 = '') {
+		$exists = false;
 		//加载mime
 		if(empty($this->mimes))
 			$this->mimes = Loader::loadVar(APP_PATH.'/config/mime.php', 'mime');
@@ -150,22 +151,52 @@ class File extends Model {
 		} else
 			$md5 = md5($file);
 		}
-		
+
 		$db = Loader::load('Database');
-		$sql = "SELECT `path` FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
+		$sql = "SELECT `path`,`md5` FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
 		$res = $db->query($sql);
-		if(!empty($res[0]['path']) && file_exists(DOCUMENT_ROOT.$res[0]['path'])) {
-			return $res[0];
-		} else {
+		if(!empty($res[0]['path'])) {
+			$exists = file_exists(DOCUMENT_ROOT.$res[0]['path']);
+			if($exists)
+				return $res[0];
+		}
+		if(!$exists) {
 			//如果已经上传过，提取信息
 			if(!empty($res[0]['path'])) {
+				$exists = true;
 				$res = pathinfo($res[0]['path']);
 				$this->dir = $res['dirname'];
 				$res = explode('.', $res['basename']);
 				$this->name = $res[0];
 				$this->extension = $res[1];
 			}
+			//如果文件不存在数据库
+			if(!Util::makeDir(DOCUMENT_ROOT.$this->dir))
+				throw new FileException('创建文件夹失败');
+			$path = $this->dir.'/'.$this->name.'.'.$this->extension;
+			// 保存文件
+			switch($switch) {
+				case 0: {
+							if(!($res = move_uploaded_file($file['tmp_name'], DOCUMENT_ROOT.$path)))
+								throw new FileException('保存文件失败,error:upl');
+						}
+						break;
+				default: {
+							if(!($res = file_put_contents(DOCUMENT_ROOT.$path, $file)))
+								throw new FileException('保存文件失败,error:onl');
+						}
+						break;
+			}
+			unset($file);
+			if(!$exists && $res) {
+				$sql = "INSERT INTO `{$this->table}` (`md5`,`path`) VALUES ('{$md5}','{$path}')";
+				$res = $db->execute($sql);
+			}
 			
+			if($res)
+				return array('md5'=>$md5, 'path'=>$path);
+			else
+				return false;
 		}
 	}
 	/*
