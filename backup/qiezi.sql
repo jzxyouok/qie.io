@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016-05-05 13:12:47
+-- Generation Time: 2016-05-13 12:16:43
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -48,13 +48,15 @@ CREATE TABLE `article` (
 --
 
 INSERT INTO `article` (`id`, `title`, `content`, `category_id`, `counter`, `keywords`, `excerpt`, `author`, `from`, `href`, `cover`, `order`, `create_time`, `tm`) VALUES
-(1, '发送到发送到', '<p>请输入文章正文</p>', 1, 0, '', '', '管理员', '', '', '', 0, '2016-05-05 08:59:27', '2016-05-05 06:59:27'),
-(2, '飞洒地方', '<p>请输入文章正文</p>', 1, 0, '', '', '管理员', '', '', '', 0, '2016-05-05 09:00:03', '2016-05-05 07:00:03'),
+(1, '发送到发送到', '<p>请输入文章正文fsad</p>', 1, 0, 'key1,key2', '', '管理员', '', '', '', 0, '2016-05-05 08:59:27', '2016-05-06 08:26:59'),
+(2, '飞洒地方', '<p>请输入文章正文fas</p>', 1, 0, 'key1', '', '管理员', '', '', '', 0, '2016-05-05 09:00:03', '2016-05-06 08:26:32'),
 (3, '飞洒地方', '<p>请输入文章正文法撒旦</p>', 9, 0, 'key1,key2,key3,aferf分,ab', '', '管理员', '', '', '', 0, '2016-05-05 09:01:15', '2016-05-05 09:32:48'),
 (4, '这是一篇带tag', '<p>请输入文章正文份饭</p>', 1, 0, '哈哈1,哈啊哈,好啊好啊', '', '管理员', '', '', '', 0, '2016-05-05 11:35:28', '2016-05-05 10:04:08'),
-(5, '发送到发送到', '<p>请输入文章正文法撒旦</p>', 1, 0, 'tag1，tag2，key1', '', '管理员', '', '', '', 0, '2016-05-05 11:39:18', '2016-05-05 09:39:18'),
-(6, '案发地方', '<p>请输入文章正文法撒旦</p>', 5, 0, 'tag1，tag2，key1', '', '管理员', '', '', '', 0, '2016-05-05 11:41:53', '2016-05-05 09:41:53'),
-(7, '案发地方法撒旦', '<p>请输入文章正文法撒旦</p>', 5, 0, 'tag1,tag2,key1', '', '管理员', '', '', '', 0, '2016-05-05 11:42:39', '2016-05-05 09:42:39');
+(5, '发送到发送到', '<p>请输入文章正文法撒旦</p>', 1, 0, 'tag1,tag2,key1', '', '管理员', '', '', '', 0, '2016-05-05 11:39:18', '2016-05-11 01:54:02'),
+(6, '案发地方', '<p>请输入文章正文法撒旦</p>', 5, 0, 'tag1,tag2,key1', '', '管理员', '', '', '', 0, '2016-05-05 11:41:53', '2016-05-11 01:54:12'),
+(7, '案发地方法撒旦', '<p>请输入文章正文法撒旦</p>', 5, 0, 'tag1,tag2,key1', '', '管理员', '', '', '', 0, '2016-05-05 11:42:39', '2016-05-05 09:42:39'),
+(8, '试试tag', '<p>试试tag请输入文章正文</p>', 7, 0, 'tag1,tag2,tag3', '份饭', '是否', '法撒旦', '法撒旦', '法撒旦', 0, '2016-05-11 03:52:44', '2016-05-11 01:52:44'),
+(9, '试试tag2', '<p>试试tag请输入文章正文</p>', 9, 0, 'tag1,tag3,汤,tag4,tag5', '', '管理员', '', '', 'ff', 0, '2016-05-11 03:55:49', '2016-05-11 02:42:02');
 
 -- --------------------------------------------------------
 
@@ -100,6 +102,30 @@ INSERT INTO `category` (`id`, `name`, `description`, `parent_id`, `root_id`, `de
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `file`
+--
+
+CREATE TABLE `file` (
+  `md5` char(32) NOT NULL DEFAULT '',
+  `path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `image`
+--
+
+CREATE TABLE `image` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `file_md5` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1982-10-21 00:00:00',
+  `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `tag`
 --
 
@@ -107,6 +133,26 @@ CREATE TABLE `tag` (
   `id` int(11) UNSIGNED NOT NULL,
   `word` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `tag`
+--
+
+INSERT INTO `tag` (`id`, `word`) VALUES
+(6, 'ab'),
+(5, 'aferf分'),
+(11, 'key1'),
+(12, 'key2'),
+(4, 'key3'),
+(7, 'tag1'),
+(8, 'tag2'),
+(9, 'tag3'),
+(32, 'tag4'),
+(33, 'tag5'),
+(22, '哈哈1'),
+(23, '哈啊哈'),
+(24, '好啊好啊'),
+(31, '汤');
 
 -- --------------------------------------------------------
 
@@ -118,6 +164,40 @@ CREATE TABLE `tag_article` (
   `tag_id` int(11) UNSIGNED NOT NULL,
   `target_id` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `tag_article`
+--
+
+INSERT INTO `tag_article` (`tag_id`, `target_id`) VALUES
+(4, 3),
+(5, 3),
+(6, 3),
+(7, 5),
+(7, 6),
+(7, 7),
+(7, 8),
+(7, 9),
+(8, 5),
+(8, 6),
+(8, 7),
+(8, 8),
+(9, 8),
+(9, 9),
+(11, 1),
+(11, 2),
+(11, 3),
+(11, 5),
+(11, 6),
+(11, 7),
+(12, 1),
+(12, 3),
+(22, 4),
+(23, 4),
+(24, 4),
+(31, 9),
+(32, 9),
+(33, 9);
 
 -- --------------------------------------------------------
 
@@ -142,25 +222,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `password`, `nick`, `email`, `create_time`, `login_time`, `login_ip`, `tm`) VALUES
-(1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-05-04 04:01:23', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-05-04 02:01:23'),
-(13, 'fasdfasdfasd', '387f418c8740acfca883caa53214abba1', 'mkferc1459424404', 'fasdfas@fasd.com', '2016-03-31 13:40:04', '2016-03-31 13:40:04', '2130706433', '2016-03-31 11:40:04'),
-(14, 'fsadfasd', '387f418c8740acfca883caa53214abba1', 'qbezli1459424424', 'fasfsad@fasdfsa.com', '2016-03-31 13:40:24', '2016-03-31 13:40:24', '2130706433', '2016-03-31 11:40:24'),
-(16, 'fasdfasdfasdfsdf', '5b65e73228f9b45e938f7f11b306c67d5', 'tkrxwx1459424686', 'fasdfassadfd@fasdfas.com', '2016-03-31 13:44:46', '2016-03-31 13:44:46', '2130706433', '2016-03-31 11:44:46'),
-(17, 'safasdfasdf', '681cb30c1be5793b51bfa1ece989b18f7', 'goqmyz1459424844', 'fsdfsad@fasdfsa.com', '2016-03-31 13:47:24', '2016-03-31 13:47:24', '2130706433', '2016-03-31 11:47:24'),
-(18, 'fasddddd', '1fe992a830802220ba37be5c3838b815e', 'tnwwqu1459425051', 'fsadfasdddddddddd@fsadf.com', '2016-03-31 13:50:51', '2016-03-31 13:50:51', '2130706433', '2016-03-31 11:50:51'),
-(19, 'fasdfsafasdf', '681cb30c1be5793b51bfa1ece989b18f7', 'qzmmpz1459425099', 'fsadfsadfs@fsad.com', '2016-03-31 13:51:39', '2016-03-31 13:59:26', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-03-31 11:59:26'),
-(20, 'fadfasdfas', '4b002bb6b207f13446d6d035373f6de53', 'ipppeg1459425619', 'fasdfasdfasd@fasdfsa.com', '2016-03-31 14:00:19', '2016-03-31 14:00:19', '2130706433', '2016-03-31 12:00:19'),
-(21, 'fsadfasfsadfasd', '1fe992a830802220ba37be5c3838b815e', 'zwlmej1459425669', 'fasdfasdfasdf@fasd.com', '2016-03-31 14:01:09', '2016-03-31 14:01:09', '2130706433', '2016-03-31 12:01:09'),
-(22, 'fasdfasdf', '387f418c8740acfca883caa53214abba1', 'ninoke', 'fasdfas@fasdfas.com', '2016-03-31 14:02:02', '2016-03-31 14:25:21', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-03-31 12:25:21'),
-(23, 'fasdfasdfsa', '0612a62af1483892679fbd010931f5e81', 'dwjgps1459427240', 'fsadfasddddddd@fasd.com', '2016-03-31 14:27:20', '2016-04-01 04:59:09', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-04-01 02:59:09'),
+(1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-05-11 04:40:22', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-05-11 02:40:22'),
 (24, 'fsadfasdf', '1fe992a830802220ba37be5c3838b815e', 'fasfasd', 'fasfs@fasdfasd.co', '2016-04-01 08:26:54', '2016-04-12 10:40:45', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-04-12 08:40:45'),
-(26, 'fsadfsadffasdfasdf', '0612a62af1483892679fbd010931f5e81', 'sdlyoi1460445699', 'fsadfsaasdfasd@fsdfsadfadfas.com', '2016-04-12 09:21:39', '2016-04-12 09:21:39', '2130706433', '2016-04-12 07:21:39'),
-(27, 'fsadfasdfasdfsadf', '5b65e73228f9b45e938f7f11b306c67d5', 'cvkfsu1460445747', 'fasdfsadf2@fasdf.com', '2016-04-12 09:22:27', '2016-04-12 09:22:27', '2130706433', '2016-04-12 07:22:27'),
-(30, 'aaaaaaaaaaaaaaaa', '1fe992a830802220ba37be5c3838b815e', 'trpavn1460447812', 'fsadfsa@fasddddddddddddd.com', '2016-04-12 09:56:52', '2016-04-12 09:56:52', '2130706433', '2016-04-12 07:56:52'),
-(36, 'ffffffffasddddddddddd', '297c53d5571130cf0ff5e770108b6a53a', 'ffffffffasddddddddddd', 'ffffffffasddddddddddd@fsad.com', '2016-04-13 13:41:34', '2016-04-13 13:41:34', '2130706433', '2016-04-13 11:41:34'),
-(37, 'fffffffffffffsadfff', '3db8df79782f7749587ef5846c68c0321', 'suitzt146054888', 'fffffffffffffsad@fffffffffff22ff.com', '2016-04-13 13:42:18', '2016-04-25 09:35:00', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-04-28 07:10:13'),
-(38, 'test38', '57dc06554bf7bf68806de31ac4aba205b', 'test38nick', 'test38@38.com', '1982-10-21 00:00:00', '2016-04-26 04:23:34', '2130706433', '2016-04-26 02:23:34'),
-(39, 'test68n', '387f418c8740acfca883caa53214abba1', 'ftest68n', 'test68n@fasd.com', '1982-10-21 00:00:00', '2016-04-28 09:58:28', '2130706433', '2016-04-28 07:58:28');
+(39, 'test68nffff', '387f418c8740acfca883caa53214abba1', 'ftest68n', 'test68n@fasd.com', '1982-10-21 00:00:00', '2016-04-28 09:58:28', '2130706433', '2016-05-11 03:43:38'),
+(40, 'test168', '1fe992a830802220ba37be5c3838b815e', 'pjlyzs1462936582', 'test168@163.com', '2016-05-11 05:16:22', '2016-05-11 05:26:40', '2130706433,2130706433', '2016-05-11 03:26:40');
 
 -- --------------------------------------------------------
 
@@ -181,8 +246,7 @@ CREATE TABLE `user_admin` (
 
 INSERT INTO `user_admin` (`user_id`, `code`, `password`, `grade`) VALUES
 (1, 'xq1/', 'c816215b20af26b3697a0d563bd9ee8d', 0),
-(24, 'mJbd', '3b5a7c7d8d8b294ce584d47bdd3c59ac', 0),
-(39, 'Mlxz', '0700829b5526fa23d7e2298fb5ba4e9b', 1);
+(24, 'mJbd', '3b5a7c7d8d8b294ce584d47bdd3c59ac', 0);
 
 -- --------------------------------------------------------
 
@@ -214,6 +278,18 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
   ADD KEY `parent` (`parent_id`,`id`);
+
+--
+-- Indexes for table `file`
+--
+ALTER TABLE `file`
+  ADD PRIMARY KEY (`md5`);
+
+--
+-- Indexes for table `image`
+--
+ALTER TABLE `image`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tag`
@@ -257,22 +333,27 @@ ALTER TABLE `user_profile`
 -- 使用表AUTO_INCREMENT `article`
 --
 ALTER TABLE `article`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- 使用表AUTO_INCREMENT `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
+-- 使用表AUTO_INCREMENT `image`
+--
+ALTER TABLE `image`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
 -- 使用表AUTO_INCREMENT `tag`
 --
 ALTER TABLE `tag`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 --
 -- 使用表AUTO_INCREMENT `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

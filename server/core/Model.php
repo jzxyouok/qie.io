@@ -14,6 +14,8 @@ class Model {
 	protected $error = array('code'=>0, 'msg'=>''); //错误代码和信息
 	const MAX_PAGE_ROW = 100; //分页最大数
 	
+	function __construct(){}
+	
 	protected function error($code= 0, $msg= '') {
 		$this->error = array('code'=>(int)$code, 'msg'=> (string)$msg);
 		return $this->error;

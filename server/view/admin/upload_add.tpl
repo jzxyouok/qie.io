@@ -27,7 +27,7 @@
       </div>
       <div class="panel default-panel center">
       <h3 class="head">上传图片</h3><div class="body">
-        <form id="upload_image" class="default-form" action="<{$admin_dir}>/index.php/upload/insert_image/" method="post">
+        <form id="upload_image" class="default-form" action="<{$admin_dir}>/index.php/upload/insert_image/" method="post" enctype="multipart/form-data">
           <fieldset>
             <div class="input-group">
               <label>
@@ -75,9 +75,33 @@
       </div>
   </div>
   <{include file="./footer.tpl"}> </div>
-<{include file="../common/js.tpl"}> 
+<{include file="../common/js.tpl"}>
+<script src="/static/js/ajaxfileupload.js"></script>
 <script>
-
+document.getElementById('upload_image').addEventListener('submit', function(e){
+	e.preventDefault();
+	
+	var file = document.getElementById('image_file');
+	console.log(file.id,file.name);
+	if(!/\.(?:jpg|jpeg|png|gif)$/i.test(file.value)) {
+		alert('图片格式错误');
+		return;
+	}
+	$.ajaxFileUpload({
+				url:this.action, 
+				secureuri:false,
+				fileElementId:file.id,
+				dataType: 'text',
+				data:{},
+				success: function (data, status) {
+					data = JSON.parse(data);
+					console.info(data);
+				},
+				error: function (data, status, e) {
+					console.info(data)
+				}
+			})
+});
 </script>
 </body>
 </html>

@@ -65,6 +65,67 @@ class UploadCtrl extends Controller {
 		}
 	}
 	//删除
+	function insert_image($t = 'local') {
+		try {
+			$file = NULL;
+			//处理图片信息
+			switch($t) {
+				case 'flash': {
+					//flash方式上传
+					switch($ext) {
+						case 'jpg': $_FILES['image_file']['type'] = 'image/jpeg';
+						break;
+						case 'png': $_FILES['image_file']['type'] = 'image/png';
+						break;
+						case 'gif': $_FILES['image_file']['type'] = 'image/gif';
+						break;
+						case 'bmp': $_FILES['image_file']['type'] = 'image/bmp';
+						break;
+						default:break;
+					}
+					$file = $_FILES['image_file'];
+					unset($_FILES['image_file']);
+				}
+				break;
+				case 'online': {
+					//在线图片上传
+					$file = $_POST['url'];
+					if(!preg_match('/^(?:https?:)\/\/.+/i', $file))
+						$this->message(-1,'','请提交一个正确的url地址');
+					
+					$ext = substr($file, strrpos($file, '.')+1);
+					if(empty($ext)) {
+						$ext = 'jpg';
+						$image->setExt($ext);
+					}
+				}
+				break;
+				case 'base64': {
+					//base64方式上传
+					
+				}
+				break;
+				default: {
+					//默认本地上传
+					$file = $_FILES['image_file'];
+					unset($_FILES['image_file']);
+				}
+			}
+			$image = Loader::load('model/Image');
+			$res = $image->upload($file);
+			
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
+		}
+	}
+	//删除
 	function delete($ids = 0) {
 		if(empty($ids))
 			$ids = $_POST['ids'];
