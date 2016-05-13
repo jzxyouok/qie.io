@@ -137,8 +137,36 @@ class File extends Model {
 			break;
 			default: return false;
 		}
-		
+		//文件检查
 		$this->verify();
+		//获取文件md5
+		if(empty($md5)) {
+			if($switch == 0) {
+			if(is_readable($file['tmp_name']) && ($res = file_get_contents($file['tmp_name']))) {
+				$md5 = md5($res);
+				$res = NULL;
+			} else
+				throw new FileException('读取临时文件失败');
+		} else
+			$md5 = md5($file);
+		}
+		
+		$db = Loader::load('Database');
+		$sql = "SELECT `path` FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
+		$res = $db->query($sql);
+		if(!empty($res[0]['path']) && file_exists(DOCUMENT_ROOT.$res[0]['path'])) {
+			return $res[0];
+		} else {
+			//如果已经上传过，提取信息
+			if(!empty($res[0]['path'])) {
+				$res = pathinfo($res[0]['path']);
+				$this->dir = $res['dirname'];
+				$res = explode('.', $res['basename']);
+				$this->name = $res[0];
+				$this->extension = $res[1];
+			}
+			
+		}
 	}
 	/*
 	 * 做安全检查，并且重命名文件

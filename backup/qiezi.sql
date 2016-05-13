@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016-05-13 12:16:43
+-- Generation Time: 2016-05-13 12:23:50
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -118,7 +118,7 @@ CREATE TABLE `file` (
 
 CREATE TABLE `image` (
   `id` int(11) UNSIGNED NOT NULL,
-  `file_md5` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `file_md5` char(32) NOT NULL DEFAULT '',
   `create_time` datetime NOT NULL DEFAULT '1982-10-21 00:00:00',
   `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
