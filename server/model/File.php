@@ -26,15 +26,17 @@ class File extends Model {
 	public $dir = '/user_files/upload/';
 	
 	/*
-	 * 上传所有文件
+	 * 上传文件
 	 * 为了加快速度，不做真实文件头判断
 	 *
 	 * @param object $file 需要上传的文件resource，可以是$_FILES，在线文件或者二进制流
 	 *
 	 * @return array
 	 */
-	public function transfer($file = null, $md5 = '') {
-		$exists = false;
+	public function transfer($file = null) {
+		if(empty($file))
+			return false;
+
 		//加载mime
 		if(empty($this->mimes))
 			$this->mimes = Loader::loadVar(APP_PATH.'/config/mime.php', 'mime');
@@ -49,15 +51,15 @@ class File extends Model {
 		switch($switch) {
 			case 0: { //post方式
 				if(!is_uploaded_file($file['tmp_name']))
-					throw new FileException('post上传方式错误');
+					throw new FileException('File::transfer: post上传方式错误');
 				if($file['error'])
-					throw new FileException('上传时发生错误:'.$file['error']);
+					throw new FileException('File::transfer: 上传时发生错误 '.$file['error']);
 				//获取扩展名
 				if(empty($this->extension) && ($res = strrpos($file['name'], '.')))
 					$this->extension = strtolower(substr($file['name'], $res+1));
 				//获取文件大小
 				$this->size = $file['size'];
-				//获取文件类型
+				//获取文件mime
 				if(function_exists('finfo_open')) {
 					$finfo = finfo_open(FILEINFO_MIME);
 					$this->mime = strtolower(finfo_file($finfo, $file['tmp_name']));
@@ -76,7 +78,7 @@ class File extends Model {
 					//改用curl方式获取
 					$res = Utils::curlGetHeaders($file, true);
 					if(empty($res))
-						throw new FileException('远程文件不存在');
+						throw new FileException('File::transfer: 远程文件不存在');
 				}
 				//if(false === strpos($res[0], '200'))
 				//	throw new FileException('获取文件被禁止');
@@ -92,44 +94,40 @@ class File extends Model {
 					}
 				}
 				if($forbid)
-					throw new FileException('被禁止获取远程文件');
+					throw new FileException('File::transfer: 被禁止获取远程文件');
 				/* 获取的mime不一定正确 */
-				if(is_array($res['Content-Type'])) {
-					$this->mime = $res['Content-Type'][1];
-				} else
-					$this->mime = strtolower($res['Content-Type']);
+				$this->mime = strtolower(is_array($res['Content-Type'])?$res['Content-Type'][1]:$res['Content-Type']);
 				
 				//提取文件信息
 				//$res = explode('.', basename($file));
 				//$this->extension = $res[1];
-				if(empty($this->extension))
-					$this->extension = strtolower(substr($file, strrpos($file, '.')+1)); //获取扩展名，有些在线资源可能没有扩展名
-				$file_ = $file; //用curl获取的时候需要
+				if(empty($this->extension) && ($res = strrpos($file, '.')))
+					$this->extension = strtolower(substr($file, $res+1)); //获取扩展名，有些在线资源可能没有扩展名
+				$res = $file; //用curl获取的时候需要地址
 				$file = file_get_contents($file);
 				if(empty($file)) {
 					//改用curl方式获取
-					if(!($file = Utils::curlGetContents($file_)))
-						throw new FileException('读取远程文件失败');
+					if(!($file = Utils::curlGetContents($res)))
+						throw new FileException('File::transfer: 读取远程文件失败');
 				}
-				unset($file_);
 				$this->size = strlen($file); //获取文件大小
 			}
 			break;
 			case 2: { //base64，需提前设置ext
 				if(empty($this->extension))
-					throw new FileException('丢失文件扩展名');
-				$this->mime = $res[1];
+					throw new FileException('File::transfer: 丢失文件扩展名');
+				$this->mime = strtolower($res[1]);
 				$file = base64_decode(substr($file, strlen($res[0])), true);
 				$this->size = strlen($file); //获取文件大小
 			}
 			break;
 			case 3: { //二进制流
 				if(empty($this->extension))
-					throw new FileException('丢失文件扩展名');
+					throw new FileException('File::transfer: 丢失文件扩展名');
 				else
 					$this->extension = strtolower($this->extension);
 				if(empty($this->mime))
-					throw new FileException('丢失文件类型');
+					throw new FileException('File::transfer: 丢失文件类型');
 				else
 					$this->mime = strtolower($this->mime);
 				//提取文件信息
@@ -138,33 +136,25 @@ class File extends Model {
 			break;
 			default: return false;
 		}
-		//文件检查
+		//文件安全检查
 		$this->verify();
 		//获取文件md5
-		if(empty($md5)) {
-			if($switch == 0) {
-			if(is_readable($file['tmp_name']) && ($res = file_get_contents($file['tmp_name']))) {
-				$md5 = md5($res);
-				$res = NULL;
-			} else
-				throw new FileException('读取临时文件失败');
+		if($switch == 0) {
+			if(!is_readable($file['tmp_name']) || !($md5 = md5_file($file['tmp_name'])))
+				throw new FileException('File::transfer: 读取临时文件失败');
 		} else
 			$md5 = md5($file);
-		}
-
-		$db = Loader::load('Database');
-		$sql = "SELECT `path`,`md5` FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
-		$res = $db->query($sql);
-		if(!empty($res[0]['path'])) {
-			$exists = file_exists(DOCUMENT_ROOT.$res[0]['path']);
-			if($exists)
-				return $res[0];
-		}
-		if(!$exists) {
+		
+		//检查文件状态（是否存在）
+		$res = $this->exists($md5);
+		//处理文件
+		if(!$res || !$res['exists']) {
+			// echo 'not exists '.$md5;
+			$exists = false;
 			//如果已经上传过，提取信息
-			if(!empty($res[0]['path'])) {
-				$exists = true;
-				$res = pathinfo($res[0]['path']);
+			if(!empty($res['path'])) {
+				$exists = true; //记录存在但文件不存在
+				$res = pathinfo($res['path']);
 				$this->dir = $res['dirname'];
 				$res = explode('.', $res['basename']);
 				$this->name = $res[0];
@@ -172,23 +162,24 @@ class File extends Model {
 			}
 			//如果文件不存在数据库
 			if(!Util::makeDir(DOCUMENT_ROOT.$this->dir))
-				throw new FileException('创建文件夹失败');
+				throw new FileException('File::transfer: 创建文件夹失败');
 			$path = $this->dir.'/'.$this->name.'.'.$this->extension;
 			// 保存文件
 			switch($switch) {
 				case 0: {
 							if(!($res = move_uploaded_file($file['tmp_name'], DOCUMENT_ROOT.$path)))
-								throw new FileException('保存文件失败,error:upl');
+								throw new FileException('File::transfer: 保存文件失败,error upl');
 						}
 						break;
 				default: {
 							if(!($res = file_put_contents(DOCUMENT_ROOT.$path, $file)))
-								throw new FileException('保存文件失败,error:onl');
+								throw new FileException('File::transfer: 保存文件失败,error onl');
 						}
 						break;
 			}
 			unset($file);
-			if(!$exists && $res) {
+			if(!$exists) {
+				$db = Loader::load('Database');
 				$sql = "INSERT INTO `{$this->table}` (`md5`,`path`) VALUES ('{$md5}','{$path}')";
 				$res = $db->execute($sql);
 			}
@@ -198,6 +189,29 @@ class File extends Model {
 			else
 				return false;
 		}
+		// echo 'exists '.$md5;
+		return array('md5'=>$md5, 'path'=>$res['path']);
+	}
+	/*
+	 * 检查文件是否存在
+	 *
+	 * @param string $md5
+	 *
+	 * @return array;
+	 *
+	 */
+	public function exists($md5 = '') {
+		if(empty($md5))
+			return false;
+
+		$db = Loader::load('Database');
+		$sql = "SELECT `path` FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
+		$res = $db->query($sql);
+		if(empty($res[0]['path']))
+			return false;
+
+		$res[0]['exists'] = file_exists(DOCUMENT_ROOT.$res[0]['path']);
+		return $res[0];
 	}
 	/*
 	 * 做安全检查，并且重命名文件

@@ -43,7 +43,7 @@
       </div>
       <div class="panel default-panel center">
       <h3 class="head">保存在线图片</h3><div class="body">
-        <form id="upload_image_online" class="default-form" action="<{$admin_dir}>/index.php/upload/insert_image/" method="post">
+        <form id="upload_image_online" class="default-form" action="<{$admin_dir}>/index.php/upload/insert_image/online/" method="post">
           <fieldset>
             <div class="input-group">
               <label>
@@ -82,7 +82,6 @@ document.getElementById('upload_image').addEventListener('submit', function(e){
 	e.preventDefault();
 	
 	var file = document.getElementById('image_file');
-	console.log(file.id,file.name);
 	if(!/\.(?:jpg|jpeg|png|gif)$/i.test(file.value)) {
 		alert('图片格式错误');
 		return;
@@ -101,6 +100,23 @@ document.getElementById('upload_image').addEventListener('submit', function(e){
 					console.info(data)
 				}
 			})
+});
+document.getElementById('upload_image_online').addEventListener('submit', function(e){
+  e.preventDefault();
+  var data = $u.getFormValues(this);
+  
+  $.ajax({url:this.action,
+      method: this.method,
+      data: data,
+      dataType: 'json',
+      success: function(data){
+                  if(data.status< 1) {
+                    alert(data.result);
+                  } else {
+                    alert('done');
+                  }},
+      error: function(xhr, data) {}
+  })
 });
 </script>
 </body>

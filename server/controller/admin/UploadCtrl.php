@@ -89,7 +89,7 @@ class UploadCtrl extends Controller {
 				break;
 				case 'online': {
 					//在线图片上传
-					$file = $_POST['url'];
+					$file = $_POST['file_url'];
 					if(!preg_match('/^(?:https?:)\/\/.+/i', $file))
 						$this->message(-1,'','请提交一个正确的url地址');
 					
