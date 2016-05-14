@@ -68,6 +68,7 @@ class UploadCtrl extends Controller {
 	function insert_image($t = 'local') {
 		try {
 			$file = NULL;
+			$image = Loader::load('model/Image');
 			//处理图片信息
 			switch($t) {
 				case 'flash': {
@@ -87,6 +88,11 @@ class UploadCtrl extends Controller {
 					unset($_FILES['image_file']);
 				}
 				break;
+				case 'base64': {
+					//base64方式上传
+					
+				}
+				break;
 				case 'online': {
 					//在线图片上传
 					$file = $_POST['file_url'];
@@ -94,15 +100,9 @@ class UploadCtrl extends Controller {
 						$this->message(-1,'','请提交一个正确的url地址');
 					
 					$ext = substr($file, strrpos($file, '.')+1);
-					if(empty($ext)) {
-						$ext = 'jpg';
-						$image->setExt($ext);
+					if(empty($ext) || !in_array($ext, array('jpg','jpeg','png','gif','bmp'))) {
+						$image->extension = 'jpg';
 					}
-				}
-				break;
-				case 'base64': {
-					//base64方式上传
-					
 				}
 				break;
 				default: {
@@ -111,7 +111,6 @@ class UploadCtrl extends Controller {
 					unset($_FILES['image_file']);
 				}
 			}
-			$image = Loader::load('model/Image');
 			$res = $image->upload($file);
 			
 			if(!empty($res['code'])) {

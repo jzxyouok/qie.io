@@ -94,6 +94,7 @@ document.getElementById('upload_image').addEventListener('submit', function(e){
 				data:{},
 				success: function (data, status) {
 					data = JSON.parse(data);
+          alert(data.result);
 					console.info(data);
 				},
 				error: function (data, status, e) {
@@ -110,11 +111,8 @@ document.getElementById('upload_image_online').addEventListener('submit', functi
       data: data,
       dataType: 'json',
       success: function(data){
-                  if(data.status< 1) {
-                    alert(data.result);
-                  } else {
-                    alert('done');
-                  }},
+                  alert(data.result);
+                },
       error: function(xhr, data) {}
   })
 });

@@ -179,6 +179,28 @@ class File extends Model {
 			}
 			unset($file);
 			if(!$exists) {
+				if(in_array($this->extension, array('jpg','jpeg','bmp','png','gif'))) {
+					//为图片判断高宽
+					$orientation = 0;
+					if(function_exists('exif_read_data')) {
+						$res = exif_read_data(DOCUMENT_ROOT . $path);
+						$width = $res['COMPUTED']['Width'];
+						$height = $res['COMPUTED']['Height'];
+						$orientation = (int)$res['Orientation']; //1:0°，6:顺时针90°，8:逆时针90°，3:180°
+					}
+					if(empty($width) || empty($height)) {
+						$res = getimagesize(DOCUMENT_ROOT . $path);
+						$width = $res[0];
+						$height = $res[1];
+					}
+			
+					$name = "{$this->name}_{$width}x{$height}x{$orientation}";
+					if(rename(DOCUMENT_ROOT . $path, DOCUMENT_ROOT . $this->dir . '/' . $name . '.' . $this->extension)) {
+						$this->name = $name;
+						$path = $this->dir . '/' . $this->name . '.' . $this->extension;
+					}
+				}
+				
 				$db = Loader::load('Database');
 				$sql = "INSERT INTO `{$this->table}` (`md5`,`path`) VALUES ('{$md5}','{$path}')";
 				$res = $db->execute($sql);
