@@ -137,7 +137,43 @@ class File extends Model {
 			default: return false;
 		}
 		//文件安全检查
-		$this->verify();
+		//如果新文件名为空，生成新文件名
+		if(empty($this->name))
+			$this->name = $_SERVER['REQUEST_TIME'] . rand(10, 99);
+		//如果名字重复
+		$counter = 0;
+		while(file_exists($this->dir . '/' . $this->name . '.' . $this->extension)) {
+			$this->name = $this->name.$counter++;
+			if($counter >= 100)
+				throw new FileException('File::verify: 生成文件名失败');
+		}
+		//判断文件大小
+		if($this->size > $this->maxSize)
+			throw new FileException('File::verify: 文件大小超出范围');
+		//判断文件扩展名
+		$this->extension = strtolower($this->extension);
+		if(empty($this->extension) || empty($this->mimes[$this->extension]))
+			throw new FileException('File::verify: 不支持的文件类型');
+		//判断文件类型 并修正类型(针对本地文件)
+		$ext = '';
+		foreach($this->mimes as $k => $v) {
+			if(is_array($v)) {
+				if(in_array($this->mime, $v)) {
+					$ext = $k;
+					break;
+				}
+			} else {
+				if($this->mime == $v) {
+					$ext = $k;
+					break;
+				}
+			}
+		}
+		
+		if(empty($ext))
+			throw new FileException('File::verify: 不安全的文件类型');
+		else
+			$this->extension = $ext;
 		//获取文件md5
 		if($switch == 0) {
 			if(!is_readable($file['tmp_name']) || !($md5 = md5_file($file['tmp_name'])))
@@ -179,7 +215,7 @@ class File extends Model {
 			}
 			unset($file);
 			if(!$exists) {
-				if(in_array($this->extension, array('jpg','jpeg','bmp','png','gif'))) {
+				if(in_array($this->extension, array('jpg','png','gif','bmp','jpeg'))) {
 					//为图片判断高宽
 					$orientation = 0;
 					if(function_exists('exif_read_data')) {
@@ -234,47 +270,5 @@ class File extends Model {
 
 		$res[0]['exists'] = file_exists(DOCUMENT_ROOT.$res[0]['path']);
 		return $res[0];
-	}
-	/*
-	 * 做安全检查，并且重命名文件
-	 */
-	private function verify() {
-		//如果新文件名为空，生成新文件名
-		if(empty($this->name))
-			$this->name = $_SERVER['REQUEST_TIME'] . rand(10, 99);
-		//如果名字重复
-		$counter = 0;
-		while(file_exists($this->dir . '/' . $this->name . '.' . $this->extension)) {
-			$this->name = $this->name.$counter++;
-			if($counter >= 100)
-				throw new FileException('File::verify: 生成文件名失败');
-		}
-		//判断文件大小
-		if($this->size > $this->maxSize)
-			throw new FileException('File::verify: 文件大小超出范围');
-		//判断文件扩展名
-		$this->extension = strtolower($this->extension);
-		if(empty($this->extension) || empty($this->mimes[$this->extension]))
-			throw new FileException('File::verify: 不支持的文件类型');
-		//判断文件类型 并修正类型(针对本地文件)
-		$ext = '';
-		foreach($this->mimes as $k => $v) {
-			if(is_array($v)) {
-				if(in_array($this->mime, $v)) {
-					$ext = $k;
-					break;
-				}
-			} else {
-				if($this->mime == $v) {
-					$ext = $k;
-					break;
-				}
-			}
-		}
-		
-		if(empty($ext))
-			throw new FileException('File::verify: 不安全的文件类型');
-		else
-			$this->extension = $ext;
 	}
 }
