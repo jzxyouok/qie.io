@@ -99,9 +99,9 @@ class File extends Model {
 				else {
 					foreach($res as $v) {
 						if(is_string($v) && false !== strpos($v, '200')) {
-								$forbid = false;
-								break;
-							}
+							$forbid = false;
+							break;
+						}
 					}
 				}
 				if($forbid)
@@ -255,7 +255,7 @@ class File extends Model {
 			}
 		}
 		if(empty($extension))
-			throw new FileException('File::transfer: 不安全的文件类型');
+			throw new FileException('File::verify: 不安全的文件类型');
 		//判断文件扩展名
 		if(empty($this->extension))
 			$this->extension = strtolower($extension);
