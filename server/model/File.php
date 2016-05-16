@@ -89,7 +89,7 @@ class File extends Model {
 				//直接判断$res[0]
 				if(empty($res)) {
 					//改用curl方式获取
-					$res = Utils::curlGetHeaders($file, true);
+					$res = Util::curlGetHeaders($file, true);
 					if(empty($res))
 						throw new FileException('File::transfer: 远程文件不存在');
 				}
@@ -115,7 +115,7 @@ class File extends Model {
 				$file = file_get_contents($file);
 				if(empty($file)) {
 					//改用curl方式获取
-					if(!($file = Utils::curlGetContents($res)))
+					if(!($file = Util::curlGetContents($res)))
 						throw new FileException('File::transfer: 读取远程文件失败');
 				}
 				$this->size = strlen($file); //获取文件大小
