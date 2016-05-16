@@ -67,6 +67,7 @@ class Image extends Model {
 		if(!Util::makeDir(dirname($target)))
 			return false;
 		
+		$image = NULL;
 		//源图扩展名
 		if(empty($param['image_extension'])) {
 			$originExt = substr($origin, strrpos($origin,'.')+1);
@@ -75,17 +76,28 @@ class Image extends Model {
 		//缩略图扩展名
 		$targetExt = substr($target, strrpos($target,'.')+1);
 		
+		if(($originExt == 'jpg' || $originExt == 'jpeg') && function_exists('imagecreatefromjpeg')){
+  		$imageCreateFrom = 'imagecreatefromjpeg';
+		} else if($originExt == 'png' && function_exists('imagecreatefrompng')){
+			$imageCreateFrom = 'imagecreatefrompng';
+		} else if($originExt == 'gif' && function_exists('imagecreatefromgif')){
+			$imageCreateFrom = 'imagecreatefromgif';
+		} else
+			$imageCreateFrom = NULL;
+			
 		if(empty($param['image_width']) || empty($param['image_height'])) {
-			$size = getimagesize($origin);
-			if(empty($size))
+			if($imageCreateFrom) {
+				$image = $imageCreateFrom($origin);
+			} else
 				return false;
+				
 			//文件原始大小
-			$param['image_width'] = $size[0];
-			$param['image_height'] = $size[1];
+			$param['image_width'] = imagesx($image);
+			$param['image_height'] = imagesy($image);
 		}
 		$param['max_width'] = is_numeric($param['max_width'])?(int)$param['max_width']:200;
 		$param['max_height'] = is_numeric($param['max_height'])?(int)$param['max_height']:200;
-		//直接复制文件（1.相同扩展名;2.有一边小于最大值）
+		//直接复制文件（1.相同扩展名;）
 		if($originExt == $targetExt && ($param['max_width'] >= $param['image_width'] && $param['max_height'] >= $param['image_height'])) {
 			return copy($origin, $target);
 		}
@@ -93,25 +105,19 @@ class Image extends Model {
 		$ratio = min($param['max_width']/$param['image_width'], $param['max_height']/$param['image_height']); //生成新比例
 		
 		if($param['image_width'] > 3000 || $param['image_height'] > 3000)
-			$memory = 64;
+			$memory = 32;
 		else {
 			$memory = ceil($param['image_width']*$param['image_height']*(24/4)/1024000);
 			if($memory > 128)
 				$memory = 128;
-				
-			if($memory < 32)
+			else if($memory < 32)
 				$memory = 32;
 		}
 		ini_set('memory_limit', $memory.'M');
     //根据扩展名使用不同的生成方法
-   	if(($originExt == 'jpg' || $originExt == 'jpeg') && function_exists('imagecreatefromjpeg')){
-  		$image = imagecreatefromjpeg($origin);
-		} else if($originExt == 'png' && function_exists('imagecreatefrompng')){
-			$image = imagecreatefrompng($origin);
-		} else if($originExt == 'gif' && function_exists('imagecreatefromgif')){
-			$image = imagecreatefromgif($origin);
-		} else
-			return false;
+		if($imageCreateFrom && empty($image)) {
+			$image = $imageCreateFrom($origin);
+		} return false;
 
 		//如果生成失败
 		if(empty($image))
