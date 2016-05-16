@@ -9,7 +9,20 @@
  */
  /*
   * database
- 
+CREATE TABLE `file` (
+  `md5` char(32) NOT NULL DEFAULT '',
+  `path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `file`
+--
+ALTER TABLE `file`
+  ADD PRIMARY KEY (`md5`);
   */
 
 class FileException extends Exception {}
@@ -40,12 +53,12 @@ class File extends Model {
 		//加载mime
 		if(empty($this->mimes))
 			$this->mimes = Loader::loadVar(APP_PATH.'/config/mime.php', 'mime');
-		
+		//判断数据源类型 0:post文件类型;1:远程文件;2:base64;3:二进制流
 		if(is_string($file)) {
 			$file = trim($file);
 			$switch = (0 === strpos($file, 'http://') || 0 === strpos($file, 'https://') ? 1 : (false !== preg_match("/data:([a-z]+\/[a-z0-9.-]+);base64,/i", $file, $res)? 2 : 3));
 		} else
-			$switch = 0; //0:post文件类型,1:远程文件,2:base64,3:二进制流
+			$switch = 0;
 		
 		ini_set('max_execution_time', $this->timeout);
 		switch($switch) {
@@ -80,8 +93,6 @@ class File extends Model {
 					if(empty($res))
 						throw new FileException('File::transfer: 远程文件不存在');
 				}
-				//if(false === strpos($res[0], '200'))
-				//	throw new FileException('获取文件被禁止');
 				$forbid = true;
 				if(false !== strpos($res[0], '200'))
 					$forbid = false;
@@ -99,8 +110,6 @@ class File extends Model {
 				$this->mime = strtolower(is_array($res['Content-Type'])?$res['Content-Type'][1]:$res['Content-Type']);
 				
 				//提取文件信息
-				//$res = explode('.', basename($file));
-				//$this->extension = $res[1];
 				if(empty($this->extension) && ($res = strrpos($file, '.')))
 					$this->extension = strtolower(substr($file, $res+1)); //获取扩展名，有些在线资源可能没有扩展名
 				$res = $file; //用curl获取的时候需要地址
@@ -113,19 +122,13 @@ class File extends Model {
 				$this->size = strlen($file); //获取文件大小
 			}
 			break;
-			case 2: { //base64，需提前设置ext
-				if(empty($this->extension))
-					throw new FileException('File::transfer: 丢失文件扩展名');
+			case 2: { //base64
 				$this->mime = strtolower($res[1]);
 				$file = base64_decode(substr($file, strlen($res[0])), true);
 				$this->size = strlen($file); //获取文件大小
 			}
 			break;
 			case 3: { //二进制流
-				if(empty($this->extension))
-					throw new FileException('File::transfer: 丢失文件扩展名');
-				else
-					$this->extension = strtolower($this->extension);
 				if(empty($this->mime))
 					throw new FileException('File::transfer: 丢失文件类型');
 				else
@@ -136,6 +139,7 @@ class File extends Model {
 			break;
 			default: return false;
 		}
+		
 		//文件安全检查
 		//如果新文件名为空，生成新文件名
 		if(empty($this->name))
@@ -150,30 +154,30 @@ class File extends Model {
 		//判断文件大小
 		if($this->size > $this->maxSize)
 			throw new FileException('File::verify: 文件大小超出范围');
-		//判断文件扩展名
-		$this->extension = strtolower($this->extension);
-		if(empty($this->extension) || empty($this->mimes[$this->extension]))
+		//如果存在文件扩展名
+		if(!empty($this->extension) && empty($this->mimes[$this->extension]))
 			throw new FileException('File::verify: 不支持的文件类型');
 		//判断文件类型 并修正类型(针对本地文件)
-		$ext = '';
+		$extension = '';
 		foreach($this->mimes as $k => $v) {
 			if(is_array($v)) {
 				if(in_array($this->mime, $v)) {
-					$ext = $k;
+					$extension = $k;
 					break;
 				}
 			} else {
 				if($this->mime == $v) {
-					$ext = $k;
+					$extension = $k;
 					break;
 				}
 			}
 		}
-		
-		if(empty($ext))
+		if(empty($extension))
 			throw new FileException('File::verify: 不安全的文件类型');
-		else
-			$this->extension = $ext;
+		//判断文件扩展名
+		if(empty($this->extension))
+			$this->extension = strtolower($extension);
+		
 		//获取文件md5
 		if($switch == 0) {
 			if(!is_readable($file['tmp_name']) || !($md5 = md5_file($file['tmp_name'])))
