@@ -83,14 +83,12 @@ class Image extends Model {
 		} else if($originExt == 'gif' && function_exists('imagecreatefromgif')){
 			$imageCreateFrom = 'imagecreatefromgif';
 		} else
-			$imageCreateFrom = NULL;
+			return copy($origin, $target); //只支持jpg/png/gif
 			
 		if(empty($param['image_width']) || empty($param['image_height'])) {
-			if($imageCreateFrom) {
-				$image = $imageCreateFrom($origin);
-			} else
-				return false;
-				
+			if(!($image = $imageCreateFrom($origin)))
+				return false; //如果生成失败
+			
 			//文件原始大小
 			$param['image_width'] = imagesx($image);
 			$param['image_height'] = imagesy($image);
@@ -115,13 +113,8 @@ class Image extends Model {
 		}
 		ini_set('memory_limit', $memory.'M');
     //根据扩展名使用不同的生成方法
-		if($imageCreateFrom && empty($image)) {
-			$image = $imageCreateFrom($origin);
-		} return false;
-
-		//如果生成失败
-		if(empty($image))
-			return false;
+		if(empty($image) && !($image = $imageCreateFrom($origin)))
+			return false; //如果生成失败
 		
 		//新图片宽高度
 		$newWidth = floor($param['image_width']*$ratio);
