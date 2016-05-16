@@ -61,6 +61,7 @@ class File extends Model {
 			$switch = 0;
 		
 		ini_set('max_execution_time', $this->timeout);
+		
 		switch($switch) {
 			case 0: { //post方式
 				if(!is_uploaded_file($file['tmp_name']))
@@ -87,11 +88,9 @@ class File extends Model {
 			case 1: { //在线文件
 				$res = get_headers($file, true);
 				//直接判断$res[0]
-				if(empty($res)) {
+				if(empty($res) && !($res = Util::curlGetHeaders($file, true))) {
 					//改用curl方式获取
-					$res = Util::curlGetHeaders($file, true);
-					if(empty($res))
-						throw new FileException('File::transfer: 远程文件不存在');
+					throw new FileException('File::transfer: 远程文件不存在');
 				}
 				$forbid = true;
 				if(false !== strpos($res[0], '200'))
@@ -113,10 +112,9 @@ class File extends Model {
 					$this->extension = strtolower(substr($file, $res+1));
 				$res = $file; //用curl获取的时候需要地址
 				$file = file_get_contents($file);
-				if(empty($file)) {
+				if(empty($file) && !($file = Util::curlGetContents($res))) {
 					//改用curl方式获取
-					if(!($file = Util::curlGetContents($res)))
-						throw new FileException('File::transfer: 读取远程文件失败');
+					throw new FileException('File::transfer: 读取远程文件失败');
 				}
 				$this->size = strlen($file); //获取文件大小
 			}
