@@ -67,11 +67,6 @@ class File extends Model {
 					throw new FileException('File::transfer: post上传方式错误');
 				if($file['error'])
 					throw new FileException('File::transfer: 上传时发生错误 '.$file['error']);
-				//获取扩展名
-				if(empty($this->extension) && ($res = strrpos($file['name'], '.')))
-					$this->extension = strtolower(substr($file['name'], $res+1));
-				//获取文件大小
-				$this->size = $file['size'];
 				//获取文件mime
 				if(function_exists('finfo_open')) {
 					$finfo = finfo_open(FILEINFO_MIME);
@@ -82,6 +77,11 @@ class File extends Model {
 						$this->mime = strtolower($file['type']);
 				} else
 					$this->mime = strtolower($file['type']);
+				//获取文件大小
+				$this->size = $file['size'];
+				//获取扩展名
+				if(empty($this->extension) && ($res = strrpos($file['name'], '.')))
+					$this->extension = strtolower(substr($file['name'], $res+1));
 			}
 			break;
 			case 1: { //在线文件
@@ -106,9 +106,8 @@ class File extends Model {
 				}
 				if($forbid)
 					throw new FileException('File::transfer: 被禁止获取远程文件');
-				/* 获取的mime不一定正确 */
+				//获取的mime不一定正确
 				$this->mime = strtolower(is_array($res['Content-Type'])?$res['Content-Type'][1]:$res['Content-Type']);
-				
 				//提取文件信息
 				if(empty($this->extension) && ($res = strrpos($file, '.')))
 					$this->extension = strtolower(substr($file, $res+1)); //获取扩展名，有些在线资源可能没有扩展名
@@ -146,17 +145,17 @@ class File extends Model {
 			$this->name = $_SERVER['REQUEST_TIME'] . rand(10, 99);
 		//如果名字重复
 		$counter = 0;
-		while(file_exists($this->dir . '/' . $this->name . '.' . $this->extension)) {
+		while(file_exists(DOCUMENT_ROOT.$this->dir . '/' . $this->name . '.' . $this->extension)) {
 			$this->name = $this->name.$counter++;
 			if($counter >= 100)
-				throw new FileException('File::verify: 生成文件名失败');
+				throw new FileException('File::transfer: 生成文件名失败');
 		}
 		//判断文件大小
 		if($this->size > $this->maxSize)
-			throw new FileException('File::verify: 文件大小超出范围');
+			throw new FileException('File::transfer: 文件大小超出范围');
 		//如果存在文件扩展名
 		if(!empty($this->extension) && empty($this->mimes[$this->extension]))
-			throw new FileException('File::verify: 不支持的文件类型');
+			throw new FileException('File::transfer: 不支持的文件类型');
 		//判断文件类型 并修正类型(针对本地文件)
 		$extension = '';
 		foreach($this->mimes as $k => $v) {
@@ -173,7 +172,7 @@ class File extends Model {
 			}
 		}
 		if(empty($extension))
-			throw new FileException('File::verify: 不安全的文件类型');
+			throw new FileException('File::transfer: 不安全的文件类型');
 		//判断文件扩展名
 		if(empty($this->extension))
 			$this->extension = strtolower($extension);
@@ -190,10 +189,10 @@ class File extends Model {
 		//处理文件
 		if(!$res || !$res['exists']) {
 			// echo 'not exists '.$md5;
-			$exists = false;
+			$exists = false; //文件信息没在数据库
 			//如果已经上传过，提取信息
 			if(!empty($res['path'])) {
-				$exists = true; //记录存在但文件不存在
+				$exists = true; //文件信息存在数据库
 				$res = pathinfo($res['path']);
 				$this->dir = $res['dirname'];
 				$res = explode('.', $res['basename']);
@@ -201,19 +200,19 @@ class File extends Model {
 				$this->extension = $res[1];
 			}
 			//如果文件不存在数据库
-			if(!Util::makeDir(DOCUMENT_ROOT.$this->dir))
+			if(!Util::makeDir($this->dir))
 				throw new FileException('File::transfer: 创建文件夹失败');
 			$path = $this->dir.'/'.$this->name.'.'.$this->extension;
 			// 保存文件
 			switch($switch) {
 				case 0: {
 							if(!($res = move_uploaded_file($file['tmp_name'], DOCUMENT_ROOT.$path)))
-								throw new FileException('File::transfer: 保存文件失败,error upl');
+								throw new FileException('File::transfer: 保存文件失败case 0');
 						}
 						break;
 				default: {
 							if(!($res = file_put_contents(DOCUMENT_ROOT.$path, $file)))
-								throw new FileException('File::transfer: 保存文件失败,error onl');
+								throw new FileException('File::transfer: 保存文件失败case default');
 						}
 						break;
 			}
