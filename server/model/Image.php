@@ -124,7 +124,7 @@ class Image extends Model {
 			$thumbImage = imagecreatetruecolor($newWidth, $newHeight);
 			if($targetExt == 'png'){
 				imagealphablending($thumbImage, false);
-      	//imagesavealpha($thumbImage, true);
+      	imagesavealpha($thumbImage, true);
 			}
 			imagecopyresampled($thumbImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $param['image_width'], $param['image_height']);
 		} else
@@ -134,8 +134,6 @@ class Image extends Model {
 		if($targetExt == "jpg" || $targetExt == "jpeg") {
 			$res = imagejpeg($thumbImage, $target, $quality);
 		} else if($targetExt == 'png'){
-			//imagealphablending($thumbImage, false);
-      imagesavealpha($thumbImage, true);
 			$res = imagepng($thumbImage, $target);
 		} else {
 			$res = imagegif($thumbImage, $target);
