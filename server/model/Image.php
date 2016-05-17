@@ -47,7 +47,8 @@ class Image extends Model {
 		return $res;
 	}
 	/*
-	 * 生成图片缩略图，需要GD库支持，支持远程图片下载
+	 * 生成图片缩略图，需要GD库支持
+	 * 只支持jpg/png/gif
 	 * 
 	 * @param string $origin 原始图片路径
 	 * @param string $target 缩略图路径
@@ -57,15 +58,15 @@ class Image extends Model {
 	 * @return string
 	 */
 	public static function createThumb($origin, $target, $param = array(), $quality = 60) {
-		$target = DOCUMENT_ROOT . $target;
-		if(file_exists($target))
-			return true;
 		$origin = DOCUMENT_ROOT . $origin;
 		if(!file_exists($origin))
 			return false;
 		//生成文件夹
+		if(file_exists(DOCUMENT_ROOT . $target))
+			return true;
 		if(!Util::makeDir(dirname($target)))
 			return false;
+		$target = DOCUMENT_ROOT . $target;
 		
 		$image = NULL;
 		//源图扩展名
@@ -84,7 +85,7 @@ class Image extends Model {
 			$imageCreateFrom = 'imagecreatefromgif';
 		} else
 			return copy($origin, $target); //只支持jpg/png/gif
-			
+		
 		if(empty($param['image_width']) || empty($param['image_height'])) {
 			if(!($image = $imageCreateFrom($origin)))
 				return false; //如果生成失败
@@ -96,30 +97,33 @@ class Image extends Model {
 		$param['max_width'] = is_numeric($param['max_width'])?(int)$param['max_width']:200;
 		$param['max_height'] = is_numeric($param['max_height'])?(int)$param['max_height']:200;
 		//直接复制文件（1.相同扩展名;）
-		if($originExt == $targetExt && ($param['max_width'] >= $param['image_width'] && $param['max_height'] >= $param['image_height'])) {
+		if($originExt == $targetExt && $param['max_width'] >= $param['image_width'] && $param['max_height'] >= $param['image_height']) {
 			return copy($origin, $target);
 		}
 		
-		$ratio = min($param['max_width']/$param['image_width'], $param['max_height']/$param['image_height']); //生成新比例
-		
-		if($param['image_width'] > 3000 || $param['image_height'] > 3000)
-			$memory = 128;
-		else {
-			$memory = ceil($param['image_width']*$param['image_height']*(24/4)/1024000);
+		$memory = 0;
+		if($param['image_width'] > 5000 || $param['image_height'] > 5000) {
+			$memory = 1;
+			ini_set('memory_limit', '-1');
+		} else if($param['image_width'] > 1000 && $param['image_height'] > 1000) {
+			$memory = ceil($param['image_width']*$param['image_height']/1024000*(24/4));
 			if($memory > 128)
 				$memory = 128;
-			else if($memory < 32)
-				$memory = 32;
+			else if($memory < 8)
+				$memory = 8;
+			
+			ini_set('memory_limit', $memory.'M');
 		}
-		ini_set('memory_limit', $memory.'M');
     //根据扩展名使用不同的生成方法
 		if(empty($image) && !($image = $imageCreateFrom($origin)))
 			return false; //如果生成失败
 		
-		//新图片宽高度
-		$newWidth = floor($param['image_width']*$ratio);
-		$newHeight = floor($param['image_height']*$ratio);
 		if(function_exists('imagecreatetruecolor') && function_exists('imagecopyresampled')) {
+			//生成新比例
+			$ratio = min($param['max_width']/$param['image_width'], $param['max_height']/$param['image_height']);
+			//新图片宽高度
+			$newWidth = floor($param['image_width']*$ratio);
+			$newHeight = floor($param['image_height']*$ratio);
 			//生成新图片资源
 			$thumbImage = imagecreatetruecolor($newWidth, $newHeight);
 			if($targetExt == 'png'){
@@ -143,7 +147,8 @@ class Image extends Model {
 		imagedestroy($thumbImage);
 		unset($image);
 		unset($thumbImage);
-		ini_set('memory_limit', '8M');
+		if($memory>0)
+			ini_set('memory_limit', '8M');
 		
 		if(!$res)
 			return false;
