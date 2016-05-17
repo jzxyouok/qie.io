@@ -30,7 +30,7 @@ class Image extends Model {
 		$file->extension = $this->extension;
 		$file->maxSize = $this->maxSize;
 
-		$res = $file->transfer($image);
+		$res = $file->transfer($image, $this);
 
 		$this->name = $file->name;
 		$this->extension = $file->extension;
@@ -45,6 +45,36 @@ class Image extends Model {
 			$res['thumb'] = $thumb;
 
 		return $res;
+	}
+	/*
+	 * 分解图片高度/宽度/拍摄角度
+	 *
+	 * @param object $file File对象
+	 */
+	public function handle($file = NULL) {
+		if(!$file)
+			return;
+		
+		//为图片判断高宽
+		$path = $file->dir . '/' . $file->name . '.' . $file->extension;
+			
+		$orientation = 0;
+		if(function_exists('exif_read_data')) {
+			$res = exif_read_data(DOCUMENT_ROOT . $path);
+			$width = $res['COMPUTED']['Width'];
+			$height = $res['COMPUTED']['Height'];
+			$orientation = (int)$res['Orientation']; //1:0°，6:顺时针90°，8:逆时针90°，3:180°
+		}
+		if(empty($width) || empty($height)) {
+			$res = getimagesize(DOCUMENT_ROOT . $path);
+			$width = $res[0];
+			$height = $res[1];
+		}
+		
+		$name = "{$file->name}_{$width}x{$height}x{$orientation}";
+		if(rename(DOCUMENT_ROOT . $path, DOCUMENT_ROOT . $file->dir . '/' . $name . '.' . $file->extension)) {
+			$file->name = $name;
+		}
 	}
 	/*
 	 * 生成图片缩略图，需要GD库支持

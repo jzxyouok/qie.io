@@ -42,11 +42,12 @@ class File extends Model {
 	 * 上传文件
 	 * 为了加快速度，不做真实文件头判断
 	 *
-	 * @param object $file 需要上传的文件resource，可以是$_FILES，在线文件或者二进制流
+	 * @param string/array $file 需要上传的文件resource，可以是$_FILES，在线文件或者二进制流
+	 * @param object $client 客户端对象
 	 *
 	 * @return array
 	 */
-	public function transfer($file = NULL) {
+	public function transfer($file = NULL, $client = NULL) {
 		if(empty($file))
 			return false;
 
@@ -181,26 +182,9 @@ class File extends Model {
 			}
 			unset($file);
 			if(!$exists) {
-				if(in_array($this->extension, array('jpg','png','gif','bmp','jpeg'))) {
-					//为图片判断高宽
-					$orientation = 0;
-					if(function_exists('exif_read_data')) {
-						$res = exif_read_data(DOCUMENT_ROOT . $path);
-						$width = $res['COMPUTED']['Width'];
-						$height = $res['COMPUTED']['Height'];
-						$orientation = (int)$res['Orientation']; //1:0°，6:顺时针90°，8:逆时针90°，3:180°
-					}
-					if(empty($width) || empty($height)) {
-						$res = getimagesize(DOCUMENT_ROOT . $path);
-						$width = $res[0];
-						$height = $res[1];
-					}
-			
-					$name = "{$this->name}_{$width}x{$height}x{$orientation}";
-					if(rename(DOCUMENT_ROOT . $path, DOCUMENT_ROOT . $this->dir . '/' . $name . '.' . $this->extension)) {
-						$this->name = $name;
-						$path = $this->dir . '/' . $this->name . '.' . $this->extension;
-					}
+				if($client && is_callable(array($client,'handle'), true)) {
+					$client->handle($this);
+					$path = $this->dir.'/'.$this->name.'.'.$this->extension;
 				}
 				
 				$db = Loader::load('Database');
