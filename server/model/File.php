@@ -203,6 +203,48 @@ class File extends Model {
 		return array('md5'=>$md5, 'path'=>$res['path']);
 	}
 	/*
+	 * 删除文件
+	 *
+	 * @param string $md5
+	 *
+	 * @return int
+	 */
+	public function delete($md5 = '') {
+		if(!is_string($md5) || strlen($md5) != 32)
+			return false;
+		
+		$db = Loader::load('Database');
+		
+		$sql = "SELECT `path` FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
+		$res = $db->query($sql);
+		if(empty($res[0]['path']))
+			return false;
+		
+		$sql = "DELETE FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
+		return array('result'=>$db->execute($sql) && unlink(DOCUMENT_ROOT.$res[0]['path']), 'path'=>$res[0]['path']);
+	}
+	/*
+	 * 检查文件是否存在
+	 *
+	 * @param string $md5
+	 *
+	 * @return array;
+	 *
+	 */
+	public function exists($md5 = '') {
+		if(empty($md5) || strlen($md5) != 32)
+			return false;
+
+		$db = Loader::load('Database');
+		$sql = "SELECT `path` FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
+		$res = $db->query($sql);
+		if(empty($res[0]['path']))
+			return false;
+
+		$res[0]['exists'] = file_exists(DOCUMENT_ROOT.$res[0]['path']);
+		return $res[0];
+	}
+	/*
 	 * 安全检查
 	 */
 	protected function verify() {
@@ -236,26 +278,5 @@ class File extends Model {
 		//判断文件扩展名
 		if(empty($this->extension))
 			$this->extension = strtolower($extension);
-	}
-	/*
-	 * 检查文件是否存在
-	 *
-	 * @param string $md5
-	 *
-	 * @return array;
-	 *
-	 */
-	public function exists($md5 = '') {
-		if(empty($md5))
-			return false;
-
-		$db = Loader::load('Database');
-		$sql = "SELECT `path` FROM `{$this->table}` WHERE `md5`='{$md5}' LIMIT 1";
-		$res = $db->query($sql);
-		if(empty($res[0]['path']))
-			return false;
-
-		$res[0]['exists'] = file_exists(DOCUMENT_ROOT.$res[0]['path']);
-		return $res[0];
 	}
 }

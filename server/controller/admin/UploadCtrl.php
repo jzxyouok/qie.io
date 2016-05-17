@@ -23,13 +23,8 @@ class UploadCtrl extends Controller {
 			$where = '`word` LIKE "'.$_GET['word'].'%"';
 		}
 		
-		$orderBy = 'id_desc';
-		if($_GET['orderby']) {
-			$orderBy = $_GET['orderby'];
-		}
-		$orderBy = strtr($orderBy, '_', ' ');
 		$file = Loader::load('model/File');
-		$this->vars['data'] = $file->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
+		$this->vars['data'] = $file->select(array('where'=>$where, 'now'=>$now, 'row'=>$row));
 		$pagination = Loader::load('Pagination', array(array(
 			'sum'=>$this->vars['data']['sum'],
 			'row'=>$this->vars['data']['row'],
@@ -40,6 +35,7 @@ class UploadCtrl extends Controller {
 		
 		$this->view('upload');
 	}
+	//图片上传页
 	function add() {
 		$this->view('upload_add');
 	}
@@ -64,7 +60,7 @@ class UploadCtrl extends Controller {
 			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
-	//上传图片
+	//上传图片，带缩略图
 	function insert_image($t = 'local') {
 		try {
 			$file = NULL;
@@ -121,7 +117,7 @@ class UploadCtrl extends Controller {
 	}
 	//根据md5判断文件是否存在
 	function file_exists($md5 = '') {
-		if(empty($md5) || strlen($md5) != 32)
+		if(empty($md5))
 			$this->message(-1, '请输入md5', 1);
 			
 		try {
@@ -139,36 +135,20 @@ class UploadCtrl extends Controller {
 		}
 	}
 	//删除
-	function delete($ids = 0) {
-		if(empty($ids))
-			$ids = $_POST['ids'];
-		
-		if(empty($ids))
-			$this->message(-1, '没有修改的内容', 1);
+	function delete($md5 = '') {
+		if(empty($md5))
+			$this->message(-1, '请输入md5', 1);
+			
 		try {
-			$tag = Loader::load('model/Tag');
-			$res = $tag->delete($ids);
+			$tag = Loader::load('model/File');
+			$res = $tag->delete($md5);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
 			} else if($res) {
-				$this->message(1, $res);
-			} else {
-				$this->message(0, '操作失败');
-			}
-		} catch(Exception $e) {
-			$this->message(-1, $e->getMessage(), $e->getCode());
-		}
-	}
-	//清理
-	function clean($table='article') {
-		if(empty($table))
-			$this->message(-1, '没有修改的内容', 1);
-		try {
-			$tag = Loader::load('model/Tag');
-			$res = $tag->clean($table);
-			if(!empty($res['code'])) {
-				$this->message(-1, $res['msg'], 10+$res['code']);
-			} else if($res) {
+				//删除缩略图
+				$extension = substr($res['path'], strrpos($res['path'], '.')+1);
+				if(in_array($extension, array('jpg', 'png', 'gif', 'bmp', 'jpeg')))
+					unlink(DOCUMENT_ROOT.$res['path'].'.'.$extension);
 				$this->message(1, $res);
 			} else {
 				$this->message(0, '操作失败');

@@ -53,27 +53,29 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th><a href="<{$smarty.SERVER.PHP_SELF}>?orderby=<{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>id_asc<{else}>id_desc<{/if}><{if $smarty.get.word}>&word=<{$smarty.get.word}><{/if}><{if $smarty.get.fuzzy}>&fuzzy=<{$smarty.get.fuzzy}><{/if}>">ID <i class="fa <{if !$smarty.get.orderby || $smarty.get.orderby == 'id_desc'}>fa-long-arrow-down<{else}>fa-long-arrow-up<{/if}>"></i></a></th>
-                <th>名称</th>
-                <th>文章数量</th>
+                <th>MD5</th>
+                <th>预览</th>
+                <th>路径</th>
                 <th>操作</th>
               </tr>
             </thead>
             <tbody>
             <{section loop=$data.result name=n}>
             <tr>
-              <td class="center"><{$smarty.section.n.index+1}></td>
-              <td class="center"><{$data.result[n].id}></td>
-              <td class="center"><{$data.result[n].word}></td>
-              <td class="center"><a href="<{$admin_dir}>/index.php/article/?tag_id=<{$data.result[n].id}>"><{$data.result[n].article_sum}></a></td>
-              <td class="center manage"><a href="<{$admin_dir}>/index.php/tag/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
+              <td class="center"><label>
+                  <input type="checkbox" value="<{$data.result[n].md5}>">
+                  <{$smarty.section.n.index+1}></label></td>
+              <td><{$data.result[n].md5}></td>
+              <td class="center"><a href="<{$data.result[n].path}>" target="_blank"><{$extension = $data.result[n].path|substr:(($data.result[n].path|strrpos:'.')+1)}><{if $extension == 'jpg' || $extension == 'png' || $extension == 'gif' || $extension == 'jpeg' || $extension == 'bmp'}><img src="<{$data.result[n].path}>" style="max-width:200px; max-height:100px; border:1px solid #ccc; padding:2px;"><{else}><{$extension}><{/if}></a></td>
+              <td><{$data.result[n].path}></td>
+              <td class="center manage"><a href="<{$admin_dir}>/index.php/upload/delete/<{$data.result[n].md5}>/" class="ajax delete" title="删除">删除</a></td>
             </tr>
             <{/section}>
               </tbody>
             
           </table>
           <div class="pagination">
-            <div class="info">共<{$data.sum}>个标签/<{$data.max}>页 <!--a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/tag/delete/" title="批量删除" class="delete-more">批量删除</a--><a href="<{$admin_dir}>/index.php/tag/clean/article/" title="清理文章无效tag" class="clean">清理</a></div>
+            <div class="info">共<{$data.sum}>个文件/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/upload/delete/" title="批量删除" class="delete-more">批量删除</a></div>
             <div class="paging"><{$pagination}></div>
           </div>
         </div>
