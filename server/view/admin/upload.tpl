@@ -9,19 +9,36 @@
 <{include file="./header.tpl"}>
 <div class="content">
   <div class="wrap">
+    <div class="panel default-panel center">
+      <h3 class="head">上传文件</h3>
+      <div class="body">
+        <form id="upload_file" class="default-form" action="<{$admin_dir}>/index.php/upload/insert/" method="post">
+          <fieldset>
+            <div class="input-group">
+              <label>
+              <div class="title">选择文件</div>
+              <div class="control">
+                <input type="file" name="normal_file" id="normal_file" required>
+              </div>
+              </label>
+            </div>
+          </fieldset>
+          <div class="form-button">
+            <button type="submit">添加</button>
+          </div>
+        </form>
+      </div>
+    </div>
     <div class="panel default-panel">
       <h3 class="head">文件管理</h3>
       <div class="body">
         <div class="search">
-          <form id="search_form" class="inline-form search-form" action="<{$admin_dir}>/index.php/tag/" method="get">
+          <form id="search_form" class="inline-form search-form" action="<{$admin_dir}>/index.php/tag/?fuzzy=1" method="get">
             <fieldset>
               <div class="input-group">
                 <label>关键字:
                   <input type="text" name="word" placeholder="请填写关键词">
                 </label>
-              </div>
-              <div class="input-group">
-                <label><input type="checkbox" name="fuzzy" value="1"<{if $smarty.get.fuzzy}> checked<{/if}>> 模糊搜索</label>
               </div>
             </fieldset>
             <div class="form-button">

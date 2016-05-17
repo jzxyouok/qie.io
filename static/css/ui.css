@@ -15,6 +15,12 @@ body {
 .center {
     text-align:center;
 }
+.show {
+    display: block;
+}
+.hide {
+    display: none;
+}
 /*form*/
 form {
     text-align: center;
@@ -288,7 +294,7 @@ form .split-line .text {
     border-color: #ddd;
 }
 .default-form .tips {
-    margin-top:10px;
+    margin-bottom:10px;
     line-height: 1.5;
 }
 /*inline form*/

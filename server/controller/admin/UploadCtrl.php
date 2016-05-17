@@ -28,8 +28,8 @@ class UploadCtrl extends Controller {
 			$orderBy = $_GET['orderby'];
 		}
 		$orderBy = strtr($orderBy, '_', ' ');
-		$upload = Loader::load('model/Upload');
-		$this->vars['data'] = $upload->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
+		$file = Loader::load('model/File');
+		$this->vars['data'] = $file->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
 			'sum'=>$this->vars['data']['sum'],
 			'row'=>$this->vars['data']['row'],
@@ -98,11 +98,6 @@ class UploadCtrl extends Controller {
 					$file = $_POST['file_url'];
 					if(!preg_match('/^(?:https?:)\/\/.+/i', $file))
 						$this->message(-1,'','请提交一个正确的url地址');
-					
-					$ext = substr($file, strrpos($file, '.')+1);
-					if(empty($ext) || !in_array($ext, array('jpg','jpeg','png','gif','bmp'))) {
-						$image->extension = 'jpg';
-					}
 				}
 				break;
 				default: {
@@ -113,6 +108,25 @@ class UploadCtrl extends Controller {
 			}
 			$res = $image->upload($file);
 			
+			if(!empty($res['code'])) {
+				$this->message(-1, $res['msg'], 10+$res['code']);
+			} else if($res) {
+				$this->message(1, $res);
+			} else {
+				$this->message(0, '操作失败');
+			}
+		} catch(Exception $e) {
+			$this->message(-1, $e->getMessage(), $e->getCode());
+		}
+	}
+	//删除
+	function file_exists($md5 = '') {
+		if(empty($md5))
+			$this->message(-1, '请输入md5', 1);
+			
+		try {
+			$file = Loader::load('model/File');
+			$res = $file->exists($md5);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
 			} else if($res) {
