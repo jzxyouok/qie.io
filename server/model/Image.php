@@ -103,7 +103,7 @@ class Image extends Model {
 		$ratio = min($param['max_width']/$param['image_width'], $param['max_height']/$param['image_height']); //生成新比例
 		
 		if($param['image_width'] > 3000 || $param['image_height'] > 3000)
-			$memory = 32;
+			$memory = 128;
 		else {
 			$memory = ceil($param['image_width']*$param['image_height']*(24/4)/1024000);
 			if($memory > 128)
