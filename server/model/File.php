@@ -240,16 +240,9 @@ class File extends Model {
 		//判断文件类型 并修正类型(针对本地文件)
 		$extension = '';
 		foreach($this->mimes as $k => $v) {
-			if(is_array($v)) {
-				if(in_array($this->mime, $v)) {
-					$extension = $k;
-					break;
-				}
-			} else {
-				if($this->mime == $v) {
-					$extension = $k;
-					break;
-				}
+			if((is_array($v) && in_array($this->mime, $v)) || $this->mime == $v) {
+				$extension = $k;
+				break;
 			}
 		}
 		if(empty($extension))
