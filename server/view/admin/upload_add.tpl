@@ -78,6 +78,30 @@
 <{include file="../common/js.tpl"}>
 <script src="/static/js/ajaxfileupload.js"></script>
 <script>
+document.getElementById('image_file').addEventListener('change', function(e){
+	if(typeof FileReader == 'undefined')
+		return;
+	var file = e.target.files[0];
+	if(!/image\/(?:jpg|jpeg|png|gif)$/i.test(file.type)) {
+		return;
+	}
+	var fileReader = new FileReader();
+	fileReader.onload = function(e){
+		/*
+		$.ajax({
+			url:"<{$admin_dir}>/index.php/upload/insert_image/base64/",
+			method:"post",
+			data:{"image_file":e.target.result},
+			dataType:"json",
+			success: function(data){
+				console.info(data);
+				},
+			error: function(xhr,status){}
+		});*/
+		
+	};
+	fileReader.readAsDataURL(file);
+});
 document.getElementById('upload_image').addEventListener('submit', function(e){
 	e.preventDefault();
 	

@@ -90,7 +90,7 @@ class UploadCtrl extends Controller {
 				break;
 				case 'base64': {
 					//base64方式上传
-					
+					$file = $_POST['image_file'];
 				}
 				break;
 				case 'online': {
