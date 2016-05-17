@@ -12,19 +12,19 @@
     <div class="panel default-panel center">
       <h3 class="head">上传文件</h3>
       <div class="body">
-        <form id="upload_file" class="default-form" action="<{$admin_dir}>/index.php/upload/insert/" method="post">
+        <form id="upload_file" class="default-form" action="<{$admin_dir}>/index.php/upload/insert/" method="post" enctype="multipart/form-data">
           <fieldset>
             <div class="input-group">
               <label>
-              <div class="title">选择文件</div>
+              <div class="title">选择图片</div>
               <div class="control">
                 <input type="file" name="local_file" id="local_file" required>
               </div>
               </label>
             </div>
-            <div class="tips center hide" id="file_status"><i class="fa fa-refresh fa-spin fa-fw"></i><span>文件处理中...</span></div>
+            <div class="tips center hide" id="handle_status"><i class="fa fa-refresh fa-spin fa-fw"></i><span>文件处理中...</span></div>
           </fieldset>
-          <input type="hidden" name="file_path" id="exists_result">
+          <input type="hidden" name="exists_result" id="exists_result">
           <div class="form-button">
             <button type="submit">添加</button>
           </div>
@@ -97,15 +97,14 @@ document.getElementById('local_file').addEventListener('change', function(e){
 	var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
 			fileReader = new FileReader(),
 			spark = new SparkMD5.ArrayBuffer(),
-			md5 = '',
 			chunkSize = 2097152,
 			currentChunk = 0,
       chunks = Math.ceil(file.size / chunkSize),
-			fileStatus = document.getElementById('file_status'),
+			handleStatus = document.getElementById('handle_status'),
 			existsResult = document.getElementById('exists_result');
 	
 	existsResult.value = '';
-	fileStatus.classList.remove('hide');
+	handleStatus.classList.remove('hide');
 	
 	fileReader.onload = function(e){
 		spark.append(e.target.result);
@@ -113,9 +112,9 @@ document.getElementById('local_file').addEventListener('change', function(e){
 		if (currentChunk < chunks) {
 			loadNext();
 		} else {
-			md5 = spark.end();
-			fileStatus.querySelector('span').textContent = '处理完毕';
-			window.setTimeout(function(){fileStatus.classList.remove('show');fileStatus.classList.add('hide');}, 1000);
+			var md5 = spark.end();
+			handleStatus.querySelector('span').textContent = '处理完毕';
+			window.setTimeout(function(){handleStatus.classList.remove('show');handleStatus.classList.add('hide');}, 500);
 			//console.log(md5);
 			if(md5) {
 				$.get("<{$admin_dir}>/index.php/upload/file_exists/"+md5+"/", function(data){
@@ -123,7 +122,6 @@ document.getElementById('local_file').addEventListener('change', function(e){
 						existsResult.value = data.result.path;
 				},'json');
 			}
-			
 		}
 	};
 	function loadNext() {
@@ -137,10 +135,16 @@ document.getElementById('local_file').addEventListener('change', function(e){
 document.getElementById('upload_file').addEventListener('submit', function(e){
 	e.preventDefault();
 	
-	var file = document.getElementById('local_file');
+	var file = document.getElementById('local_file'),
+			path = document.getElementById('exists_result').value;
 			
-	if(file.value == '') {
-		alert('请选择文件');
+	if(!file.value) {
+		alert('请选择上传文件');
+		return;
+	}
+	if(path) {
+		console.log('秒传');
+		file.value = '';
 		return;
 	}
 	$.ajaxFileUpload({
@@ -154,7 +158,10 @@ document.getElementById('upload_file').addEventListener('submit', function(e){
 						data = JSON.parse(data);
 					else
 						eval("data="+data);
-					//console.log('普通上传',data.result.path);
+					console.log('普通上传');
+					if(data.status < 1)
+						alert(data.result);
+					file.value = '';
 				},
 				error: function (data, status, e) {
 					console.info(data)

@@ -12,7 +12,7 @@
     <div class="panel default-panel center">
       <h3 class="head">本地上传</h3>
       <div class="body">
-        <form id="upload_image" class="default-form" action="<{$admin_dir}>/index.php/upload/insert_image/" method="post" enctype="multipart/form-data">
+        <form id="upload_file" class="default-form" action="<{$admin_dir}>/index.php/upload/insert_image/" method="post" enctype="multipart/form-data">
           <fieldset>
             <div class="input-group">
               <label>
@@ -24,7 +24,7 @@
             </div>
             <div class="tips center hide" id="handle_status"><i class="fa fa-refresh fa-spin fa-fw"></i><span>文件处理中...</span></div>
           </fieldset>
-          <input type="hidden" name="image_path" id="exists_result">
+          <input type="hidden" name="exists_result" id="exists_result">
           <div class="form-button">
             <button type="submit">添加</button>
           </div>
@@ -34,7 +34,7 @@
     <div class="panel default-panel center">
       <h3 class="head">在线地址</h3>
       <div class="body">
-        <form id="upload_image_online" class="default-form" action="<{$admin_dir}>/index.php/upload/insert_image/online/" method="post">
+        <form id="upload_file_online" class="default-form" action="<{$admin_dir}>/index.php/upload/insert_image/online/" method="post">
           <fieldset>
             <div class="input-group">
               <label>
@@ -69,14 +69,13 @@ document.getElementById('local_file').addEventListener('change', function(e){
 	var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
 			fileReader = new FileReader(),
 			spark = new SparkMD5.ArrayBuffer(),
-			md5 = '',
 			chunkSize = 2097152,
 			currentChunk = 0,
       chunks = Math.ceil(file.size / chunkSize),
 			handleStatus = document.getElementById('handle_status'),
-			uploadResult = document.getElementById('exists_result');
+			existsResult = document.getElementById('exists_result');
 	
-	uploadResult.value = '';
+	existsResult.value = '';
 	handleStatus.classList.remove('hide');
 	
 	fileReader.onload = function(e){
@@ -85,17 +84,16 @@ document.getElementById('local_file').addEventListener('change', function(e){
 		if (currentChunk < chunks) {
 			loadNext();
 		} else {
-			md5 = spark.end();
+			var md5 = spark.end();
 			handleStatus.querySelector('span').textContent = '处理完毕';
-			window.setTimeout(function(){handleStatus.classList.remove('show');handleStatus.classList.add('hide');}, 1000);
+			window.setTimeout(function(){handleStatus.classList.remove('show');handleStatus.classList.add('hide');}, 500);
 			//console.log(md5);
 			if(md5) {
 				$.get("<{$admin_dir}>/index.php/upload/file_exists/"+md5+"/", function(data){
 					if(data.status> 0 && data.result.exists)
-						uploadResult.value = data.result.path;
+						existsResult.value = data.result.path;
 				},'json');
 			}
-			
 		}
 	};
 	function loadNext() {
@@ -106,7 +104,7 @@ document.getElementById('local_file').addEventListener('change', function(e){
 	}
 	loadNext();
 });
-document.getElementById('upload_image').addEventListener('submit', function(e){
+document.getElementById('upload_file').addEventListener('submit', function(e){
 	e.preventDefault();
 	
 	var file = document.getElementById('local_file'),
@@ -117,7 +115,8 @@ document.getElementById('upload_image').addEventListener('submit', function(e){
 		return;
 	}
 	if(path) {
-		//console.log('秒传',path);
+		console.log('秒传');
+		file.value = '';
 		return;
 	}
 	$.ajaxFileUpload({
@@ -131,14 +130,18 @@ document.getElementById('upload_image').addEventListener('submit', function(e){
 						data = JSON.parse(data);
 					else
 						eval("data="+data);
-					//console.log('普通上传',data.result.path);
+					console.log('普通上传');
+					if(data.status < 1)
+						alert(data.result);
+					file.value = '';
 				},
 				error: function (data, status, e) {
 					console.info(data)
 				}
 	})
 });
-document.getElementById('upload_image_online').addEventListener('submit', function(e){
+document.getElementById('file_url').addEventListener('click', function(e){e.target.select();})
+document.getElementById('upload_file_online').addEventListener('submit', function(e){
   e.preventDefault();
   var data = $u.getFormValues(this);
   
@@ -147,8 +150,12 @@ document.getElementById('upload_image_online').addEventListener('submit', functi
       data: data,
       dataType: 'json',
       success: function(data){
-                  alert(data.result);
-                },
+								if(data.status < 1) {
+									alert(data.result);
+								} else {
+									document.getElementById('file_url').value = '';
+								}
+              },
       error: function(xhr, data) {}
   })
 });

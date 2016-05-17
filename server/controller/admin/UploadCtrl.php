@@ -46,9 +46,9 @@ class UploadCtrl extends Controller {
 	/*
 	 * api
 	 */
-	//删除
+	//上传所有类型文件
 	function insert() {
-		if(empty($_FILES['normal_file']))
+		if(empty($_FILES['local_file']))
 			$this->message(-1, '请选择文件', 1);
 		try {
 			$tag = Loader::load('model/File');
@@ -64,7 +64,7 @@ class UploadCtrl extends Controller {
 			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
-	//删除
+	//上传图片
 	function insert_image($t = 'local') {
 		try {
 			$file = NULL;
@@ -119,9 +119,9 @@ class UploadCtrl extends Controller {
 			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
-	//删除
+	//根据md5判断文件是否存在
 	function file_exists($md5 = '') {
-		if(empty($md5))
+		if(empty($md5) || strlen($md5) != 32)
 			$this->message(-1, '请输入md5', 1);
 			
 		try {
