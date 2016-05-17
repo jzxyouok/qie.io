@@ -34,7 +34,7 @@ class UploadCtrl extends Controller {
 			'sum'=>$this->vars['data']['sum'],
 			'row'=>$this->vars['data']['row'],
 			'now'=>$this->vars['data']['now'],
-			'uri'=>$this->profile['admin_dir'].'/index.php/tag/'
+			'uri'=>$this->profile['admin_dir'].'/index.php/upload/'
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
@@ -48,11 +48,11 @@ class UploadCtrl extends Controller {
 	 */
 	//删除
 	function insert() {
-		if(empty($_POST['words']))
-			$this->message(-1, '请输入内容', 1);
+		if(empty($_FILES['normal_file']))
+			$this->message(-1, '请选择文件', 1);
 		try {
-			$tag = Loader::load('model/Tag');
-			$res = $tag->insert(array('words'=>$_POST['words'],'format'=>true));
+			$tag = Loader::load('model/File');
+			$res = $tag->transfer($_FILES['local_file']);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
 			} else if($res) {
@@ -74,23 +74,23 @@ class UploadCtrl extends Controller {
 				case 'flash': {
 					//flash方式上传
 					switch($ext) {
-						case 'jpg': $_FILES['image_file']['type'] = 'image/jpeg';
+						case 'jpg': $_FILES['local_file']['type'] = 'image/jpeg';
 						break;
-						case 'png': $_FILES['image_file']['type'] = 'image/png';
+						case 'png': $_FILES['local_file']['type'] = 'image/png';
 						break;
-						case 'gif': $_FILES['image_file']['type'] = 'image/gif';
+						case 'gif': $_FILES['local_file']['type'] = 'image/gif';
 						break;
-						case 'bmp': $_FILES['image_file']['type'] = 'image/bmp';
+						case 'bmp': $_FILES['local_file']['type'] = 'image/bmp';
 						break;
 						default:break;
 					}
-					$file = $_FILES['image_file'];
-					unset($_FILES['image_file']);
+					$file = $_FILES['local_file'];
+					unset($_FILES['local_file']);
 				}
 				break;
 				case 'base64': {
 					//base64方式上传
-					$file = $_POST['image_file'];
+					$file = $_POST['local_file'];
 				}
 				break;
 				case 'online': {
@@ -102,8 +102,8 @@ class UploadCtrl extends Controller {
 				break;
 				default: {
 					//默认本地上传
-					$file = $_FILES['image_file'];
-					unset($_FILES['image_file']);
+					$file = $_FILES['local_file'];
+					unset($_FILES['local_file']);
 				}
 			}
 			$res = $image->upload($file);

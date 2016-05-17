@@ -18,13 +18,13 @@
               <label>
               <div class="title">选择图片</div>
               <div class="control">
-                <input type="file" name="image_file" id="image_file" required>
+                <input type="file" name="local_file" id="local_file" required>
               </div>
               </label>
             </div>
-            <div class="tips center hide" id="file_status"><i class="fa fa-refresh fa-spin fa-fw"></i><span>文件处理中...</span></div>
+            <div class="tips center hide" id="handle_status"><i class="fa fa-refresh fa-spin fa-fw"></i><span>文件处理中...</span></div>
           </fieldset>
-          <input type="hidden" name="image_path" id="upload_image_result">
+          <input type="hidden" name="image_path" id="exists_result">
           <div class="form-button">
             <button type="submit">添加</button>
           </div>
@@ -57,7 +57,7 @@
 <script src="/static/js/spark-md5.min.js"></script> 
 <script src="/static/js/ajaxfileupload.js"></script> 
 <script>
-document.getElementById('image_file').addEventListener('change', function(e){
+document.getElementById('local_file').addEventListener('change', function(e){
 	if(typeof FileReader == 'undefined')
 		return;
 	//获取文件md5
@@ -73,11 +73,11 @@ document.getElementById('image_file').addEventListener('change', function(e){
 			chunkSize = 2097152,
 			currentChunk = 0,
       chunks = Math.ceil(file.size / chunkSize),
-			fileStatus = document.getElementById('file_status'),
-			uploadResult = document.getElementById('upload_image_result');
+			handleStatus = document.getElementById('handle_status'),
+			uploadResult = document.getElementById('exists_result');
 	
 	uploadResult.value = '';
-	fileStatus.classList.remove('hide');
+	handleStatus.classList.remove('hide');
 	
 	fileReader.onload = function(e){
 		spark.append(e.target.result);
@@ -86,8 +86,8 @@ document.getElementById('image_file').addEventListener('change', function(e){
 			loadNext();
 		} else {
 			md5 = spark.end();
-			fileStatus.querySelector('span').textContent = '处理完毕';
-			window.setTimeout(function(){fileStatus.classList.remove('show');fileStatus.classList.add('hide');}, 1000);
+			handleStatus.querySelector('span').textContent = '处理完毕';
+			window.setTimeout(function(){handleStatus.classList.remove('show');handleStatus.classList.add('hide');}, 1000);
 			//console.log(md5);
 			if(md5) {
 				$.get("<{$admin_dir}>/index.php/upload/file_exists/"+md5+"/", function(data){
@@ -109,8 +109,8 @@ document.getElementById('image_file').addEventListener('change', function(e){
 document.getElementById('upload_image').addEventListener('submit', function(e){
 	e.preventDefault();
 	
-	var file = document.getElementById('image_file'),
-			path = document.getElementById('upload_image_result').value;
+	var file = document.getElementById('local_file'),
+			path = document.getElementById('exists_result').value;
 			
 	if(!/\.(?:jpg|jpeg|png|gif)$/i.test(file.value)) {
 		alert('图片格式错误');

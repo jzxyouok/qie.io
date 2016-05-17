@@ -18,11 +18,13 @@
               <label>
               <div class="title">选择文件</div>
               <div class="control">
-                <input type="file" name="normal_file" id="normal_file" required>
+                <input type="file" name="local_file" id="local_file" required>
               </div>
               </label>
             </div>
+            <div class="tips center hide" id="file_status"><i class="fa fa-refresh fa-spin fa-fw"></i><span>文件处理中...</span></div>
           </fieldset>
+          <input type="hidden" name="file_path" id="exists_result">
           <div class="form-button">
             <button type="submit">添加</button>
           </div>
@@ -80,73 +82,85 @@
   </div>
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}> 
+<script src="/static/js/spark-md5.min.js"></script> 
+<script src="/static/js/ajaxfileupload.js"></script> 
 <script>
-document.querySelector('.default-form').addEventListener('submit', function(e){
-	e.preventDefault();
-	var data = $u.getFormValues(this);
+document.getElementById('local_file').addEventListener('change', function(e){
+	if(typeof FileReader == 'undefined')
+		return;
+	//获取文件md5
+	var file = e.target.files[0];
+	if(!file) {
+		return;
+	}
 	
-	$.ajax({url:this.action,
-			method: this.method,
-			data: data,
-			dataType: 'json',
-			success: function(data){
-									if(data.status< 1) {
-										alert(data.result);
-									} else {
-										location.href = location.href;
-									}},
-			error: function(xhr, data) {}
+	var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
+			fileReader = new FileReader(),
+			spark = new SparkMD5.ArrayBuffer(),
+			md5 = '',
+			chunkSize = 2097152,
+			currentChunk = 0,
+      chunks = Math.ceil(file.size / chunkSize),
+			fileStatus = document.getElementById('file_status'),
+			existsResult = document.getElementById('exists_result');
+	
+	existsResult.value = '';
+	fileStatus.classList.remove('hide');
+	
+	fileReader.onload = function(e){
+		spark.append(e.target.result);
+		currentChunk++;
+		if (currentChunk < chunks) {
+			loadNext();
+		} else {
+			md5 = spark.end();
+			fileStatus.querySelector('span').textContent = '处理完毕';
+			window.setTimeout(function(){fileStatus.classList.remove('show');fileStatus.classList.add('hide');}, 1000);
+			//console.log(md5);
+			if(md5) {
+				$.get("<{$admin_dir}>/index.php/upload/file_exists/"+md5+"/", function(data){
+					if(data.status> 0 && data.result.exists)
+						existsResult.value = data.result.path;
+				},'json');
+			}
+			
+		}
+	};
+	function loadNext() {
+		var start = currentChunk * chunkSize,
+        end = (start + chunkSize) >= file.size ? file.size : start + chunkSize;
+				
+    fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+	}
+	loadNext();
+});
+document.getElementById('upload_file').addEventListener('submit', function(e){
+	e.preventDefault();
+	
+	var file = document.getElementById('local_file');
+			
+	if(file.value == '') {
+		alert('请选择文件');
+		return;
+	}
+	$.ajaxFileUpload({
+				url:this.action, 
+				secureuri:false,
+				fileElementId:file.id,
+				dataType: 'text',
+				data:{},
+				success: function (data, status) {
+					if(typeof JSON != 'undefined')
+						data = JSON.parse(data);
+					else
+						eval("data="+data);
+					//console.log('普通上传',data.result.path);
+				},
+				error: function (data, status, e) {
+					console.info(data)
+				}
 	})
 });
-$('.panel .body .manage a.delete').on('click', function(e){
-	if(!confirm('确认删除？'))
-		return false;
-		
-	$.get(this.href,function(data){
-									if(data.status< 1) {
-										alert(data.result);
-									} else {
-										location.href = location.href;
-									}}, 'json');
-	return false;
-});
-$('.panel .body .pagination a.clean').on('click', function(e){	
-	$.get(this.href,function(data){
-									if(data.status< 1) {
-										alert(data.result);
-									} else {
-										location.href = location.href;
-									}}, 'json');
-	return false;
-});
-/*
-document.querySelector('a.delete-more').addEventListener('click', function(e) {
-	e.preventDefault();
-	
-	if(!confirm('确认全部删除？'))
-		return;
-	
-	var ids = [];
-	$(this).parents('.select-table').eq(0).find('input[type=checkbox]:checked').each(function(){
-  	if('' != $(this).val())
-			ids.push($(this).val());
-  });
-	
-	$.ajax({url:this.href,
-			method: "post",
-			data: {'ids':ids.join()},
-			dataType: 'json',
-			success: function(data){
-				if(data.status< 1) {
-					alert(data.result);
-				} else {
-					alert('成功删除: '+data.result);
-					location.href = location.href;
-				}
-			},
-			error: function(xhr, data) {}
-	});
-});*/
 </script>
 </body>
 </html>

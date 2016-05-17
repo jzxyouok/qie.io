@@ -36,7 +36,7 @@ class File extends Model {
 	public $mimes = array(); //允许的extension(key)和mime(value)
 	public $maxSize = 5242880; //5M
 	public $timeout = 600; //上传超时时间
-	public $dir = '/user_files/upload/';
+	public $dir = '';
 	
 	/*
 	 * 上传文件
@@ -50,7 +50,9 @@ class File extends Model {
 	public function transfer($file = NULL, $client = NULL) {
 		if(empty($file))
 			return false;
-
+		
+		if(empty($this->dir))
+			$this->dir = '/user_files/upload/'.date("Ymd");
 		//加载mime
 		if(empty($this->mimes))
 			$this->mimes = Loader::loadVar(APP_PATH.'/config/mime.php', 'mime');
