@@ -1,6 +1,8 @@
 <?php
 /*
- * 文件上传类
+ * 文件类
+ * 客户端文件上传/服务器文件操作
+ *
  * 作者：陈贵标
  * 邮箱：48838096@qq.com
  * 创建时间：2016/04/29
@@ -52,7 +54,7 @@ class File extends Model {
 			return false;
 		
 		if(empty($this->dir))
-			$this->dir = '/user_files/upload/'.date("Ymd");
+			$this->dir = '/user_files/upload/'.(is_object($client)?strtolower(get_class($client)).'/':'').date("Ymd");
 		//加载mime
 		if(empty($this->mimes))
 			$this->mimes = Loader::loadVar(APP_PATH.'/config/mime.php', 'mime');
@@ -184,8 +186,8 @@ class File extends Model {
 			}
 			unset($file);
 			if(!$exists) {
-				if($client && is_callable(array($client,'handle'), true)) {
-					$client->handle($this);
+				if($client && is_callable(array($client,'transferCallback'), true)) {
+					$client->transferCallback($this);
 					$path = $this->dir.'/'.$this->name.'.'.$this->extension;
 				}
 				

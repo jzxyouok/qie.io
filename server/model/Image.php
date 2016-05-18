@@ -51,7 +51,7 @@ class Image extends Model {
 	 *
 	 * @param object $file File对象
 	 */
-	public function handle($file = NULL) {
+	public function transferCallback($file = NULL) {
 		if(!$file)
 			return;
 		

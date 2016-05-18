@@ -14,8 +14,8 @@ class App {
 	 *
 	 */
 	function __construct($process_start = 0) {
+		$isClosed = false;
 		try {
-			$isClose = false;
 			if(!class_exists('Loader')) {
 				if(!file_exists(APP_PATH.'/core/Loader.php'))
 					exit('App::__construct(): Loader not exists');
@@ -38,10 +38,9 @@ class App {
 			if(STATE == -1) {
 				error_reporting(E_ERROR | E_WARNING | E_PARSE); //E_ALL
 				error_reporting(1);
-			} if(STATE === 0) {
-				$isClose = true;
-				error_reporting(0);
 			} else {
+				if(STATE === 0)
+					$isClosed = true;
 				error_reporting(0);
 			}
 			
@@ -63,7 +62,7 @@ class App {
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
 			$dir = $info['dirname'];
 			if($dir == $profile['admin_dir'])
-				$isClose = false;
+				$isClosed = false;
 			$dir = preg_replace($route['dir']['regexp'], $route['dir']['replace'], $dir);
 			//处理path
 			if(!empty($_SERVER['PATH_INFO']))
@@ -91,7 +90,7 @@ class App {
 				$param = -1;
 			}
 			//网站维护模式
-			if($isClose && $ctrlName != 'user') {
+			if($isClosed && $ctrlName != 'user') {
 				exit('we will come back soon.');
 			}
 			
