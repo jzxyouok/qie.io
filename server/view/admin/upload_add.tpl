@@ -57,17 +57,23 @@
 <script src="/static/js/spark-md5.min.js"></script> 
 <script src="/static/js/ajaxfileupload.js"></script> 
 <script>
-document.getElementById('local_file').addEventListener('change', function(e){
-	if(typeof FileReader == 'undefined')
+var filePaths = {};
+var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+
+/*
+ * input[type=file] change事件
+ * 主要功能是计算md5值和查询
+ */
+function fileInputChange(e){
+	if(typeof FileReader == 'undefined' || !blobSlice)
 		return;
 	//获取文件md5
 	var file = e.target.files[0];
-	if(!/^image\//i.test(file.type)) {
+	if(!file || !/^image\//i.test(file.type)) {
 		return;
 	}
 	
-	var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
-			fileReader = new FileReader(),
+	var fileReader = new FileReader(),
 			spark = new SparkMD5.ArrayBuffer(),
 			chunkSize = 2097152,
 			currentChunk = 0,
@@ -85,13 +91,17 @@ document.getElementById('local_file').addEventListener('change', function(e){
 			loadNext();
 		} else {
 			var md5 = spark.end();
-			handleStatus.querySelector('span').textContent = '处理完毕';
-			window.setTimeout(function(){handleStatus.classList.remove('show');handleStatus.classList.add('hide');}, 500);
 			//console.log(md5);
 			if(md5) {
+				if(filePaths[md5]) {
+					existsResult.value = filePaths[md5];
+					resultHandle();
+					return;
+				}
 				$.get("<{$admin_dir}>/index.php/upload/file_exists/"+md5+"/", function(data){
+					resultHandle();
 					if(data.status> 0 && data.result.exists)
-						existsResult.value = data.result.path;
+						filePaths[md5] = existsResult.value = data.result.path;
 				},'json');
 			}
 		}
@@ -102,8 +112,18 @@ document.getElementById('local_file').addEventListener('change', function(e){
 				
     fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
 	}
+	function resultHandle() {
+		handleStatus.querySelector('span').textContent = '处理完毕';
+		handleStatus.classList.remove('show');
+		handleStatus.classList.add('hide');
+	}
 	loadNext();
-});
+}
+//上传成功
+function uploadSuccess(result) {
+	console.log(result);
+}
+document.getElementById('local_file').addEventListener('change', fileInputChange);
 document.getElementById('upload_file').addEventListener('submit', function(e){
 	e.preventDefault();
 	
@@ -115,8 +135,8 @@ document.getElementById('upload_file').addEventListener('submit', function(e){
 		return;
 	}
 	if(path) {
-		console.log('秒传');
-		file.value = '';
+		//根据mdt
+		uploadSuccess({path:path});
 		return;
 	}
 	$.ajaxFileUpload({
@@ -130,10 +150,16 @@ document.getElementById('upload_file').addEventListener('submit', function(e){
 						data = JSON.parse(data);
 					else
 						eval("data="+data);
-					console.log('普通上传');
+					
 					if(data.status < 1)
 						alert(data.result);
-					file.value = '';
+					else {
+						filePaths[data.result.md5] = data.result.path;
+						uploadSuccess({md5:data.result.md5,path:data.result.path});
+					}
+					var file = document.getElementById('local_file');
+					file.removeEventListener('change', fileInputChange);
+					file.addEventListener('change', fileInputChange);
 				},
 				error: function (data, status, e) {
 					console.info(data)
