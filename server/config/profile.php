@@ -3,8 +3,8 @@
  * 网站配置文件
  */
 
-//测试模式
-$profile['test_mode'] = true;
+//1:正常;0:关闭;-1:测试
+$profile['state'] = 1;
 //管理后台二次登录验证
 $profile['admin_relogin'] = true;
 //管理后台物理路径

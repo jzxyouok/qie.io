@@ -83,6 +83,7 @@ form .split-line .text {
     overflow: hidden;
 }
 .field-group.hide {
+    display:block;
     height: 0;
     margin-bottom: 15px;
 }

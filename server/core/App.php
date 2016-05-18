@@ -26,7 +26,7 @@ class App {
 			 */
 			$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
 			//测试模式
-			define('TEST_MODE', isset($profile['test_mode'])?(boolean)$profile['test_mode']:false);
+			define('STATE', (int)$profile['state']);
 			//全局加密SALT
 			define('SALT', (string)$profile['salt']);
 			//domain
@@ -34,7 +34,7 @@ class App {
 			//默认数据库配置
 			define('DB_CONFIG', (string)$profile['db_config']);
 			
-			if(TEST_MODE) {
+			if(STATE == -1) {
 				error_reporting(E_ERROR | E_WARNING | E_PARSE); //E_ALL
 				error_reporting(1);
 			} else {

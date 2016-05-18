@@ -68,6 +68,16 @@ body.manage .default-form {
             </div>
             <div class="split-line"><span class="text">高级选项(<a href="" class="more">显示</a>)</span></div>
             <div class="field-group hide">
+            <div class="input-group">
+              <label>
+              <div class="title">网站状态:</div>
+              <div class="control">
+                <select name="state"><option value="1"<{if $profile.state==1}> selected<{/if}>>正常</option>
+                <option value="0"<{if $profile.state==0}> selected<{/if}>>关闭</option>
+                <option value="-1"<{if $profile.state==-1}> selected<{/if}>>测试</option></select>
+              </div>
+              </label>
+            </div>
               <div class="input-group">
                 <div class="title">管理员二次登录:</div>
                 <div class="control">

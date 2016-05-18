@@ -78,6 +78,9 @@ class Setting extends Model {
 							continue;
 						}
 					}
+					case 'state': {
+						$v = (int)$v;
+					}
 					default: {
 						//salt,加密
 						//domain,域名
