@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016-05-18 09:52:43
+-- Generation Time: 2016-05-18 14:05:14
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -56,7 +56,8 @@ INSERT INTO `article` (`id`, `title`, `content`, `category_id`, `counter`, `keyw
 (6, '案发地方', '<p>请输入文章正文法撒旦</p>', 5, 0, 'tag1,tag2,key1', '', '管理员', '', '', '', 0, '2016-05-05 11:41:53', '2016-05-11 01:54:12'),
 (7, '案发地方法撒旦', '<p>请输入文章正文法撒旦</p>', 5, 0, 'tag1,tag2,key1', '', '管理员', '', '', '', 0, '2016-05-05 11:42:39', '2016-05-05 09:42:39'),
 (8, '试试tag', '<p>试试tag请输入文章正文</p>', 7, 0, 'tag1,tag2,tag3', '份饭', '是否', '法撒旦', '法撒旦', '法撒旦', 0, '2016-05-11 03:52:44', '2016-05-11 01:52:44'),
-(9, '试试tag2', '<p>试试tag请输入文章正文</p>', 9, 0, 'tag1,tag3,汤,tag4,tag5', '', '管理员', '', '', 'ff', 0, '2016-05-11 03:55:49', '2016-05-11 02:42:02');
+(9, '试试tag2', '<p>试试tag请输入文章正文</p>', 9, 0, 'tag1,tag3,汤,tag4,tag5', '', '管理员', '', '', 'ff', 0, '2016-05-11 03:55:49', '2016-05-11 02:42:02'),
+(10, '这是一篇文章哈哈', '<p><img src="../../../../user_files/upload/image/20160518/146357132926_1920x669x0.jpg" alt="6c2dee68c6b29b1b3626ae6a75389d5c" width="1920" height="669" />请输入文章正文</p>', 1, 0, '', '', '管理员', '', '', '', 0, '2016-05-18 13:46:18', '2016-05-18 11:46:18');
 
 -- --------------------------------------------------------
 
@@ -108,6 +109,29 @@ INSERT INTO `category` (`id`, `name`, `description`, `parent_id`, `root_id`, `de
 CREATE TABLE `file` (
   `md5` char(32) NOT NULL DEFAULT '',
   `path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `file`
+--
+
+INSERT INTO `file` (`md5`, `path`) VALUES
+('88c77c32335f647005e1ce4e16e17cc8', '/user_files/upload/image/20160518/146356563498_320x240x0.jpg'),
+('9cf7c5fe2322ee0142fee68115fabf02', '/user_files/upload/image/20160518/146356574623_354x322x0.jpg'),
+('bccd5a415e5c8c660d3d69469f222591', '/user_files/upload/20160518/146355944699.docx'),
+('fe099acaab1140b93fd5b94f60d68a5c', '/user_files/upload/20160518/146355956358.rar');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `image`
+--
+
+CREATE TABLE `image` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `file_md5` char(32) NOT NULL DEFAULT '',
+  `create_time` datetime NOT NULL DEFAULT '1982-10-21 00:00:00',
+  `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -274,6 +298,12 @@ ALTER TABLE `file`
   ADD PRIMARY KEY (`md5`);
 
 --
+-- Indexes for table `image`
+--
+ALTER TABLE `image`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tag`
 --
 ALTER TABLE `tag`
@@ -315,12 +345,17 @@ ALTER TABLE `user_profile`
 -- 使用表AUTO_INCREMENT `article`
 --
 ALTER TABLE `article`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- 使用表AUTO_INCREMENT `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+--
+-- 使用表AUTO_INCREMENT `image`
+--
+ALTER TABLE `image`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- 使用表AUTO_INCREMENT `tag`
 --
