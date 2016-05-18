@@ -31,6 +31,9 @@ class Setting extends Model {
 			$replace = array();
 			
 			foreach($data as $k => $v) {
+				if(!isset($profile[$k]))
+					continue;
+				
 				$v = trim($v);
 				switch($k) {
 					case 'admin_relogin': {
@@ -71,27 +74,28 @@ class Setting extends Model {
 						$replace[] = "\$profile['analytics'] = <<<EOT".PHP_EOL."{$v}".PHP_EOL."EOT;";
 					}
 					break;
-					case 'db_config': {
-						//数据库配置
-						$dbList = $this->getDatabase();
-						if(!isset($dbList[$v])) {
-							continue;
-						}
-					}
-					case 'state': {
-						$v = (int)$v;
-					}
 					default: {
 						//salt,加密
 						//domain,域名
 						//homepage,首页
 						//title,标题
 						//icp,ICP证
-						if(isset($profile[$k])) {
-							$v = trim($v);
-							$search[] = '#\$profile\[\s*\''.$k.'\'\s*]\s*=.+#';	
-							$replace[] = '\$profile[\''.$k.'\'] = \''.$v.'\';';
+						switch($k) {
+							case 'db_config': {
+								//数据库配置
+								$dbList = $this->getDatabase();
+								if(!isset($dbList[$v])) {
+									continue;
+								}
+							}
+							break;
+							case 'state': {
+								$v = (int)$v;
+							}
+							break;
 						}
+						$search[] = '#\$profile\[\s*\''.$k.'\'\s*]\s*=.+#';	
+						$replace[] = '\$profile[\''.$k.'\'] = '.(is_int($v)?$v:'\''.$v.'\'').';';
 					}
 				}
 			}

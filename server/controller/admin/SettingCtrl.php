@@ -53,6 +53,8 @@ class SettingCtrl extends Controller {
 			$data['salt'] = $_POST['salt'];
 		if(isset($_POST['db_config']))
 			$data['db_config'] = $_POST['db_config'];
+		if(isset($_POST['state']))
+			$data['state'] = $_POST['state'];
 			
 		try{
 			$setting = Loader::load('Setting');

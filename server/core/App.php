@@ -15,6 +15,7 @@ class App {
 	 */
 	function __construct($process_start = 0) {
 		try {
+			$isClose = false;
 			if(!class_exists('Loader')) {
 				if(!file_exists(APP_PATH.'/core/Loader.php'))
 					exit('App::__construct(): Loader not exists');
@@ -37,6 +38,9 @@ class App {
 			if(STATE == -1) {
 				error_reporting(E_ERROR | E_WARNING | E_PARSE); //E_ALL
 				error_reporting(1);
+			} if(STATE === 0) {
+				$isClose = true;
+				error_reporting(0);
 			} else {
 				error_reporting(0);
 			}
@@ -57,7 +61,10 @@ class App {
 			$route['path'] = array_merge($route['path'], $userRoute['path']);
 			//处理dir
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
-			$dir = preg_replace($route['dir']['regexp'], $route['dir']['replace'], $info['dirname']);
+			$dir = $info['dirname'];
+			if($dir == $profile['admin_dir'])
+				$isClose = false;
+			$dir = preg_replace($route['dir']['regexp'], $route['dir']['replace'], $dir);
 			//处理path
 			if(!empty($_SERVER['PATH_INFO']))
 				$path = substr($_SERVER['PATH_INFO'], 1);
@@ -82,6 +89,10 @@ class App {
 				$ctrlName = 'main'; //默认控制器，也就是网站首页
 				$method = 'index';
 				$param = -1;
+			}
+			//网站维护模式
+			if($isClose && $ctrlName != 'user') {
+				exit('we will come back soon.');
 			}
 			
 			$ctrlName{0} = strtoupper($ctrlName{0});
