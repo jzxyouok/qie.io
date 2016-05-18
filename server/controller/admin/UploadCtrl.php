@@ -146,6 +146,7 @@ class UploadCtrl extends Controller {
 		
 		try {
 			$file = Loader::load('model/File');
+			$image = Loader::load('model/Image');
 			foreach($md5 as $v) {
 				$res = $file->delete($v);
 				if($res['path']) {
@@ -154,6 +155,7 @@ class UploadCtrl extends Controller {
 					$extension = substr($res['path'], strrpos($res['path'], '.')+1);
 					if(in_array($extension, array('jpg', 'png', 'gif', 'bmp', 'jpeg')))
 						unlink(DOCUMENT_ROOT.$res['path'].'.'.$extension);
+					$image->delete($v);
 				}
 				//一次最多只能删100个文件
 				if($counter>99)
@@ -174,11 +176,6 @@ class UploadCtrl extends Controller {
 		
 		$file = Loader::load('model/Image');
 		$res = $file->select(array('now'=>$now, 'row'=>$row));
-		$images = array();
-		if($res['result']) {
-			foreach($res['result'] as $v)
-				$images[] = array('title'=>$v['md5'], 'value'=>$v['path']);
-		}
-		echo json_encode($images);
+		$this->message(1, $res);
 	}
 }

@@ -80,11 +80,33 @@ class Image extends Model {
 			$file->name = $name;
 		}
 	}
+	/*
+	 * 查询select
+	 * 
+	 * @param array $cfg 原始图片路径
+	 *
+	 * @return array
+	 */
 	public function select($cfg = array()) {
 		$cfg['field'] = array(array('name'=>$this->table,'column'=>'id'),array('name'=>$this->table,'column'=>'create_time'), array('name'=>'file','column'=>'md5'), array('name'=>'file','column'=>'path'));
 		$cfg['table'] = array(array('name'=>'file','type'=>'LEFT JOIN', 'on'=>'`file`.`md5`=`'.$this->table.'`.`file_md5`'));
 		
 		return parent::select($cfg);
+	}
+	/*
+	 * delete
+	 * 
+	 * @param string $md5
+	 *
+	 * @return array
+	 */
+	public function delete($md5 = '') {
+		if(!is_string($md5) || strlen($md5) != 32)
+			return false;
+			
+		$db = Loader::load('Database');
+		$sql = "DELETE FROM `{$this->table}` WHERE `file_md5`='{$md5}' LIMIT 1";
+		return $db->execute($sql);
 	}
 	/*
 	 * 生成图片缩略图，需要GD库支持

@@ -115,11 +115,7 @@ tinymce.init({
     'insertdatetime table paste code'
   ],
   toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
-	image_list: '<{$admin_dir}>/index.php/upload/image_list/'
 });
-function imageListHandle(data) {
-	console.info(data);
-}
 document.querySelector('form').addEventListener('submit', function(e){
 	e.preventDefault();
 	
