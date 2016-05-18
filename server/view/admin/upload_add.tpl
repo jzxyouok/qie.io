@@ -23,6 +23,7 @@
               </label>
             </div>
             <div class="tips center hide" id="handle_status"><i class="fa fa-refresh fa-spin fa-fw"></i><span>文件处理中...</span></div>
+            <div class="result center hide" id="result_status"><img id="result_img" style="max-height:100px; max-width:200px;"></div>
           </fieldset>
           <input type="hidden" name="exists_result" id="exists_result">
           <div class="form-button">
@@ -88,57 +89,86 @@ function fileInputChange(e){
 		spark.append(e.target.result);
 		currentChunk++;
 		if (currentChunk < chunks) {
+			//继续加载
 			loadNext();
 		} else {
+			//数据块加载结束
 			var md5 = spark.end();
 			//console.log(md5);
 			if(md5) {
-				if(filePaths[md5]) {
-					existsResult.value = filePaths[md5];
+				if(typeof filePaths[md5] != 'undefined') {
+					//如果md5已经存在
+					if(filePaths[md5])
+						existsResult.value = filePaths[md5];
 					resultHandle();
 					return;
 				}
 				$.get("<{$admin_dir}>/index.php/upload/file_exists/"+md5+"/", function(data){
-					resultHandle();
-					if(data.status> 0 && data.result.exists)
+					if(data.status> 0 && data.result.exists) {
 						filePaths[md5] = existsResult.value = data.result.path;
+					} else {
+						//不存在时避免多次请求服务器
+						filePaths[md5] = false;
+					}
+					resultHandle();
 				},'json');
 			}
 		}
 	};
+	//开始加载
+	loadNext();
+	
+	//分块加载数据
 	function loadNext() {
 		var start = currentChunk * chunkSize,
         end = (start + chunkSize) >= file.size ? file.size : start + chunkSize;
 				
     fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
 	}
+	//处理结果
 	function resultHandle() {
 		handleStatus.querySelector('span').textContent = '处理完毕';
 		handleStatus.classList.remove('show');
 		handleStatus.classList.add('hide');
 	}
-	loadNext();
 }
-//上传成功
+/*
+ * 上传成功
+ * 如果包含md5，即为新上传，否则为秒传
+ * 
+ * result:{md5:'',path:''}
+ */
 function uploadSuccess(result) {
 	console.log(result);
+	if(!result.path)
+		return;
+	var img = document.getElementById('result_img').src = result.path;
+	var result = document.getElementById('result_status');
+	result.classList.remove('hide');
+	result.classList.add('show');
 }
 document.getElementById('local_file').addEventListener('change', fileInputChange);
 document.getElementById('upload_file').addEventListener('submit', function(e){
 	e.preventDefault();
 	
 	var file = document.getElementById('local_file'),
-			path = document.getElementById('exists_result').value;
+			path = document.getElementById('exists_result').value,
+			result = document.getElementById('result_status');
 			
 	if(!/\.(?:jpg|jpeg|png|gif)$/i.test(file.value)) {
 		alert('图片格式错误');
 		return;
 	}
+	
+	result.classList.remove('show');
+	result.classList.add('hide');
+	
 	if(path) {
-		//根据mdt
+		//如果文件已经存在
 		uploadSuccess({path:path});
 		return;
 	}
+	file.removeEventListener('change', fileInputChange);
 	$.ajaxFileUpload({
 				url:this.action, 
 				secureuri:false,
@@ -151,14 +181,16 @@ document.getElementById('upload_file').addEventListener('submit', function(e){
 					else
 						eval("data="+data);
 					
-					if(data.status < 1)
+					if(data.status < 1) {
+						//失败处理
 						alert(data.result);
-					else {
+					} else {
+						//上传成功
 						filePaths[data.result.md5] = data.result.path;
 						uploadSuccess({md5:data.result.md5,path:data.result.path});
 					}
+					//重新绑定file change事件
 					var file = document.getElementById('local_file');
-					file.removeEventListener('change', fileInputChange);
 					file.addEventListener('change', fileInputChange);
 				},
 				error: function (data, status, e) {
