@@ -18,7 +18,7 @@ class Article extends Model {
 	/*
 	 * 查询文章列表
 	 *
-	 * @param array $cfg array('field'=>,'tables'=>,'order'=>,'row'=>int,'now'=>int)
+	 * @param array $cfg array('field'=>,'table'=>,'order'=>,'row'=>int,'now'=>int)
 	 *
 	 * @return array
 	 */
@@ -26,14 +26,14 @@ class Article extends Model {
 		//处理field
 		$cfg['field'] = array(array('table'=>$this->table,'column'=>'*'),array('table'=>'category','column'=>'name','alias'=>'category_name'));
 		//处理内联
-		$cfg['tables'] = array(array('name'=>'category','type'=>'LEFT JOIN', 'on'=>'`article`.`category_id`=`category`.`id`'));
+		$cfg['table'] = array(array('name'=>'category','type'=>'LEFT JOIN', 'on'=>'`article`.`category_id`=`category`.`id`'));
 		//处理where
 		while(list($k, $v) = each($cfg['where'])) {
 			switch($v['field']) {
 				case 'tag_id': {
 					$cfg['where'][$k]['type'] = 'AND';
 					$cfg['where'][$k]['table'] = 'tag_'.$this->table;
-					$cfg['tables'][] = array('name'=>'tag_'.$this->table,'alias'=>'', 'type'=>'RIGHT JOIN', 'on'=>'`tag_'.$this->table.'`.`target_id`=`'.$this->table.'`.`id`');
+					$cfg['table'][] = array('name'=>'tag_'.$this->table,'alias'=>'', 'type'=>'RIGHT JOIN', 'on'=>'`tag_'.$this->table.'`.`target_id`=`'.$this->table.'`.`id`');
 				}
 				break;
 				case 'title':

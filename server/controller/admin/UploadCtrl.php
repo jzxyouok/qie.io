@@ -168,4 +168,17 @@ class UploadCtrl extends Controller {
 			$this->message(-1, $e->getMessage(), $e->getCode());
 		}
 	}
+	//image list 
+	function image_list($now = 1) {
+		$row = (int)$_GET['row'] or $row = 20;
+		
+		$file = Loader::load('model/Image');
+		$res = $file->select(array('now'=>$now, 'row'=>$row));
+		$images = array();
+		if($res['result']) {
+			foreach($res['result'] as $v)
+				$images[] = array('title'=>$v['md5'], 'value'=>$v['path']);
+		}
+		echo json_encode($images);
+	}
 }

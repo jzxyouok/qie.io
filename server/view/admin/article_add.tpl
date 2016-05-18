@@ -110,15 +110,16 @@ tinymce.init({
   selector: 'textarea',
   height: 500,
   plugins: [
-    'advlist autolink lists link image charmap print preview anchor',
+    'advlist autolink lists link image charmap preview anchor',
     'searchreplace visualblocks fullscreen',
     'insertdatetime table paste code'
   ],
   toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
-  content_css: [
-    '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css'
-  ]
+	image_list: '<{$admin_dir}>/index.php/upload/image_list/'
 });
+function imageListHandle(data) {
+	console.info(data);
+}
 document.querySelector('form').addEventListener('submit', function(e){
 	e.preventDefault();
 	

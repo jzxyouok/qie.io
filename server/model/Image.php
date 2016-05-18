@@ -30,21 +30,25 @@ class Image extends Model {
 		$file->extension = $this->extension;
 		$file->maxSize = $this->maxSize;
 
-		$res = $file->transfer($image, $this);
-
+		$result = $file->transfer($image, $this);
+		
 		$this->name = $file->name;
 		$this->extension = $file->extension;
 		$this->mime = $file->mime;
 		$this->size = $file->size;
 		unset($image, $file);
-		//生成缩略图
-		$size = substr($res['path'], strrpos($res['path'], '_')+1);
-		$size = explode('x', $size);
-		$thumb = $res['path'].'.'.$this->extension;
-		if(self::createThumb($res['path'], $thumb, array('max_width'=>200,'max_height'=>200,'image_width'=>$size[0],'image_height'=>$size[1],'image_extension'=>$this->extension), 70))
-			$res['thumb'] = $thumb;
+		if($result) {
+			$data = array('file_md5'=>$result['md5'],'create_time'=>date(DATE_FORMAT, $_SERVER['REQUEST_TIME']));
+			$result['id'] = parent::insert($data);
+			//生成缩略图
+			$size = substr($result['path'], strrpos($result['path'], '_')+1);
+			$size = explode('x', $size);
+			$thumb = $result['path'].'.'.$this->extension;
+			if(self::createThumb($result['path'], $thumb, array('max_width'=>200,'max_height'=>200,'image_width'=>$size[0],'image_height'=>$size[1],'image_extension'=>$this->extension), 70))
+				$result['thumb'] = $thumb;
+		}
 
-		return $res;
+		return $result;
 	}
 	/*
 	 * 分解图片高度/宽度/拍摄角度
@@ -75,6 +79,12 @@ class Image extends Model {
 		if(rename(DOCUMENT_ROOT . $path, DOCUMENT_ROOT . $file->dir . '/' . $name . '.' . $file->extension)) {
 			$file->name = $name;
 		}
+	}
+	public function select($cfg = array()) {
+		$cfg['field'] = array(array('name'=>$this->table,'column'=>'id'),array('name'=>$this->table,'column'=>'create_time'), array('name'=>'file','column'=>'md5'), array('name'=>'file','column'=>'path'));
+		$cfg['table'] = array(array('name'=>'file','type'=>'LEFT JOIN', 'on'=>'`file`.`md5`=`'.$this->table.'`.`file_md5`'));
+		
+		return parent::select($cfg);
 	}
 	/*
 	 * 生成图片缩略图，需要GD库支持
