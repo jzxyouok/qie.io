@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016-05-13 12:23:50
+-- Generation Time: 2016-05-18 09:52:43
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -113,19 +113,6 @@ CREATE TABLE `file` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `image`
---
-
-CREATE TABLE `image` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `file_md5` char(32) NOT NULL DEFAULT '',
-  `create_time` datetime NOT NULL DEFAULT '1982-10-21 00:00:00',
-  `tm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `tag`
 --
 
@@ -222,7 +209,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `password`, `nick`, `email`, `create_time`, `login_time`, `login_ip`, `tm`) VALUES
-(1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-05-11 04:40:22', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-05-11 02:40:22'),
+(1, 'admin', '6fc596211340374888eda68debf0846ce', '管理员', '48838096@qq.com', '2016-03-25 10:31:28', '2016-05-16 11:19:46', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-05-16 09:19:46'),
 (24, 'fsadfasdf', '1fe992a830802220ba37be5c3838b815e', 'fasfasd', 'fasfs@fasdfasd.co', '2016-04-01 08:26:54', '2016-04-12 10:40:45', '2130706433,2130706433,2130706433,2130706433,2130706433', '2016-04-12 08:40:45'),
 (39, 'test68nffff', '387f418c8740acfca883caa53214abba1', 'ftest68n', 'test68n@fasd.com', '1982-10-21 00:00:00', '2016-04-28 09:58:28', '2130706433', '2016-05-11 03:43:38'),
 (40, 'test168', '1fe992a830802220ba37be5c3838b815e', 'pjlyzs1462936582', 'test168@163.com', '2016-05-11 05:16:22', '2016-05-11 05:26:40', '2130706433,2130706433', '2016-05-11 03:26:40');
@@ -246,7 +233,8 @@ CREATE TABLE `user_admin` (
 
 INSERT INTO `user_admin` (`user_id`, `code`, `password`, `grade`) VALUES
 (1, 'xq1/', 'c816215b20af26b3697a0d563bd9ee8d', 0),
-(24, 'mJbd', '3b5a7c7d8d8b294ce584d47bdd3c59ac', 0);
+(24, 'mJbd', '3b5a7c7d8d8b294ce584d47bdd3c59ac', 0),
+(40, 'M?2k', '95adc91a4aba6bc4178ab4f15ae262e5', 1);
 
 -- --------------------------------------------------------
 
@@ -284,12 +272,6 @@ ALTER TABLE `category`
 --
 ALTER TABLE `file`
   ADD PRIMARY KEY (`md5`);
-
---
--- Indexes for table `image`
---
-ALTER TABLE `image`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tag`
@@ -339,11 +321,6 @@ ALTER TABLE `article`
 --
 ALTER TABLE `category`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
---
--- 使用表AUTO_INCREMENT `image`
---
-ALTER TABLE `image`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- 使用表AUTO_INCREMENT `tag`
 --
