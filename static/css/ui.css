@@ -226,7 +226,7 @@ form .split-line .text {
 }
 .panel table tbody td {
     padding: 8px;
-    vertical-align: top;
+    vertical-align: middle;
     border-bottom: 1px solid #ddd;
 }
 .panel table tbody td.edit input {

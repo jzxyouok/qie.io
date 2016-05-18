@@ -53,8 +53,9 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>MD5</th>
+                <th>状态</th>
                 <th>预览</th>
+                <th>MD5</th>
                 <th>路径</th>
                 <th>操作</th>
               </tr>
@@ -65,8 +66,9 @@
               <td class="center"><label>
                   <input type="checkbox" value="<{$data.result[n].md5}>">
                   <{$smarty.section.n.index+1}></label></td>
-              <td><{$data.result[n].md5}></td>
+              <td class="center"><{if ($DOCUMENT_ROOT|cat:$data.result[n].path)|file_exists}><i class="fa fa-check"></i><{else}><i class="fa fa-close" style="color:red;"></i><{/if}></td>
               <td class="center"><a href="<{$data.result[n].path}>" target="_blank"><{$extension = $data.result[n].path|substr:(($data.result[n].path|strrpos:'.')+1)}><{if $extension == 'jpg' || $extension == 'png' || $extension == 'gif' || $extension == 'jpeg' || $extension == 'bmp'}><img src="<{$data.result[n].path}>" style="max-width:200px; max-height:100px; border:1px solid #ccc; padding:2px;"><{else}><{$extension}><{/if}></a></td>
+              <td><{$data.result[n].md5}></td>
               <td><{$data.result[n].path}></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/upload/delete/<{$data.result[n].md5}>/" class="ajax delete" title="删除">删除</a></td>
             </tr>
@@ -169,6 +171,34 @@ document.getElementById('upload_file').addEventListener('submit', function(e){
 					console.info(data)
 				}
 	})
+});
+//全部删除
+document.querySelector('a.delete-more').addEventListener('click', function(e) {
+	e.preventDefault();
+	
+	if(!confirm('确认全部删除？'))
+		return;
+	
+	var ids = [];
+	$(this).parents('.select-table').eq(0).find('input[type=checkbox]:checked').each(function(){
+  	if('' != $(this).val())
+			ids.push($(this).val());
+  });
+	
+	$.ajax({url:this.href,
+			method: "post",
+			data: {'md5':ids.join()},
+			dataType: 'json',
+			success: function(data){
+				if(data.status< 1) {
+					alert(data.result);
+				} else {
+					alert('成功删除: '+data.result);
+					location.href = location.href;
+				}
+			},
+			error: function(xhr, data) {}
+	});
 });
 </script>
 </body>

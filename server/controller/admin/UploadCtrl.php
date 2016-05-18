@@ -137,19 +137,30 @@ class UploadCtrl extends Controller {
 	//删除
 	function delete($md5 = '') {
 		if(empty($md5))
+			$md5 = $_POST['md5'];
+		if(empty($md5))
 			$this->message(-1, '请输入md5', 1);
-			
+		
+		$md5 = explode(',', $md5);
+		$counter = 0;
+		
 		try {
-			$tag = Loader::load('model/File');
-			$res = $tag->delete($md5);
-			if(!empty($res['code'])) {
-				$this->message(-1, $res['msg'], 10+$res['code']);
-			} else if($res) {
-				//删除缩略图
-				$extension = substr($res['path'], strrpos($res['path'], '.')+1);
-				if(in_array($extension, array('jpg', 'png', 'gif', 'bmp', 'jpeg')))
-					unlink(DOCUMENT_ROOT.$res['path'].'.'.$extension);
-				$this->message(1, $res);
+			$file = Loader::load('model/File');
+			foreach($md5 as $v) {
+				$res = $file->delete($v);
+				if($res['path']) {
+					$counter++;
+					//删除缩略图
+					$extension = substr($res['path'], strrpos($res['path'], '.')+1);
+					if(in_array($extension, array('jpg', 'png', 'gif', 'bmp', 'jpeg')))
+						unlink(DOCUMENT_ROOT.$res['path'].'.'.$extension);
+				}
+				//一次最多只能删100个文件
+				if($counter>99)
+					break;
+			}
+			if($counter) {
+				$this->message(1, $counter);
 			} else {
 				$this->message(0, '操作失败');
 			}

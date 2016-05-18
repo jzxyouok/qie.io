@@ -205,7 +205,7 @@ class File extends Model {
 		return array('md5'=>$md5, 'path'=>$res['path']);
 	}
 	/*
-	 * 删除文件
+	 * 删除文件，只支持单个文件
 	 *
 	 * @param string $md5
 	 *
