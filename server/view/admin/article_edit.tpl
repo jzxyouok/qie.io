@@ -104,6 +104,7 @@
   </div>
   <{include file="./footer.tpl"}> </div>
 <{include file="../common/js.tpl"}> 
+<script src="/static/js/ajaxfileupload.js"></script> 
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
 tinymce.init({
