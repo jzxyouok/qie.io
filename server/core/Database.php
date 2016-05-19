@@ -224,11 +224,11 @@ class Database extends Model {
 		$len = -1;
 		foreach($param as $v) {
 			if($len === -1)
-				$len = strlen($v['type'])+1;
+				$len = strlen($v['type']);
 			$where[] = ($v['type']?$v['type'].' ':'').($v['table']?'`'.$v['table'].'`.':'').($v['field']?'`'.$v['field'].'`':'').$v['condition'];
 		}
 		if($len>0)
-			return substr(implode(' ', $where), $len);
+			return substr(implode(' ', $where), $len+1);
 		else
 			return implode(' ', $where);
 	}

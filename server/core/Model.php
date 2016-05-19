@@ -34,7 +34,7 @@ array (
 	 *
 	 * @return array array('now'=>,'max'=>,'row'=>,'sum'=>,'result'=>)
 	 */
-	public function select($cfg = array('field' => '', 'where' => '', 'table'=>array(), 'order' => '', 'now' => 1, 'row' => 20)) {
+	public function select($cfg = array('field' => '', 'table'=>array(), 'where' => '', 'order' => '', 'now' => 1, 'row' => 20)) {
 		if(empty($cfg['field']))
 			$cfg['field'] = '*';
 		
@@ -128,7 +128,7 @@ array (
 	 */
 	public function update($cfg = array('data'=>array(),'where'=>'','limit'=>0)) {
 		$db = Loader::load('Database');
-		$field = Database::setUpdateField($cfg['data'], $this->table);
+		$field = Database::setUpdateField($cfg['data']);
 		$sql = "UPDATE `{$this->table}` SET {$field}".(!empty($cfg['where'])?" WHERE {$cfg['where']}":"").(!empty($cfg['limit'])?" LIMIT {$cfg['limit']}":"");
 		return $db->execute($sql);
 	}

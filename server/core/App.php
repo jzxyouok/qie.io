@@ -91,7 +91,7 @@ class App {
 			}
 			//网站维护模式
 			if($isClosed && $ctrlName != 'user') {
-				exit('we will come back soon.');
+				self::closed();
 			}
 			
 			$ctrlName{0} = strtoupper($ctrlName{0});
@@ -114,7 +114,7 @@ class App {
 				
 				$param = $position + 1;
 			}
-			$controller->setParamPos($param);
+			$controller->paramPos = $param;
 			if($param != -1 && NULL !== ($param = $segments[$param]))
 				$controller->$method($param);
 			else
@@ -123,12 +123,37 @@ class App {
 			self::error('Exception:'.$error->getMessage());
 		}
 	}
+	/*
+	 * 出错页面
+	 *
+	 * @param string $msg
+	 * @param object $obj
+	 *
+	 */
 	public static function error($msg = '', $obj = null) {
-		if(TEST_MODE) {
+		if(STATE === -1) {
 			header('Content-type: text/html; charset=utf-8');
 			echo '<h4>',$msg,'</h4>','<div><pre>',var_dump($obj),'</pre></div>';
 		} else
 			header('Location: /index.php/error/'.$msg.'/');
 		exit;
+	}
+	/*
+	 * 网站维护页面
+	 */
+	public static function closed() {
+		$profile = Loader::loadVar(APP_PATH.'/config/profile.php', 'profile');
+		$html = <<<EOT
+<html>
+<head>
+<title>网站维护中-{$profile['title']}</title>
+</head>
+<body>
+we will come back soon.
+{$profile['analytics']}
+</body>
+</html>
+EOT;
+		exit($html);
 	}
 }

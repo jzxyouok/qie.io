@@ -12,9 +12,8 @@
 class Controller {
 	const VERSION = '0.9';
 	protected $user = array();
-	protected $paramPos = 1; //自动调用方法的参数uri位置
 	protected $vars = array(); //页面模板需要的变量
-	protected $funcs = array(); //页面模板需要的函数
+	protected $functions = array(); //页面模板需要的函数
 	protected $classes = array(); //页面模板需要的类
 	protected $dynamicCode = "I'm Bill Chen(48838096@qq.com).(a%^&dream@#df$%fj&?<L#%25SWJfdsafsadf"; //生成页面token
 	protected $profile = array(); //config/profile
@@ -22,6 +21,7 @@ class Controller {
 	protected $autoloadResult = array();
 	public $processStart = ''; //控制器加载开始时间
 	public $dir = '';
+	public $paramPos = 1; //自动调用方法的参数uri位置
 	public $segments = array();
 	
 	function __construct() {
@@ -78,7 +78,7 @@ class Controller {
 		$view = Loader::load('View');
 		
 		//assign函数
-		foreach($this->funcs as $k => $v)
+		foreach($this->functions as $k => $v)
 			$view->registerPlugin("function", $k, $v);
 		//assign类
 		foreach($this->classes as $k => $v)
@@ -95,6 +95,24 @@ class Controller {
 		}
 		//显示模板
 		$view->display($tpl);
+	}
+	/*
+	 * 判断是否为管理员
+	 *
+	 * @param boolean $redirect 未登录状态下是否跳转到登录页面
+	 *
+	 * @return boolean
+	 */
+	public function hasAdminLogin($redirect = true) {
+		if(!Loader::load('Passport')->isAdmin()) {
+			//exit('need login');
+			if($redirect)
+				header('Location: '.($this->profile['admin_relogin']?$this->profile['admin_dir'].'/':'/index.php/user/'));
+			else
+				return false;
+		}
+		
+		return true;
 	}
 	/*
 	 * 根据token检查安全性
@@ -142,46 +160,5 @@ class Controller {
 			exit(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error)));
 		} else
 			exit($_GET['jsoncallback'].'('.(json_encode(array('status'=>$status,'result'=>$result, 'error'=>$error))).')');
-	}
-	/*
-	 * 判断是否为管理员
-	 *
-	 * @param boolean $redirect 未登录状态下是否跳转到登录页面
-	 *
-	 * @return boolean
-	 */
-	public function hasAdminLogin($redirect = true) {
-		if(!Loader::load('Passport')->isAdmin()) {
-			//exit('need login');
-			if($redirect)
-				header('Location: '.($this->profile['admin_relogin']?$this->profile['admin_dir'].'/':'/index.php/user/'));
-			else
-				return false;
-		}
-		
-		return true;
-	}
-	/*
-	 * 设置自动调用方法的参数uri位置
-	 * 
-	 * @param int $pos uri位置
-	 * 
-	 */
-	public function setParamPos($pos) {
-		$this->paramPos = $pos;
-	}
-	/*
-	 * 返回自动调用方法的参数uri位置
-	 */
-	public function getParamPos() {
-		return $this->paramPos;
-	}
-	/*
-	 * 获取segment
-	 *
-	 * @param int $pos
-	 */
-	public function getSegment($pos) {
-		return isset($this->segments[$pos])?$this->segments[$pos]:false;
 	}
 }

@@ -126,6 +126,12 @@ class UploadCtrl extends Controller {
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
 			} else if($res) {
+				if($res['path']) {
+					$extension = substr($res['path'], strrpos($res['path'], '.')+1);
+					if(in_array($extension, array('jpg', 'png', 'gif', 'bmp', 'jpeg')))
+						$res['thumb'] = file_exists(DOCUMENT_ROOT.$res['path'].'.'.$extension);
+				}
+				
 				$this->message(1, $res);
 			} else {
 				$this->message(0, '操作失败');
