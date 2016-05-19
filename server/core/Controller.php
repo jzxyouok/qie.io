@@ -10,7 +10,6 @@
  *
  */
 class Controller {
-	const VERSION = '0.9';
 	protected $user = array();
 	protected $vars = array(); //页面模板需要的变量
 	protected $functions = array(); //页面模板需要的函数
@@ -23,6 +22,7 @@ class Controller {
 	public $dir = '';
 	public $paramPos = 1; //自动调用方法的参数uri位置
 	public $segments = array();
+	const VERSION = '0.9';
 	
 	function __construct() {
 		//获取注册用户信息
@@ -58,7 +58,6 @@ class Controller {
 			break;
 			default: {
 				//assign
-				$this->vars['DOCUMENT_ROOT'] = DOCUMENT_ROOT;
 				$this->vars['theme'] = $this->profile['theme'];
 				$this->vars['admin_dir'] = $this->profile['admin_dir'];
 				$this->vars['admin_relogin'] = $this->profile['admin_relogin'];

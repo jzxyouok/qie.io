@@ -28,6 +28,12 @@ class Database extends Model {
 			$this->connect($DBList[$db]);
 		}
 	}
+	/*
+	 * 连接数据库
+	 * 
+	 * @param array $option array('host'=>string,'user'=>string,'password'=>string,'db'=>string,'port'=>int)
+	 *
+	 */
 	public function connect($option) {
 		$this->db = new MySQLi($option['host'], $option['user'], $option['password'], $option['db'], $option['port']);
 		if($this->db->connect_errno)

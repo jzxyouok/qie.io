@@ -94,13 +94,13 @@ INSERT INTO `user_admin` (`user_id`, `code`, `password`, `grade`) VALUES
 class PassportException extends Exception{}
 
 class Passport extends Model {
-	public $table = 'user';
 	private $user = array(); //用户数组
-	public static $users = array();
 	private $expire = 0; //cookie过期时间
 	private $auth = ''; //授权信息
 	private $loginTime = null;
 	private $loginIP = null;
+	public $table = 'user';
+	public static $users = array();
 	const MINIMUM_USER_ID = 1; //最小用户id
 	const EXPIRE_MAX = 1209600; //cookie过期最长时间为一个星期，14*24*60*60
 	const MY_SALT = '!@#qie.$%^io&*()';
@@ -416,7 +416,7 @@ class Passport extends Model {
 	 * @param string $idOrName 用户id或者用户名，如果为空，返回当前登录用户
 	 * @param string $type 查询类型。可选id,name,nick
 	 *
-	 * @return array/boolean 用户数组(array('id'=>,'name'=>,'nick'=>,'face'=>))或者false
+	 * @return array/boolean 用户数组(array('id'=>,'name'=>,'nick'=>))或者false
 	 */
 	public function getUser($idOrName = FALSE, $type = 'id') {
 		if(!$idOrName) {
@@ -488,6 +488,24 @@ class Passport extends Model {
 			} else
 				return false;
 		}
+	}
+	/*
+	 * 设置用户
+	 *
+	 * @param array $user array('id'=>int, 'name'=>string, 'nick'=>string, 'auth'=>string)
+	 *
+	 * @return boolean
+	 */
+	public function setUser($user = array()) {
+		if(!is_int($user['id']) || empty($user['name']) || !preg_match(RegExp::USERNAME, $user['name']) || empty($user['auth']) || empty($user['nick']) || !($res = $this->verify($user['id'], $user['name'], $user['auth'])))
+			return false;
+		
+		$this->auth = $res[0];
+		$this->expire = $res[2];
+		$this->user['id'] = $user['id'];
+		$this->user['name'] = $user['name'];
+		$this->user['nick'] = $user['nick'];
+		return true;
 	}
 	/*
 	 * 密码加密方法

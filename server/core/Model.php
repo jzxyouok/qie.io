@@ -10,8 +10,8 @@
  *
  */
 class Model {
-	public $table = ''; //数据库表名称
 	protected $error = array('code'=>0, 'msg'=>''); //错误代码和信息
+	public $table = ''; //数据库表名称
 	const MAX_PAGE_ROW = 100; //分页最大数
 	
 	function __construct(){}
