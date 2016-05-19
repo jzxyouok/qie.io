@@ -34,14 +34,15 @@ class App {
 			//默认数据库配置
 			define('DB_CONFIG', (string)$profile['db_config']);
 			
+			//是否关闭网站
+			$isClosed = !$profile['state'];
+			
 			if(STATE == -1) {
 				error_reporting(E_ERROR | E_WARNING | E_PARSE); //E_ALL
 				error_reporting(1);
 			} else {
 				error_reporting(0);
 			}
-			//是否关闭网站
-			$isClosed = !!STATE;
 			/*
 			 * 实现路由
 			 */
@@ -84,7 +85,7 @@ class App {
 			$ctrlName = ''; //自动调用的控制器名称
 			$controller = null; //自动调用的控制器
 			$method = ''; //自动调用的控制器方法
-			$param = $position+2; //调用方法是用的参数的uri参数位置为3
+			$param = $position+2; //调用方法时用的参数的uri参数位置为3
 			
 			//按照访问路径加载控制器
 			if(empty($segments[$position]) || !($ctrlName = strtolower($segments[$position]))) {
@@ -99,8 +100,10 @@ class App {
 			
 			$ctrlName{0} = strtoupper($ctrlName{0});
 			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl', array(), false);
+			//控制器不存在
 			if(!$controller)
 				self::error('App::__construct: controller not found');
+			
 			$controller->processStart = $process_start;
 			$controller->dir = $dir;
 			$controller->segments = $segments;
@@ -111,12 +114,13 @@ class App {
 			}
 			
 			if(!is_callable(array($controller, $method))) {
-				$method = 'index';
-				if(!is_callable(array($controller, $method)))
+				if($param == -1 || !is_callable(array($controller, 'index')))
 					self::error('App::__construct: method not found'); //错误处理，找不到对象方法。
 				
+				$method = 'index';
 				$param = $position + 1;
 			}
+			
 			$controller->paramPos = $param;
 			if($param != -1 && NULL !== ($param = $segments[$param]))
 				$controller->$method($param);
