@@ -8,7 +8,7 @@
  */
 class DatabaseException extends Exception {}
 
-class Database extends Model {
+class Database {
 	private $db = null; //数据库连接资源
 	private $sql = ''; //sql查询语句
 	

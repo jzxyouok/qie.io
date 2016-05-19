@@ -7,7 +7,7 @@
  * 
  */
 
-class Setting extends Model {
+class Setting {
 	const PROFILE_PATH = APP_PATH.'/config/profile.php';
 	const DATABASE_PATH = APP_PATH.'/config/database.php';
 	/*

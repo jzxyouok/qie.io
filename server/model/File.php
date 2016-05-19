@@ -251,15 +251,17 @@ class File extends Model {
 	 */
 	protected function verify() {
 		//如果新文件名为空，生成新文件名
-		if(empty($this->name))
-			$this->name = $_SERVER['REQUEST_TIME'] . rand(10, 99);
+		if(empty($this->name)) {
+			$this->name = $_SERVER['REQUEST_TIME'];
+			$counter = rand(10, 99);
+		} else 
+			$counter = '';
 		//如果名字重复
-		$counter = 0;
-		while(file_exists(DOCUMENT_ROOT.$this->dir . '/' . $this->name . '.' . $this->extension)) {
-			$this->name = $this->name.$counter++;
-			if($counter >= 100)
+		while(file_exists(DOCUMENT_ROOT.$this->dir . '/' . $this->name . $counter . '.' . $this->extension)) {
+			if($counter++ >= 100)
 				throw new FileException('File::verify: 生成文件名失败');
 		}
+		$this->name .= $counter;
 		
 		//判断文件大小
 		if($this->size > $this->maxSize)

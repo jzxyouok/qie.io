@@ -14,7 +14,6 @@ class App {
 	 *
 	 */
 	function __construct($process_start = 0) {
-		$isClosed = false;
 		try {
 			if(!class_exists('Loader')) {
 				if(!file_exists(APP_PATH.'/core/Loader.php'))
@@ -39,32 +38,36 @@ class App {
 				error_reporting(E_ERROR | E_WARNING | E_PARSE); //E_ALL
 				error_reporting(1);
 			} else {
-				if(STATE === 0)
-					$isClosed = true;
 				error_reporting(0);
 			}
-			
+			//是否关闭网站
+			$isClosed = !!STATE;
 			/*
 			 * 实现路由
 			 */
 			//处理管理后台目录
-			$route = array('dir'=>array('regexp'=>array('#^'.$profile['admin_dir'].'#i'),
+			$route = array('dir'=>array('regexp'=>array('#^'.$profile['admin_dir'].'#i' //管理后台目录
+																									),
 																	'replace'=>array('/admin')
 																	),
-										'path'=>array('regexp'=>array('/\/+/', '/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u'),
+										'path'=>array('regexp'=>array('/\/+/', //过滤多余的/斜杠
+																									'/[^a-zA-Z0-9_\/,-\\\%\x{4e00}-\x{9fa5}\s]+/u' //过滤非法字符
+																									),
 									  							'replace'=>array('/', '')
 																	));
 			
 			$userRoute = Loader::loadVar(APP_PATH.'/config/route.php');
 			$route['dir'] = array_merge($route['dir'], $userRoute['dir']);
 			$route['path'] = array_merge($route['path'], $userRoute['path']);
-			//处理dir
+			//处理物理目录dir
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
 			$dir = $info['dirname'];
+			//管理目录不允许关闭网站
 			if($dir == $profile['admin_dir'])
 				$isClosed = false;
+			//物理目录转虚拟目录
 			$dir = preg_replace($route['dir']['regexp'], $route['dir']['replace'], $dir);
-			//处理path
+			//处理虚拟path
 			if(!empty($_SERVER['PATH_INFO']))
 				$path = substr($_SERVER['PATH_INFO'], 1);
 			else {
@@ -89,7 +92,7 @@ class App {
 				$method = 'index';
 				$param = -1;
 			}
-			//网站维护模式
+			//关闭网站
 			if($isClosed && $ctrlName != 'user') {
 				self::closed();
 			}
