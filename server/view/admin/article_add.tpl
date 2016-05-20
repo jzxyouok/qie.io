@@ -116,8 +116,8 @@ tinymce.init({
     'insertdatetime table paste pagebreak code'
   ],
   toolbar: 'forecolor backcolor | styleselect bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link imageplus image pagebreak | undo redo code',
-	imageUploadUrl: '<{$admin_dir}>/upload/insert_image/',
-	imageListUrl: '<{$admin_dir}>/upload/image_list/'
+	imageUploadUrl: '<{$admin_dir}>/index.php/upload/insert_image/',
+	imageListUrl: '<{$admin_dir}>/index.php/upload/image_list/'
 });
 document.querySelector('form').addEventListener('submit', function(e){
 	e.preventDefault();
