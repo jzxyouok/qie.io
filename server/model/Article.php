@@ -14,6 +14,7 @@
 
 class Article extends Model {
 	public $table = 'article';
+	const PAGE_BREAK = '<!--pagebreak-->';
 	
 	/*
 	 * 查询文章列表
