@@ -111,11 +111,11 @@ tinymce.init({
   selector: 'textarea',
   height: 500,
   plugins: [
-    'advlist autolink lists link image charmap preview anchor',
+    'advlist autolink lists link imageplus charmap preview anchor',
     'searchreplace visualblocks fullscreen',
-    'insertdatetime table paste code'
+    'insertdatetime table paste pagebreak code'
   ],
-  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
+  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link imageplus pagebreak | code',
 });
 document.querySelector('form').addEventListener('submit', function(e){
 	e.preventDefault();
