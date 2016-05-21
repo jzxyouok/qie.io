@@ -25,8 +25,7 @@ class View extends Smarty {
 	 */
 	public function assignConst() {
 		foreach (get_defined_constants() as $k => $v)
-			if (0 === strpos($k, '__')) 
-				$this->assign($k, $v);
+			$this->assign($k, $v);
     }
 	/* 设置模板文件路径
 	 */

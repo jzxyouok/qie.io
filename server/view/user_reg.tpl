@@ -6,7 +6,7 @@
 <{include file="./common/css.tpl"}>
 </head>
 <body class="user user-reg">
-<{include file="`$DOCUMENT_ROOT`/theme/`$theme`/header.tpl"}>
+<{include file="`$smarty.const.DOCUMENT_ROOT`/theme/`$theme`/header.tpl"}>
 <div class="middle">
   <div class="wrap panel default-form">
     <h2 class="head">用户注册</h2>
@@ -54,7 +54,7 @@
       <input type="hidden" name="token" value="<{$token}>">
     </form>
   </div>
-  <{include file="`$DOCUMENT_ROOT`/theme/`$theme`/footer.tpl"}></div>
+  <{include file="`$smarty.const.DOCUMENT_ROOT`/theme/`$theme`/footer.tpl"}></div>
 <{include file="./common/js.tpl"}>
 <script>
 function refreshImg() {
