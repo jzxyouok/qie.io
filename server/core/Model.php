@@ -32,7 +32,7 @@ array (
   'order' => array (0 => array ('name' => 'article','by' => 'id desc'),1 => array ('name' => 'category','by' => 'id desc'))
 	)
 	 *
-	 * @return array array('now'=>,'max'=>,'row'=>,'sum'=>,'result'=>)
+	 * @return array array('now'=>,'max'=>,'row'=>,'total'=>,'result'=>)
 	 */
 	public function select($cfg = array('field' => '', 'table'=>array(), 'where' => '', 'order' => '', 'now' => 1, 'row' => 20)) {
 		if(empty($cfg['field']))
@@ -78,8 +78,8 @@ array (
 		
 		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`{$table}{$where}";
 		$res = $db->query($sql);
-		$data['sum'] = (int)$res[0]['sum'];
-		if($data['sum']< 1) {
+		$data['total'] = (int)$res[0]['sum'];
+		if($data['total']< 1) {
 			//如果查询为空
 			$data['result'] = array();
 			return $data;
@@ -96,7 +96,7 @@ array (
 			
 			$data['max'] = 0;
 		
-			$data['max'] = ceil($data['sum']/$data['row']);
+			$data['max'] = ceil($data['total']/$data['row']);
 			if($data['now'] > $data['max'])
 				$data['now'] = $data['max'];
 		}
