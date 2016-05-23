@@ -1,0 +1,43 @@
+.mce-image-plus li {
+    width:72px;
+    height:72px;
+    text-align:center;
+    line-height:72px;
+    margin:5px;
+    border:1px solid #ccc;
+    background:#f1f1f1;
+    cursor:pointer;
+    float:left;
+}
+.mce-image-plus li img {
+    max-width:70px;
+    max-height:70px;
+    vertical-align:middle;
+}
+.mce-image-plus-body {
+    padding:5px;
+    padding-bottom:30px;
+    overflow:hidden;
+}
+.mce-image-plus-body>div {
+    width:100%;
+    height:100%;
+    overflow-y:auto;
+}
+.mce-image-plus-footer {
+    height:30px;
+    line-height:30px;
+    bottom:0;
+    right:10px;
+    background-color:white;
+}
+.mce-image-plus-footer a, .mce-image-plus-footer span {
+    display:inline-block;
+    vertical-align: middle;
+    margin: 0 5px;
+    padding: 0 5px;
+    line-height: 20px;
+    border-radius:3px;
+    font-family:  Tahoma, Arial, Verdana, Sans-Serif;
+    font-size: 12px;
+}
