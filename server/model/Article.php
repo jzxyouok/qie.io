@@ -19,7 +19,7 @@ class Article extends Model {
 	/*
 	 * 查询文章列表
 	 *
-	 * @param array $cfg array('field'=>,'table'=>,'order'=>,'row'=>int,'now'=>int)
+	 * @param array $cfg array('field'=>,'table'=>,'order'=>,'size'=>int,'now'=>int)
 	 *
 	 * @return array
 	 */

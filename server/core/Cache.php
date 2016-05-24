@@ -216,7 +216,7 @@ class Cache {
 	 *
 	 * @return int
 	 */
-	public function sum() {
+	public function count() {
 		$c = 0;
 		if($handle = opendir(DOCUMENT_ROOT.self::DIR)) {
 			while(false !== ($res = readdir($handle))) {

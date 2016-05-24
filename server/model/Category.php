@@ -53,7 +53,7 @@ class Category extends Model {
 	public $table = 'category';
 
 	public function select($cfg = array()) {
-		$cfg['field'] = "`{$this->table}`.*,(SELECT COUNT(1) FROM `article` WHERE `category_id`=`{$this->table}`.`id`) AS `article_sum`";
+		$cfg['field'] = "`{$this->table}`.*,(SELECT COUNT(1) FROM `article` WHERE `category_id`=`{$this->table}`.`id`) AS `article_total`";
 		
 		return parent::select($cfg);
 	}

@@ -38,7 +38,7 @@ class Tag extends Model {
 		$cfg['field'] = "`{$this->table}`.*";
 		
 		foreach($this->relationTables as $v) {
-			$cfg['field'] .= ",(SELECT COUNT(1) FROM `{$this->table}_{$v}` WHERE `tag_id`=`{$this->table}`.`id`) AS `{$v}_sum`";
+			$cfg['field'] .= ",(SELECT COUNT(1) FROM `{$this->table}_{$v}` WHERE `tag_id`=`{$this->table}`.`id`) AS `{$v}_total`";
 			//$tables[$this->table.'_'.$v] = array('alias'=>'', 'type'=>'LEFT JOIN', 'on'=> '`'.$this->table.'`.`id`=`'.$this->table.'_'.$v.'`.`tag_id`');
 		}
 		return parent::select($cfg);

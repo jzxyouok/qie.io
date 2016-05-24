@@ -12,7 +12,7 @@
 class Model {
 	protected $error = array('code'=>0, 'msg'=>''); //错误代码和信息
 	public $table = ''; //数据库表名称
-	const MAX_PAGE_ROW = 100; //分页最大数
+	const MAX_PAGE_SIZE = 100; //分页最大数
 	
 	function __construct(){}
 	
@@ -23,7 +23,7 @@ class Model {
 	/*
 	 * 通用数据库select
 	 *
-	 * @param array $cfg 配置。如果array('field' => '*', 'where' => '', 'order' => 'id DESC', 'now' => 1, 'row' => 20, 'tables'=>array
+	 * @param array $cfg 配置。如果array('field' => '*', 'where' => '', 'order' => 'id DESC', 'current' => 1, 'size' => 20, 'tables'=>array
 	 *                   
 array (
   'field' => array (0 => array ('name' => 'article','column' => '*'),1 => array ('name' => 'category','column' => 'category_name', 'alias'=>'')),
@@ -32,9 +32,9 @@ array (
   'order' => array (0 => array ('name' => 'article','by' => 'id desc'),1 => array ('name' => 'category','by' => 'id desc'))
 	)
 	 *
-	 * @return array array('now'=>,'max'=>,'row'=>,'total'=>,'result'=>)
+	 * @return array array('total'=>0, 'result'=>array(), 'current'=>0, 'max'=>0, 'size'=>0)
 	 */
-	public function select($cfg = array('field' => '', 'table'=>array(), 'where' => '', 'order' => '', 'now' => 1, 'row' => 20)) {
+	public function select($cfg = array('field' => '', 'table'=>array(), 'where' => '', 'order' => '', 'current' => 1, 'size' => 20)) {
 		if(empty($cfg['field']))
 			$cfg['field'] = '*';
 		
@@ -42,6 +42,7 @@ array (
 		$table = '';
 		$order = '';
 		$where = '';
+		$data = array('total'=>0, 'result'=>array(), 'current'=>0, 'max'=>0, 'size'=>0);
 		
 		$db = Loader::load('Database');
 		//处理field
@@ -76,32 +77,31 @@ array (
 				$order = " ORDER BY {$cfg['order']}";
 		}
 		
-		$sql = "SELECT COUNT(1) AS `sum` FROM `{$this->table}`{$table}{$where}";
+		$sql = "SELECT COUNT(1) AS `total` FROM `{$this->table}`{$table}{$where}";
 		$res = $db->query($sql);
-		$data['total'] = (int)$res[0]['sum'];
+		$data['total'] = (int)$res[0]['total'];
 		if($data['total']< 1) {
 			//如果查询为空
-			$data['result'] = array();
 			return $data;
 		}
 		
-		$data['row'] = (int)$cfg['row'];
-		if($data['row'] !== 0) {
-			if($data['row'] > self::MAX_PAGE_ROW) {
-				$data['row'] = self::MAX_PAGE_ROW;
+		$data['size'] = (int)$cfg['size'];
+		if($data['size'] !== 0) {
+			if($data['size'] > self::MAX_PAGE_SIZE) {
+				$data['size'] = self::MAX_PAGE_SIZE;
 			}
-			$data['now'] = (int)$cfg['now'];
-			if($data['now'] < 1)
-				$data['now'] = 1;
+			$data['current'] = (int)$cfg['current'];
+			if($data['current'] < 1)
+				$data['current'] = 1;
 			
 			$data['max'] = 0;
 		
-			$data['max'] = ceil($data['total']/$data['row']);
-			if($data['now'] > $data['max'])
-				$data['now'] = $data['max'];
+			$data['max'] = ceil($data['total']/$data['size']);
+			if($data['current'] > $data['max'])
+				$data['current'] = $data['max'];
 		}
 		
-		$sql = "SELECT {$field} FROM `{$this->table}`{$table}{$where}{$order}".($data['row'] !== 0?" LIMIT ".($data['now']-1)*$data['row'].",{$data['row']}":"");
+		$sql = "SELECT {$field} FROM `{$this->table}`{$table}{$where}{$order}".($data['size'] !== 0?" LIMIT ".($data['current']-1)*$data['size'].",{$data['size']}":"");
 		$data['result'] = $db->query($sql);
 		
 		return $data;

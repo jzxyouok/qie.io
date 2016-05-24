@@ -62,7 +62,7 @@
               <td class="center"><{$smarty.section.n.index+1}></td>
               <td class="center"><{$data.result[n].id}></td>
               <td class="center"><{$data.result[n].word}></td>
-              <td class="center"><a href="<{$admin_dir}>/index.php/article/?tag_id=<{$data.result[n].id}>"><{$data.result[n].article_sum}></a></td>
+              <td class="center"><a href="<{$admin_dir}>/index.php/article/?tag_id=<{$data.result[n].id}>"><{$data.result[n].article_total}></a></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/tag/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
             </tr>
             <{/section}>
@@ -70,7 +70,7 @@
             
           </table>
           <div class="pagination">
-            <div class="info">共<{$data.sum}>个标签/<{$data.max}>页 <!--a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/tag/delete/" title="批量删除" class="delete-more">批量删除</a--><a href="<{$admin_dir}>/index.php/tag/clean/article/" title="清理文章无效tag" class="clean">清理</a></div>
+            <div class="info">共<{$data.total}>个标签/<{$data.max}>页 <!--a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/tag/delete/" title="批量删除" class="delete-more">批量删除</a--><a href="<{$admin_dir}>/index.php/tag/clean/article/" title="清理文章无效tag" class="clean">清理</a></div>
             <div class="paging"><{$pagination}></div>
           </div>
         </div>

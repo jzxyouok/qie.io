@@ -52,7 +52,7 @@
               <td class="edit"><input data-action="<{$admin_dir}>/index.php/category/update/<{$data.result[n].id}>/" data-field="name" type="text" value="<{$data.result[n].name}>"></td>
               <td class="center"><{$data.result[n].depth}></td>
               <td class="center"><{$data.result[n].parent_id}></td>
-              <td class="center"><{$data.result[n].article_sum}></td>
+              <td class="center"><{$data.result[n].article_total}></td>
               <td class="center manage"><a href="<{$admin_dir}>/index.php/category/edit/<{$data.result[n].id}>/" class="modify" title="编辑">编辑</a><a href="<{$admin_dir}>/index.php/category/delete/<{$data.result[n].id}>/" class="delete" title="删除">删除</a></td>
             </tr>
             <{/section}>
@@ -60,7 +60,7 @@
             
           </table>
           <div class="pagination">
-            <div class="info">共<{$data.sum}>个分类/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/category/delete/" title="批量删除" class="delete-more">批量删除</a></div>
+            <div class="info">共<{$data.total}>个分类/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/category/delete/" title="批量删除" class="delete-more">批量删除</a></div>
             <div class="paging"><{$pagination}></div>
           </div>
         </div>

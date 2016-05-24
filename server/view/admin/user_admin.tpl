@@ -43,7 +43,7 @@
             
           </table>
           <div class="pagination">
-            <div class="info">共<{$data.sum}>个管理员/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/user/admin_delete/" title="批量取消" class="delete-more">批量取消</a></div>
+            <div class="info">共<{$data.total}>个管理员/<{$data.max}>页 <a href="#" title="选择" class="select">选择</a><a href="#" title="取消" class="unselect">取消</a><a href="<{$admin_dir}>/index.php/user/admin_delete/" title="批量取消" class="delete-more">批量取消</a></div>
             <div class="paging"><{$pagination}></div>
           </div>
         </div>

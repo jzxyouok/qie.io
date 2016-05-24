@@ -153,7 +153,7 @@ class Database {
 	 *
 	 * @return int
 	 */
-	public function sum($table, $where = '') {
+	public function count($table, $where = '') {
 		
 	}
 	/*
