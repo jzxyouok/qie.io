@@ -291,12 +291,12 @@ form .split-line .text {
     height: 0;
     clear: both;
 }
-.panel .pagination .paging a, .panel .pagination .paging span, .panel .pagination .paging strong {
+.panel .pagination .paging a, .panel .pagination .paging span {
     padding:6px 12px;
     border: 1px solid #ddd;
     border-left: none;
 }
-.panel .pagination .paging strong, .panel .pagination .paging a:hover {
+.panel .pagination .paging a:hover {
     background-color: #337ab7;
     border-color: #337ab7;
     color: white;

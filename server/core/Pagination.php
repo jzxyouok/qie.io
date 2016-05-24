@@ -18,7 +18,7 @@ class Pagination {
 	private $start = 0; //数据开始位置
 	public $leftSize = 5; //左边显示页数
 	public $rightSize = 2; //右边显示页数
-	public $currentClass = 'on'; //但前页样式
+	public $currentClass = 'current'; //但前页样式
 	public $etcString = '<span class="etc">...</span>'; //隐藏内容html格式
 	public $startText = '&lt;&lt;'; //第一页
 	public $endText = '&gt;&gt;'; //最后页
@@ -207,36 +207,34 @@ class Pagination {
 				$this->leftSize = 3;
 			$leftMinSize = floor($this->leftSize/2);//左边显示最小值
 			$leftMaxSize = $this->max - $this->rightSize;//左边显示最大值
+			$i = 0;
+			$length = 0;
 			//显示左边
 			if($this->current <= $leftMinSize) {
 				//如果当前页在最小范围内，显示从1开始
-				for($i = 1; $i <= $this->leftSize; $i++)
-					if($i == $this->current)
-						$footer .= '<span class="' . $this->currentClass . '" title="第' . $i . '页">' . $i . '</span>';
-					else
-						$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
+				$i = 1;
+				$length = $this->leftSize;
 			} else if($this->current < ($this->leftSize%2 == 1 ? $leftMaxSize-$leftMinSize : $leftMaxSize-$leftMinSize +1 )) {
 				//如果当前页在中间位置
-				for($i = ($this->current-$leftMinSize); $i <= ($this->current-$leftMinSize+$this->leftSize-1); $i++)
-					if($i == $this->current)
-						$footer .= '<span class="' . $this->currentClass . '" title="第' . $i . '页">' . $i . '</span>';
-					else
-						$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
+				$i = $this->current-$leftMinSize;
+				$length = $this->current-$leftMinSize+$this->leftSize-1;
 			} else {
 				//如果当前页靠后
-				for($i = $this->max-$this->rightSize-$this->leftSize+1; $i <= $leftMaxSize; $i++)
-					if($i == $this->current)
-						$footer .= '<span class="' . $this->currentClass . '" title="第' . $i . '页">' . $i . '</span>';
-					else
-						$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
-					
+				$i = $this->max-$this->rightSize-$this->leftSize;
+				$length = $leftMaxSize-1;
 				$show_etc = false; //不显示更多
+			}
+			for(; $i <= $length; $i++) {
+				if($i == $this->current)
+					$footer .= '<span class="' . $this->currentClass . '" title="第' . $i . '页">' . $i . '</span>';
+				else
+					$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
 			}
 			//显示更多
 			if($show_etc)
 				$footer .= $this->etcString;
 			//显示右边
-			for($i = $this->max-$this->rightSize+1; $i <= $this->max; $i++) {
+			for($i = $this->max-$this->rightSize; $i <= $this->max; $i++) {
 				if($i == $this->current)
 					$footer .= '<span title="第' . $i . '页" class="' . $this->currentClass . '">' . $i . '</span>';
 				else
