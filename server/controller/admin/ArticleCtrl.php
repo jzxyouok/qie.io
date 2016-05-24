@@ -37,11 +37,11 @@ class ArticleCtrl extends Controller {
 		$orderBy = strtr($orderBy, '_', ' ');
 		
 		$article = Loader::load('model/Article');
-		$this->vars['data'] = $article->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
+		$this->vars['data'] = $article->select(array('where'=>$where, 'current'=>$now, 'size'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
-			'sum'=>$this->vars['data']['sum'],
-			'row'=>$this->vars['data']['row'],
-			'now'=>$this->vars['data']['now'],
+			'total'=>$this->vars['data']['total'],
+			'size'=>$this->vars['data']['size'],
+			'current'=>$this->vars['data']['current'],
 			'uri'=>$this->profile['admin_dir'].'/index.php/article/'
 		)));
 		$this->vars['pagination'] = $pagination->get();

@@ -24,11 +24,11 @@ class UploadCtrl extends Controller {
 		}
 		
 		$file = Loader::load('model/File');
-		$this->vars['data'] = $file->select(array('where'=>$where, 'now'=>$now, 'row'=>$row));
+		$this->vars['data'] = $file->select(array('where'=>$where, 'current'=>$now, 'size'=>$row));
 		$pagination = Loader::load('Pagination', array(array(
-			'sum'=>$this->vars['data']['sum'],
-			'row'=>$this->vars['data']['row'],
-			'now'=>$this->vars['data']['now'],
+			'total'=>$this->vars['data']['total'],
+			'size'=>$this->vars['data']['size'],
+			'current'=>$this->vars['data']['current'],
 			'uri'=>$this->profile['admin_dir'].'/index.php/upload/'
 		)));
 		$this->vars['pagination'] = $pagination->get();

@@ -94,8 +94,6 @@ array (
 			if($data['current'] < 1)
 				$data['current'] = 1;
 			
-			$data['max'] = 0;
-		
 			$data['max'] = ceil($data['total']/$data['size']);
 			if($data['current'] > $data['max'])
 				$data['current'] = $data['max'];

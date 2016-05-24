@@ -29,11 +29,11 @@ class TagCtrl extends Controller {
 		}
 		$orderBy = strtr($orderBy, '_', ' ');
 		$tag = Loader::load('model/Tag');
-		$this->vars['data'] = $tag->select(array('where'=>$where, 'now'=>$now, 'row'=>$row, 'order'=>$orderBy));
+		$this->vars['data'] = $tag->select(array('where'=>$where, 'current'=>$now, 'size'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
-			'sum'=>$this->vars['data']['sum'],
-			'row'=>$this->vars['data']['row'],
-			'now'=>$this->vars['data']['now'],
+			'total'=>$this->vars['data']['total'],
+			'size'=>$this->vars['data']['size'],
+			'current'=>$this->vars['data']['current'],
 			'uri'=>$this->profile['admin_dir'].'/index.php/tag/'
 		)));
 		$this->vars['pagination'] = $pagination->get();
