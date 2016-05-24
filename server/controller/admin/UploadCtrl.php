@@ -182,7 +182,7 @@ class UploadCtrl extends Controller {
 		$row = (int)$_GET['row'] or $row = 20;
 		
 		$file = Loader::load('model/Image');
-		$res = $file->select(array('now'=>$now, 'row'=>$row));
+		$res = $file->select(array('current'=>$now, 'size'=>$row));
 		$this->message(1, $res);
 	}
 }
