@@ -35,9 +35,6 @@ array (
 	 * @return array array('total'=>0, 'result'=>array(), 'current'=>0, 'max'=>0, 'size'=>0)
 	 */
 	public function select($cfg = array('field' => '', 'table'=>array(), 'where' => '', 'order' => '', 'current' => 1, 'size' => 20)) {
-		if(empty($cfg['field']))
-			$cfg['field'] = '*';
-		
 		$field = '';
 		$table = '';
 		$order = '';
@@ -90,12 +87,12 @@ array (
 			if($data['size'] > self::MAX_PAGE_SIZE) {
 				$data['size'] = self::MAX_PAGE_SIZE;
 			}
+			$data['max'] = ceil($data['total']/$data['size']);
+			
 			$data['current'] = (int)$cfg['current'];
 			if($data['current'] < 1)
 				$data['current'] = 1;
-			
-			$data['max'] = ceil($data['total']/$data['size']);
-			if($data['current'] > $data['max'])
+			else if($data['current'] > $data['max'])
 				$data['current'] = $data['max'];
 		}
 		

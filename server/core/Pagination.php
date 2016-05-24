@@ -16,17 +16,17 @@ class Pagination {
 	private $max = 0; //页面总数
 	private $size = 10; //每页显示数
 	private $start = 0; //数据开始位置
-	private $leftSize = 5; //左边显示页数
-	private $rightSize = 2; //右边显示页数
-	private $onStyle = 'on'; //但前页样式
-	private $etc = '<span class="etc">...</span>'; //缩略样式
-	private $query = ''; //参数
-	private $goStart = '&lt;&lt;'; //第一页
-	private $goEnd = '&gt;&gt;'; //最后页
-	private $goPrev = '&lt;'; //上一页
-	private $goNext = '&gt;'; //下一页
-	private $style = 'default'; //分页样式
-	private $uri = '';
+	public $leftSize = 5; //左边显示页数
+	public $rightSize = 2; //右边显示页数
+	public $currentClass = 'on'; //但前页样式
+	public $etcString = '<span class="etc">...</span>'; //隐藏内容html格式
+	public $startText = '&lt;&lt;'; //第一页
+	public $endText = '&gt;&gt;'; //最后页
+	public $prevText = '&lt;'; //上一页
+	public $nextText = '&gt;'; //下一页
+	public $query = ''; //参数
+	public $uri = '';
+	public $style = 'default'; //分页样式
 	//private $isQuery = false;
 	
 	/*
@@ -160,93 +160,6 @@ class Pagination {
 		return $this->start;
 	}
 	/*
-	 * 获取当前页面查询参数
-	 *
-	 * @return string
-	 */
-	public function getQuery() {
-		return $this->query;	
-	}
-	/*
-	 * 设置分页样式
-	 *
-	 * @param string $style {default,mini}
-	 *
-	 * @return string
-	 */
-	public function setLeftSize($size = 3) {
-		return $this->leftSize = (int)$size;	
-	}
-	/*
-	 * 设置分页样式
-	 *
-	 * @param string $style {default,mini}
-	 *
-	 * @return string
-	 */
-	public function setRightSize($size = 3) {
-		return $this->rightSize = (int)$size;	
-	}
-	/*
-	 * 设置分页样式
-	 *
-	 * @param string $style {default,mini}
-	 *
-	 * @return string
-	 */
-	public function setGoStart($go = '') {
-		return $this->goStart = $go;	
-	}
-	/*
-	 * 设置分页样式
-	 *
-	 * @param string $style {default,mini}
-	 *
-	 * @return string
-	 */
-	public function setGoEnd($go = '') {
-		return $this->goEnd = $go;	
-	}
-	/*
-	 * 设置分页样式
-	 *
-	 * @param string $style {default,mini}
-	 *
-	 * @return string
-	 */
-	public function setGoPrev($go = '') {
-		return $this->goPrev = $go;	
-	}
-	/*
-	 * 设置分页样式
-	 *
-	 * @param string $style {default,mini}
-	 *
-	 * @return string
-	 */
-	public function setGoNext($go = '') {
-		return $this->goNext = $go;	
-	}
-	/*
-	 * 设置分页样式
-	 *
-	 * @param string $style {default,mini}
-	 *
-	 * @return string
-	 */
-	public function setStyle($style = 'default') {
-		return $this->style = $style;	
-	}
-	public function setEtc($e) {
-		$this->etc = $e;	
-	}
-	public function setPageTag($p) {
-		$this->pageTag = $p;	
-	}
-	public function setOnStyle($o) {
-		$this->onStyle = $o;	
-	}
-	/*
 	 * 显示分页页脚
 	 *
 	 * @return string
@@ -256,8 +169,6 @@ class Pagination {
 			return '';
 			
 		switch($this->style) {
-			case 'default':
-				return $this->defaultStyle();
 			case 'mini':
 				return $this->miniStyle();
 			default:
@@ -275,13 +186,13 @@ class Pagination {
 		$show_etc = true;//是否显示更多
 		$footer = '';
 			//显示首页，前一页
-		if($this->current > 1) $footer .= '<a href="' . $this->uri . '1'.$this->query.'" title="第一页" class="start">'.$this->goStart.'</a><a href="' . $this->uri . ($this->current -1) .$this->query.'" title="上一页" class="prev">'.$this->goPrev.'</a>';
-			else $footer .= '<span class="start">'.$this->goStart.'</span><span class="prev">'.$this->goPrev.'</span>';
+		if($this->current > 1) $footer .= '<a href="' . $this->uri . '1'.$this->query.'" title="第一页" class="start">'.$this->startText.'</a><a href="' . $this->uri . ($this->current -1) .$this->query.'" title="上一页" class="prev">'.$this->prevText.'</a>';
+			else $footer .= '<span class="start">'.$this->startText.'</span><span class="prev">'.$this->prevText.'</span>';
 			
 		if($this->max <= ($this->leftSize + $this->rightSize)) {
 			for($i = 1; $i <= $this->max; $i++)
 				if($i == $this->current)
-					$footer .= '<strong title="第' . $i . '页" class="' . $this->onStyle . '">' . $i . '</strong>';
+					$footer .= '<strong title="第' . $i . '页" class="' . $this->currentClass . '">' . $i . '</strong>';
 				else
 					$footer .= '<a href="' . $this->uri . $i .$this->query.'" title="第' . $i . '页">' . $i . '</a>';
 		} else {
@@ -292,36 +203,36 @@ class Pagination {
 			if($this->current <= $left_min_size) //如果当前页在最小范围内，显示从1开始
 				for($i = 1; $i <= $this->leftSize; $i++)
 					if($i == $this->current)
-						$footer .= '<strong title="第' . $i . '页" class="' . $this->onStyle . '">' . $i . '</strong>';
+						$footer .= '<strong title="第' . $i . '页" class="' . $this->currentClass . '">' . $i . '</strong>';
 					else
 						$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
 			else if($this->current < ($this->leftSize%2 == 1 ? $left_max_size-$left_min_size : $left_max_size-$left_min_size +1 ))//如果当前页在中间位置
 				for($i = $this->current-$left_min_size; $i <= $this->current-$left_min_size+$this->leftSize-1; $i++)
 					if($i == $this->current)
-						$footer .= '<strong title="第' . $i . '页" class="' . $this->onStyle . '">' . $i . '</strong>';
+						$footer .= '<strong title="第' . $i . '页" class="' . $this->currentClass . '">' . $i . '</strong>';
 					else
 						$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
 			else { //如果当前页靠后
 				for($i = $this->max-$this->rightSize-$this->leftSize+1; $i <= $left_max_size; $i++)
 					if($i == $this->current)
-						$footer .= '<strong title="第' . $i . '页" class="' . $this->onStyle . '">' . $i . '</strong>';
+						$footer .= '<strong title="第' . $i . '页" class="' . $this->currentClass . '">' . $i . '</strong>';
 					else
 						$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
 					
 				$show_etc = false; //不显示更多
 			}
 			//显示更多
-			if($show_etc) $footer .= $this->etc;
+			if($show_etc) $footer .= $this->etcString;
 			//显示右边
 			for($i = $this->max-$this->rightSize+1; $i <= $this->max; $i++)
 				if($i == $this->current)
-					$footer .= '<strong title="第' . $i . '页" class="' . $this->onStyle . '">' . $i . '</strong>';
+					$footer .= '<strong title="第' . $i . '页" class="' . $this->currentClass . '">' . $i . '</strong>';
 				else
 					$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
 		}
 		//显示下一页，最后页
-		if($this->current < $this->max) $footer .= '<a href="' . $this->uri . ($this->current + 1) . $this->query.'" title="下一页" class="next">' . $this->goNext . '</a><a href="' . $this->uri . $this->max . $this->query.'" title="最后页" class="end">'.$this->goEnd.'</a>';
-		else $footer .= '<span title="下一页" class="next">' . $this->goNext . '</span><span title="最后页" class="end">' . $this->goEnd . '</span>';
+		if($this->current < $this->max) $footer .= '<a href="' . $this->uri . ($this->current + 1) . $this->query.'" title="下一页" class="next">' . $this->nextText . '</a><a href="' . $this->uri . $this->max . $this->query.'" title="最后页" class="end">'.$this->endText.'</a>';
+		else $footer .= '<span title="下一页" class="next">' . $this->nextText . '</span><span title="最后页" class="end">' . $this->endText . '</span>';
 		
 		return $footer;
 	}
@@ -335,14 +246,14 @@ class Pagination {
 		$footer = '';
 		
 		if($this->current < 2)
-			$footer .= '<span class="start">'.$this->goStart.'</span><span class="prev">'.$this->goPrev.'</span>';
+			$footer .= '<span class="start">'.$this->startText.'</span><span class="prev">'.$this->prevText.'</span>';
 		else
-			$footer .= '<a href="' . $this->query . $this->pageTag . '=1" title="第一页" class="start">'.$this->goStart.'</a><a href="' . $this->query . $this->pageTag . '=' . ($this->current -1) . '" title="上一页" class="prev">'.$this->goPrev.'</a>';
+			$footer .= '<a href="' . $this->query . $this->pageTag . '=1" title="第一页" class="start">'.$this->startText.'</a><a href="' . $this->query . $this->pageTag . '=' . ($this->current -1) . '" title="上一页" class="prev">'.$this->prevText.'</a>';
 		
 		if($this->current < $this->max)
-			$footer .= '<a href="' . $this->query . $this->pageTag . '=' . ($this->current + 1) . '" title="下一页" class="next">' . $this->goNext . '</a><a href="' . $this->query . $this->pageTag . '=' . $this->max . '" title="最后页" class="end">'.$this->goEnd.'</a>';
+			$footer .= '<a href="' . $this->query . $this->pageTag . '=' . ($this->current + 1) . '" title="下一页" class="next">' . $this->nextText . '</a><a href="' . $this->query . $this->pageTag . '=' . $this->max . '" title="最后页" class="end">'.$this->endText.'</a>';
 		else
-			$footer .= '<span title="下一页" class="next">' . $this->goNext . '</span><span title="最后页" class="end">' . $this->goEnd . '</span>';
+			$footer .= '<span title="下一页" class="next">' . $this->nextText . '</span><span title="最后页" class="end">' . $this->endText . '</span>';
 		
 		return $footer;
 	}
