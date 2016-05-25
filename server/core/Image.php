@@ -24,7 +24,7 @@ class Image extends Model {
 		if(empty($image))
 			return false;
 		
-		$file = Loader::load('model/File');
+		$file = Loader::load('File');
 		$file->mimes = $this->mimes;
 		$file->dir = $this->dir. date("Ymd");
 		$file->extension = $this->extension;

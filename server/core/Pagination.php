@@ -24,7 +24,7 @@ class Pagination {
 	public $endText = '&gt;&gt;'; //最后页
 	public $prevText = '&lt;'; //上一页
 	public $nextText = '&gt;'; //下一页
-	public $query = ''; //参数
+	public $queryString = ''; //参数
 	public $uri = '';
 	public $style = 'default'; //分页样式
 	//private $isQuery = false;
@@ -41,9 +41,11 @@ class Pagination {
 	}
 	public function init($config = array()) {
 		if($config) {
-			$this->total = $config['total'];
-			$this->size = $config['size'];
-			$this->current = $config['current'];
+			//数据
+			$this->total = (int)$config['total'];
+			$this->size = (int)$config['size'];
+			$this->current = (int)$config['current'];
+			//跳转地址
 			$this->uri = $config['uri'] or $this->uri = $_SERVER['REQUEST_URI'];
 			//$config['is_query'] = true;
 			//$config['query_flag'] = 'pg';
@@ -51,7 +53,7 @@ class Pagination {
 			if(!$config['is_query']) {
 				if('/' != $this->uri{strlen($this->uri)-1})
 					$this->uri .= '/';
-				$this->query = '/'.($_SERVER['QUERY_STRING']?'?'.$_SERVER['QUERY_STRING']:'');
+				$this->queryString = '/'.($_SERVER['QUERY_STRING']?'?'.$_SERVER['QUERY_STRING']:'');
 			} else {
 				if(!empty($_SERVER['QUERY_STRING'])) {
 					$this->query = array();
@@ -67,18 +69,17 @@ class Pagination {
 					else
 						$this->query = '';
 				}
-					
+				
 				$this->uri .= (false !== strpos($this->uri, '?') ? '&' : '?').$config['query_flag'].'=';
 			}
 		}
 		
-		if(empty($this->size))
+		if($this->size < 0)
 			$this->size = 20;
 		if($this->total > 0)
 			$this->max = ceil($this->total/$this->size);
 		else
 			$this->max = 0;
-		
 		if($this->current < 1)
 			$this->current = 1;
 		else if($this->max > 0 && $this->current > $this->max)
@@ -190,7 +191,7 @@ class Pagination {
 		
 		//显示首页，前一页
 		if($this->current > 1)
-			$footer .= '<a href="' . $this->uri . '1'.$this->query.'" class="start" title="第一页">'.$this->startText.'</a><a href="' . $this->uri . ($this->current -1) .$this->query.'" class="prev" title="上一页">'.$this->prevText.'</a>';
+			$footer .= '<a href="' . $this->uri . '1'.$this->queryString.'" class="start" title="第一页">'.$this->startText.'</a><a href="' . $this->uri . ($this->current -1) .$this->queryString.'" class="prev" title="上一页">'.$this->prevText.'</a>';
 		else
 			$footer .= '<span class="start">'.$this->startText.'</span><span class="prev">'.$this->prevText.'</span>';
 		
@@ -198,7 +199,7 @@ class Pagination {
 		if($this->max <= ($this->leftSize + $this->rightSize)) {
 			for($i = 1; $i <= $this->max; $i++) {
 				if($i != $this->current)
-					$footer .= '<a href="' . $this->uri . $i .$this->query.'" title="第' . $i . '页">' . $i . '</a>';
+					$footer .= '<a href="' . $this->uri . $i .$this->queryString.'" title="第' . $i . '页">' . $i . '</a>';
 				else
 					$footer .= '<span class="' . $this->currentClass . '" title="第' . $i . '页">' . $i . '</span>';
 			}
@@ -228,7 +229,7 @@ class Pagination {
 				if($i == $this->current)
 					$footer .= '<span class="' . $this->currentClass . '" title="第' . $i . '页">' . $i . '</span>';
 				else
-					$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
+					$footer .= '<a href="' . $this->uri . $i . $this->queryString.'" title="第' . $i . '页">' . $i . '</a>';
 			}
 			//显示更多
 			if($show_etc)
@@ -238,13 +239,13 @@ class Pagination {
 				if($i == $this->current)
 					$footer .= '<span class="' . $this->currentClass . '" title="第' . $i . '页">' . $i . '</span>';
 				else
-					$footer .= '<a href="' . $this->uri . $i . $this->query.'" title="第' . $i . '页">' . $i . '</a>';
+					$footer .= '<a href="' . $this->uri . $i . $this->queryString.'" title="第' . $i . '页">' . $i . '</a>';
 			}
 		}
 		
 		//显示下一页，最后页
 		if($this->current < $this->max)
-			$footer .= '<a href="' . $this->uri . ($this->current + 1) . $this->query.'" class="next" title="下一页">' . $this->nextText . '</a><a href="' . $this->uri . $this->max . $this->query.'" class="end" title="最后页">'.$this->endText.'</a>';
+			$footer .= '<a href="' . $this->uri . ($this->current + 1) . $this->queryString.'" class="next" title="下一页">' . $this->nextText . '</a><a href="' . $this->uri . $this->max . $this->queryString.'" class="end" title="最后页">'.$this->endText.'</a>';
 		else
 			$footer .= '<span class="next" title="下一页">' . $this->nextText . '</span><span class="end" title="最后页">' . $this->endText . '</span>';
 		
@@ -260,12 +261,12 @@ class Pagination {
 		$footer = '';
 		
 		if($this->current >1)
-			$footer .= '<a href="' . $this->query . $this->pageTag . '=1" class="start" title="第一页">'.$this->startText.'</a><a href="' . $this->query . $this->pageTag . '=' . ($this->current -1) . '" class="prev" title="上一页">'.$this->prevText.'</a>';
+			$footer .= '<a href="' . $this->queryString . $this->pageTag . '=1" class="start" title="第一页">'.$this->startText.'</a><a href="' . $this->queryString . $this->pageTag . '=' . ($this->current -1) . '" class="prev" title="上一页">'.$this->prevText.'</a>';
 		else
 			$footer .= '<span class="start">'.$this->startText.'</span><span class="prev">'.$this->prevText.'</span>';
 		
 		if($this->current < $this->max)
-			$footer .= '<a href="' . $this->query . $this->pageTag . '=' . ($this->current + 1) . '" class="next" title="下一页">' . $this->nextText . '</a><a href="' . $this->query . $this->pageTag . '=' . $this->max . '" class="end" title="最后页">'.$this->endText.'</a>';
+			$footer .= '<a href="' . $this->queryString . $this->pageTag . '=' . ($this->current + 1) . '" class="next" title="下一页">' . $this->nextText . '</a><a href="' . $this->queryString . $this->pageTag . '=' . $this->max . '" class="end" title="最后页">'.$this->endText.'</a>';
 		else
 			$footer .= '<span class="next" title="下一页">' . $this->nextText . '</span><span class="end" title="最后页">' . $this->endText . '</span>';
 		

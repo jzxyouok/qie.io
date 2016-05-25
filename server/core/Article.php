@@ -83,7 +83,7 @@ class Article extends Model {
 		$data['category_id'] = (int)$data['category_id'];
 		if($data['keywords']) {
 			//处理tag
-			$tag = Loader::load('model/Tag');
+			$tag = Loader::load('Tag');
 			$words = Tag::format($data['keywords']);
 			$data['keywords'] = implode(',', $words);
 		}
@@ -125,7 +125,7 @@ class Article extends Model {
 			$cfg['data']['content'] = addslashes(trim($cfg['data']['content']));
 		if($cfg['data']['keywords']) {
 			//处理tag
-			$tag = Loader::load('model/Tag');
+			$tag = Loader::load('Tag');
 			$words = Tag::format($cfg['data']['keywords']);
 			$cfg['data']['keywords'] = implode(',', $words);
 		}
@@ -182,7 +182,7 @@ class Article extends Model {
 		
 		$res = parent::delete($cfg);
 		if($res) {
-			$tag = Loader::load('model/Tag');
+			$tag = Loader::load('Tag');
 			$tag->deleteRelation('article', $ids);
 		}
 		
@@ -200,7 +200,7 @@ class Article extends Model {
 		if(empty($words) || empty($id))
 			return false;
 		
-		$tag = Loader::load('model/Tag');
+		$tag = Loader::load('Tag');
 		return $tag->update(array('words'=>$words,'format'=>true,'target_table'=>'article','target_id'=>$id));
 	}
 }

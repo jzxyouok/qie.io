@@ -23,7 +23,7 @@ class UploadCtrl extends Controller {
 			$where = '`word` LIKE "'.$_GET['word'].'%"';
 		}
 		
-		$file = Loader::load('model/File');
+		$file = Loader::load('File');
 		$this->vars['data'] = $file->select(array('where'=>$where, 'current'=>$now, 'size'=>$row));
 		$pagination = Loader::load('Pagination', array(array(
 			'total'=>$this->vars['data']['total'],
@@ -47,7 +47,7 @@ class UploadCtrl extends Controller {
 		if(empty($_FILES['local_file']))
 			$this->message(-1, '请选择文件', 1);
 		try {
-			$tag = Loader::load('model/File');
+			$tag = Loader::load('File');
 			$res = $tag->transfer($_FILES['local_file']);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
@@ -64,7 +64,7 @@ class UploadCtrl extends Controller {
 	function insert_image($t = 'local') {
 		try {
 			$file = NULL;
-			$image = Loader::load('model/Image');
+			$image = Loader::load('Image');
 			//处理图片信息
 			switch($t) {
 				case 'flash': {
@@ -122,7 +122,7 @@ class UploadCtrl extends Controller {
 			$this->message(-1, '请输入md5', 1);
 			
 		try {
-			$file = Loader::load('model/File');
+			$file = Loader::load('File');
 			$res = $file->exists($md5);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
@@ -152,8 +152,8 @@ class UploadCtrl extends Controller {
 		$counter = 0;
 		
 		try {
-			$file = Loader::load('model/File');
-			$image = Loader::load('model/Image');
+			$file = Loader::load('File');
+			$image = Loader::load('Image');
 			foreach($md5 as $v) {
 				$res = $file->delete($v);
 				if($res['path']) {
@@ -181,7 +181,7 @@ class UploadCtrl extends Controller {
 	function image_list($now = 1) {
 		$row = (int)$_GET['row'] or $row = 20;
 		
-		$file = Loader::load('model/Image');
+		$file = Loader::load('Image');
 		$res = $file->select(array('current'=>$now, 'size'=>$row));
 		$this->message(1, $res);
 	}

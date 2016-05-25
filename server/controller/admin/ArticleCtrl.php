@@ -36,7 +36,7 @@ class ArticleCtrl extends Controller {
 		}
 		$orderBy = strtr($orderBy, '_', ' ');
 		
-		$article = Loader::load('model/Article');
+		$article = Loader::load('Article');
 		$this->vars['data'] = $article->select(array('where'=>$where, 'current'=>$now, 'size'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
 			'total'=>$this->vars['data']['total'],
@@ -50,16 +50,16 @@ class ArticleCtrl extends Controller {
 	}
 	//添加文章
 	function add() {
-		$category = Loader::load('model/Category');
+		$category = Loader::load('Category');
 		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`root_id` ASC'));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->view('article_add');
 	}
 	//修改文章
 	function edit($id = 0) {
-		$article = Loader::load('model/Article');
+		$article = Loader::load('Article');
 		$this->vars['data'] = $article->selectOne($id);
-		$category = Loader::load('model/Category');
+		$category = Loader::load('Category');
 		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`depth` ASC'));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->view('article_edit');
@@ -86,7 +86,7 @@ class ArticleCtrl extends Controller {
 			$this->message(-1, '请输入正文内容', 2);
 		
 		try {
-			$article = Loader::load('model/Article');
+			$article = Loader::load('Article');
 			$res = $article->insert($data);
 		
 			if(!empty($res['code'])) {
@@ -130,7 +130,7 @@ class ArticleCtrl extends Controller {
 		}
 		
 		try {
-			$article = Loader::load('model/Article');	
+			$article = Loader::load('Article');	
 			$res = $article->update(array('data'=>$data,'where'=>$id, 'limit'=>1));
 		
 			if(!empty($res['code'])) {
@@ -153,7 +153,7 @@ class ArticleCtrl extends Controller {
 			$this->message(-1, '没有修改的内容', 1);
 		
 		try {
-			$article = Loader::load('model/Article');
+			$article = Loader::load('Article');
 			$res = $article->delete($ids);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
@@ -173,7 +173,7 @@ class ArticleCtrl extends Controller {
 			$this->message(-1, '没有修改的内容', 1);
 		
 		try {
-			$article = Loader::load('model/Article');
+			$article = Loader::load('Article');
 			$res = $article->fixTag($words,$id);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);

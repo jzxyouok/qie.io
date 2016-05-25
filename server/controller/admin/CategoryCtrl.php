@@ -28,7 +28,7 @@ class CategoryCtrl extends Controller {
 			$orderBy = $_GET['orderby'];
 		}
 		$orderBy = strtr($orderBy, '_', ' ');
-		$category = Loader::load('model/Category');
+		$category = Loader::load('Category');
 		$this->vars['data'] = $category->select(array('where'=>$where, 'current'=>$now, 'size'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
 			'total'=>$this->vars['data']['total'],
@@ -43,7 +43,7 @@ class CategoryCtrl extends Controller {
 	//添加分类
 	function add() {
 		$orderBy = '`root_id` ASC';
-		$category = Loader::load('model/Category');
+		$category = Loader::load('Category');
 		$this->vars['category'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
 		$this->view('category_add');
@@ -51,7 +51,7 @@ class CategoryCtrl extends Controller {
 	//修改分类
 	function edit($id = 0) {
 		$orderBy = '`root_id` ASC';
-		$category = Loader::load('model/Category');
+		$category = Loader::load('Category');
 		$this->vars['data'] = $category->selectOne($id);
 		$this->vars['category'] = $category->select(array('where'=>$where, 'row'=>0, 'order'=>$orderBy));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
@@ -66,7 +66,7 @@ class CategoryCtrl extends Controller {
 			$this->message(-1, '请输入名称', 1);
 		
 		try {
-			$category = Loader::load('model/Category');
+			$category = Loader::load('Category');
 			$res = $category->insert(array('name'=>$_POST['name'], 'description'=>$_POST['description'], 'parent_id'=>$_POST['parent_id']));
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
@@ -94,7 +94,7 @@ class CategoryCtrl extends Controller {
 			$this->message(-1, '请输入名称', 1);
 		
 		try {
-			$category = Loader::load('model/Category');
+			$category = Loader::load('Category');
 			$res = $category->update(array('where'=>$id, 'limit'=>1, 'data'=>$data));
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
@@ -116,7 +116,7 @@ class CategoryCtrl extends Controller {
 			$this->message(-1, '没有修改的内容', 1);
 		
 		try {
-			$category = Loader::load('model/Category');
+			$category = Loader::load('Category');
 			$res = $category->delete($ids);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);

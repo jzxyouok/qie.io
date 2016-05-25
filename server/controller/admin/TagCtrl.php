@@ -28,7 +28,7 @@ class TagCtrl extends Controller {
 			$orderBy = $_GET['orderby'];
 		}
 		$orderBy = strtr($orderBy, '_', ' ');
-		$tag = Loader::load('model/Tag');
+		$tag = Loader::load('Tag');
 		$this->vars['data'] = $tag->select(array('where'=>$where, 'current'=>$now, 'size'=>$row, 'order'=>$orderBy));
 		$pagination = Loader::load('Pagination', array(array(
 			'total'=>$this->vars['data']['total'],
@@ -48,7 +48,7 @@ class TagCtrl extends Controller {
 		if(empty($_POST['words']))
 			$this->message(-1, '请输入内容', 1);
 		try {
-			$tag = Loader::load('model/Tag');
+			$tag = Loader::load('Tag');
 			$res = $tag->insert(array('words'=>$_POST['words'],'format'=>true));
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
@@ -69,7 +69,7 @@ class TagCtrl extends Controller {
 		if(empty($ids))
 			$this->message(-1, '没有修改的内容', 1);
 		try {
-			$tag = Loader::load('model/Tag');
+			$tag = Loader::load('Tag');
 			$res = $tag->delete($ids);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
@@ -87,7 +87,7 @@ class TagCtrl extends Controller {
 		if(empty($table))
 			$this->message(-1, '没有修改的内容', 1);
 		try {
-			$tag = Loader::load('model/Tag');
+			$tag = Loader::load('Tag');
 			$res = $tag->clean($table);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
