@@ -59,7 +59,6 @@ class UserCtrl extends Controller {
 		}
 		try {
 			$psp = Loader::load('Passport');
-			$psp->setExpire($this->profile['admin_relogin']?(!empty($_POST['expire'])?(int)$_POST['expire']:604800):0);
 			$res = $psp->login($_POST['user_name'], $_POST['pwd']);
 		
 			if(!empty($res['code'])) {
@@ -68,6 +67,7 @@ class UserCtrl extends Controller {
 				//数据库保存失败
 				$this->message(0, '登录失败');
 			} else {
+				$psp->setExpire($this->profile['admin_relogin']?(!empty($_POST['expire'])?(int)$_POST['expire']:604800):0);
 				$psp->setCookie();
 				if($_GET['url']) {
 					header("Location: {$_GET['url']}");
@@ -79,16 +79,6 @@ class UserCtrl extends Controller {
 			}
 		} catch(Exception $e) {
 			$this->message(-1, $e->getMessage(), $e->getCode());
-		}
-	}
-	//退出
-	public function logout() {
-		$psp = Loader::load('Passport');
-		if($psp->logout()) {
-			if($_GET['url'])
-				header("Location: {$_GET['url']}");
-			else
-				$this->message(1);
 		}
 	}
 	//插入新用户
@@ -120,7 +110,6 @@ class UserCtrl extends Controller {
 		
 		try {
 			$psp = Loader::load('Passport');
-			$psp->setExpire(!empty($_POST['expire'])?(int)$_POST['expire']:604800);
 			$res = $psp->reg($_POST['user_name'], $_POST['pwd'], $_POST['email'], $_POST['nick']);
 			if(!empty($res['code'])) {
 				$this->message(-1, $res['msg'], 10+$res['code']);
@@ -128,6 +117,7 @@ class UserCtrl extends Controller {
 				//数据库保存失败
 				$this->message(0, '注册失败');
 			} else {
+				$psp->setExpire(!empty($_POST['expire'])?(int)$_POST['expire']:604800);
 				$psp->setCookie();
 				if($_GET['url']) {
 					header("Location: {$_GET['url']}");
@@ -137,6 +127,16 @@ class UserCtrl extends Controller {
 			}
 		} catch(Exception $e) {
 			$this->message(-1, $e->getMessage(), $e->getCode());
+		}
+	}
+	//退出
+	public function logout() {
+		$psp = Loader::load('Passport');
+		if($psp->logout()) {
+			if($_GET['url'])
+				header("Location: {$_GET['url']}");
+			else
+				$this->message(1);
 		}
 	}
 	//更新信息
