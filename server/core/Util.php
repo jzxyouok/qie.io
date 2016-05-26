@@ -369,7 +369,11 @@ class Util {
 	 */
 	public static function var2file($file, $varData, $varName) {
 		$oldContent = file_get_contents($file);
-		$content = substr($oldContent, 0, strpos($oldContent, '$'.$varName)).'$'.$varName.' = '.var_export($varData, true).';';
+		if($oldContent) {
+			$content = substr($oldContent, 0, strpos($oldContent, '$'.$varName)).'$'.$varName.' = '.var_export($varData, true).';';
+		} else {
+			$content = "<?php\n\r$".$varName." = ".var_export($varData, true).";";
+		}
 		return file_put_contents($file, $content);
 	}
 	/*

@@ -8,8 +8,8 @@
  */
 
 class Setting {
-	const PROFILE_PATH = APP_PATH.'/config/profile.php';
-	const DATABASE_PATH = APP_PATH.'/config/database.php';
+	const PROFILE_PATH = '/config/profile.php';
+	const DATABASE_PATH = '/config/database.php';
 	/*
 	 *  更新网站信息配置文件(profile)
 	 *
@@ -23,8 +23,8 @@ class Setting {
 			
 		//判断权限
 		$result = false;
-		$profile = Loader::loadVar(self::PROFILE_PATH);
-		$content = file_get_contents(self::PROFILE_PATH);
+		$profile = Loader::loadVar(APP_PATH. self::PROFILE_PATH);
+		$content = file_get_contents(APP_PATH. self::PROFILE_PATH);
 		
 		if($content) {
 			$search = array();
@@ -102,7 +102,7 @@ class Setting {
 			
 			$content = preg_replace($search, $replace, $content);
 			if(!empty($content) && !empty($search)) {
-				$result = file_put_contents(self::PROFILE_PATH, $content);
+				$result = file_put_contents(APP_PATH. self::PROFILE_PATH, $content);
 			}
 		}
 		return $result;
@@ -113,7 +113,7 @@ class Setting {
 	 * @return array
 	 */
 	public function getProfile() {
-		$profile = Loader::loadVar(self::PROFILE_PATH);
+		$profile = Loader::loadVar(APP_PATH. self::PROFILE_PATH);
 		
 		$profile['themes'] = array();
 		$dir = DOCUMENT_ROOT.'/theme';
@@ -139,7 +139,7 @@ class Setting {
 		if(empty($data))
 			return false;
 		
-		return Util::var2file(self::DATABASE_PATH, $data, 'DBList');
+		return Util::var2file(APP_PATH. self::DATABASE_PATH, $data, 'DBList');
 	}
 	/*
 	 * 获取网站数据库配置
@@ -147,6 +147,6 @@ class Setting {
 	 * @return array
 	 */
 	public function getDatabase() {
-		return Loader::loadVar(self::DATABASE_PATH, 'DBList');
+		return Loader::loadVar(APP_PATH. self::DATABASE_PATH, 'DBList');
 	}
 }

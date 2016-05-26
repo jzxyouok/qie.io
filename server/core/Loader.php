@@ -69,6 +69,8 @@ class Loader {
 		if(isset(self::$vars[$path])) {
 			return self::$vars[$path];
 		}
+		if(!file_exists($path))
+			return false;
 		
 		include($path);
 		if(empty($name)) {

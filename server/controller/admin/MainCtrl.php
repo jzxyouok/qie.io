@@ -11,8 +11,8 @@
 class MainCtrl extends Controller {
 	private $isAdmin = false;
 	
-	function __construct($startTime = 0) {
-		parent::__construct($startTime);
+	function __construct() {
+		parent::__construct();
 		$this->isAdmin = $this->hasAdminLogin(false);
 	}
 	/*
