@@ -31,7 +31,7 @@ class Setting {
 			$replace = array();
 			
 			foreach($data as $k => $v) {
-				if(!isset($profile[$k]))
+				if(!isset($profile[$k]) && !isset($profile['meta'][$k]))
 					continue;
 				
 				$v = trim($v);
