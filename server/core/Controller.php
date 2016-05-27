@@ -144,6 +144,34 @@ class Controller {
 			return false;
 	}
 	/*
+	 * 接口访问次数限制
+	 * @param string $key 识别字符串
+	 * @param int $time 持续时间
+	 * @param int $times 频率
+	 *
+	 * @return boolean 受限制时返回true
+	 */
+	public function limit($key = '', $time = 60, $times = 0) {
+		$cache = Loader::load('Cache');
+		$cache->setExpire($time);
+		if(empty($cache))
+			return true;
+		$key = 'limit_'.$key;
+		if(false !== ($res = $cache->get($key))) {
+			$res = (int)$res;
+			if($res > 0) {
+				if($cache->update($key, --$res))
+					return false;
+				else
+					return true;
+			} else
+				return true;
+		} else {
+			$cache->set($key, ($times-1));
+			return false;
+		}
+	}
+	/*
 	 * 前后端数据交换
 	 *
 	 * @param int $status 状态码

@@ -76,7 +76,7 @@ class Cache {
 	 */
 	public function set($key, $value) {
 		//$isNew = false;
-		if(empty($value) || !($path = $this->getPath($key)))
+		if((!is_int($value) && empty($value)) || !($path = $this->getPath($key)))
 			return false;
 		
 		if($this->isMemcache) {
