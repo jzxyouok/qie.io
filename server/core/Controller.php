@@ -58,7 +58,6 @@ class Controller {
 			break;
 			default: {
 				//assign
-				$this->vars['theme'] = $this->profile['theme'];
 				$this->vars['admin_dir'] = $this->profile['admin_dir'];
 				$this->vars['admin_relogin'] = $this->profile['admin_relogin'];
 				$tpl = APP_PATH.'/view'.$this->dir.'/'.$tpl.'.tpl';
@@ -67,6 +66,7 @@ class Controller {
 		if(!file_exists($tpl))
 			throw new Exception('Controller::view: template file not exists');
 			
+		$this->vars['theme'] = $this->profile['theme'];
 		$this->vars['title'] = $this->profile['title']?$this->profile['title']:'默认网站';
 		$this->vars['meta'] = $this->profile['meta'];
 		$this->vars['homepage'] = $this->profile['homepage'];
