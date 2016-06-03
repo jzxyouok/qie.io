@@ -1,4 +1,5 @@
 /*reset bill chen(48838096@qq.com)*/
+/*element*/
 /*html,body*/
 html,body {
     height: 100%
@@ -6,21 +7,29 @@ html,body {
 body {
     text-align:center;
     background-color: #f8f8f8;
-    font-family: \5FAE\8F6F\96C5\9ED1,sans-serif,Arial;
     font-size: 14px;
-    line-height: 1.42857143;
     color: #333;
 }
+a {
+    color:#08c;
+}
+form {
+    text-align: center;
+}
+form fieldset {
+    text-align: left;
+}
+input, select, textarea, button, .button {
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    border-color: rgb(204, 204, 204);
+    display: inline-block;
+    padding:5px 12px;
+}
+input[type=checkbox], input[type=radio] {
+    padding: 0;
+}
 /*class*/
-.center {
-    text-align:center;
-}
-.show {
-    display: block;
-}
-.hide {
-    display: none;
-}
 .color-red {
     color:red;
 }
@@ -48,23 +57,47 @@ body {
 .color-gray {
     color:gray;
 }
+.ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.inline-block {
+    vertical-align: middle;
+    display:inline-block;
+    *zoom:1;
+    *display:inline;
+}
+.text-left {
+    text-align:left;
+}
+.text-right {
+    text-align:right;
+}
+.text-center {
+    text-align:center;
+}
+.show {
+    display: block;
+}
+.hide {
+    display: none;
+}
+.flex {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+.clearfix::after {
+    content:" ";
+    display:block;
+    clear: both;
+    height:0;
+}
+/*class end*/
 /*form*/
-form {
-    text-align: center;
-}
-form fieldset {
-    text-align: left;
-}
-form input, form select, form textarea,form button, form .button {
-    box-sizing: border-box;
-    border: 1px solid transparent;
-    border-color: rgb(204, 204, 204);
-    display: inline-block;
-    padding:5px 12px;
-}
-form fieldset input[type=checkbox], form fieldset input[type=radio] {
-    padding: 0;
-}
 form button, form .button, form input[type=submit],form input[type=reset], form input[type=button] {
     color: #333;
     padding: 6px 24px;

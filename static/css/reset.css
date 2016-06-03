@@ -9,15 +9,18 @@ body, img, p, form, fieldset, h1, h2, h3, h4, h5, h6, table, ul, ol, li, dl, dt,
     font-family: inherit;
     vertical-align: baseline;
 }
+body {
+    font: 12px/1.5 \5FAE\8F6F\96C5\9ED1,Tahoma,Helvetica,\5B8B\4F53;
+}
 a {
     outline: none;
     text-decoration: none;
     cursor: pointer;
 }
 img {
+    vertical-align: bottom;
     border: none;
     -ms-interpolation-mode: bicubic;
-    vertical-align: middle;
 }
 p, td {
     word-wrap: break-word;
@@ -32,6 +35,7 @@ ol {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+    table-layout:fixed;
 }
 caption, th, td {
     vertical-align: middle;
@@ -42,7 +46,7 @@ caption, th {
 caption {
     border-bottom: none;
 }
-input {
+input, select, button {
     outline:none;
 }
 hr {
@@ -56,34 +60,4 @@ i {
 }
 sup, sub {
     line-height: 1;
-}
-/*一些常用的class
-不需要可以删除
-*/
-.ellipsis {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.flex {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-}
-.clearfix::after {
-    content:" ";
-    display:block;
-    clear: both;
-    height:0;
-}
-.old-ie .clearfix {
-    overflow: hidden;
-}
-.inline-block, .icon {
-    vertical-align: middle;
-    display:inline-block;
-    *zoom:1;
-    *display:inline;
 }
