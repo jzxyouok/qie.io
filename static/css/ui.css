@@ -7,12 +7,13 @@ html,body {
 body {
     text-align:center;
     background-color: #f8f8f8;
-    font-size: 14px;
     color: #333;
+    line-height:1.5;
 }
 a {
     color:#08c;
 }
+/*form*/
 form {
     text-align: center;
 }
@@ -29,6 +30,33 @@ input, select, textarea, button, .button {
 input[type=checkbox], input[type=radio] {
     padding: 0;
 }
+button, .button, input[type=submit], input[type=reset], input[type=button] {
+    color: #333;
+    padding: 6px 24px;
+    line-height: 1.5;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color:white;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+button:hover, input[type=submit]:hover, input[type=reset]:hover, input[type=button]:hover, .button:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+input[disabled], select[disabled], textarea[disabled], button[disabed], .disabled {
+    cursor: not-allowed;
+}
+form button[type=submit], form input[type=submit] {
+    padding:6px 28px;
+}
+/*element end*/
 /*class*/
 .color-red {
     color:red;
@@ -98,33 +126,6 @@ input[type=checkbox], input[type=radio] {
 }
 /*class end*/
 /*form*/
-form button, form .button, form input[type=submit],form input[type=reset], form input[type=button] {
-    color: #333;
-    padding: 6px 24px;
-    font-size: 14px;
-    line-height: 1.5;
-    text-align: center;
-    cursor: pointer;
-    white-space: nowrap;
-    vertical-align: middle;
-    background-color:white;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-form button[type=submit], form input[type=submit] {
-    padding:6px 28px;
-}
-form button:hover,form input[type=submit]:hover,form input[type=reset]:hover, form input[type=button]:hover, form .button:hover {
-    background-color: #e6e6e6;
-    border-color: #adadad;
-}
-form button[disabed], form input[disabled], form select[disabled], form textarea[disabled] {
-    cursor: not-allowed;
-}
 form .split-line {
     height:17px;
     line-height: 34px;

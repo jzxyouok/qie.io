@@ -9,8 +9,11 @@ body, img, p, form, fieldset, h1, h2, h3, h4, h5, h6, table, ul, ol, li, dl, dt,
     font-family: inherit;
     vertical-align: baseline;
 }
+html {
+    font-size: 87.5%; /*14px*/
+}
 body {
-    font: 12px/1.5 \5FAE\8F6F\96C5\9ED1,Tahoma,Helvetica,\5B8B\4F53;
+    font-family: \5FAE\8F6F\96C5\9ED1,Tahoma,Helvetica,\5B8B\4F53;
 }
 a {
     outline: none;
