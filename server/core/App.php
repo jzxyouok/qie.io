@@ -94,7 +94,7 @@ class App {
 				$param = -1;
 			}
 			//关闭网站
-			if($isClosed && $ctrlName != 'user') {
+			if($isClosed && !in_array($ctrlName, array('user','captcha'))) {
 				self::closed();
 			}
 			
