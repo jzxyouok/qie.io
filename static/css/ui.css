@@ -1,6 +1,12 @@
-/*reset bill chen(48838096@qq.com)*/
+/*
+ bill chen(48838096@qq.com)
+ 排版 外观
+ */
 /*element*/
-/*html,body*/
+/*
+html,body
+font-size:14px;
+*/
 html,body {
     height: 100%
 }
@@ -8,7 +14,7 @@ body {
     text-align:center;
     background-color: #f1f1f1;
     color: #333;
-    line-height:1.5;
+    line-height:1.5; /*21px*/
 }
 a {
     color:#08c;
@@ -23,17 +29,17 @@ form fieldset {
 input, select, textarea, button, .button {
     box-sizing: border-box;
     border: 1px solid transparent;
-    border-color: rgb(204, 204, 204);
-    display: inline-block;
-    padding:5px 12px;
+    outline:none;
 }
 input[type=checkbox], input[type=radio] {
     padding: 0;
 }
+input[disabled], select[disabled], textarea[disabled], button[disabed], .disabled {
+    cursor: not-allowed;
+}
 button, .button, input[type=submit], input[type=reset], input[type=button] {
     color: #333;
-    padding: 6px 24px;
-    line-height: 1.5;
+    padding: .429em 1.714em; /*6px 24px*/
     cursor: pointer;
     text-align: center;
     white-space: nowrap;
@@ -46,15 +52,12 @@ button, .button, input[type=submit], input[type=reset], input[type=button] {
     -ms-user-select: none;
     user-select: none;
 }
-button:hover, input[type=submit]:hover, input[type=reset]:hover, input[type=button]:hover, .button:hover {
-    background-color: #e6e6e6;
-    border-color: #adadad;
-}
-input[disabled], select[disabled], textarea[disabled], button[disabed], .disabled {
-    cursor: not-allowed;
+button, input[type=submit], input[type=reset], input[type=button] {
+    font-size: 1em;
+    line-height: 1.4;
 }
 form button[type=submit], form input[type=submit] {
-    padding:6px 28px;
+    padding:.429em 2em; /*6px 28px*/
 }
 /*element end*/
 /*class*/
@@ -125,11 +128,12 @@ form button[type=submit], form input[type=submit] {
     height:0;
 }
 /*class end*/
+/*ui basic class*/
 .header, .footer {
     width: 100%;
 }
 .footer {
-    padding-top: 60px;
+    padding-top: 4em;
 }
 .wrap {
     margin:0 auto;
@@ -140,22 +144,64 @@ form button[type=submit], form input[type=submit] {
     border: 1px solid transparent;
     box-sizing: border-box;
     background-color:white;
-    margin: .75em 0;
+    margin: .75em 0; /*10.5px*/
 }
 .panel>.head {
-    padding: .625em .9em;
+    padding: .625em .9em; /*10px 15px*/
     font-size:1.25em;
     line-height: 1;
 }
 .panel>.body {
     padding: 1.125em;
 }
+/*default form*/
+.default-form input, .default-form select, .default-form textarea, .default-form button, .default-form .button {
+    border-radius: .25em;/*4px*/
+    border-color: rgb(204, 204, 204);
+}
+.default-form fieldset input, .default-form fieldset select, .default-form fieldset textarea {
+    padding:.357em .857em; /*5px 12px*/
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -ms-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -moz-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -ms-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.default-form fieldset input:focus, .default-form fieldset select:focus, .default-form fieldset textarea:focus {
+    border-color: #66afe9;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    -ms-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+.default-form fieldset input[type=checkbox], .default-form fieldset input[type=radio] {
+    border:none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
+}
+.default-form button:hover, .default-form input[type=submit]:hover, .default-form input[type=reset]:hover, .default-form input[type=button]:hover, .default-form .button:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+/*ui basic class end*/
+/*ui extend class*/
 /*default-panel*/
 .default-panel {
     border:1px solid #ddd;
-    border-radius:3px;
+    border-radius:.214em;/*3px*/
 }
 .default-panel>.head {
     border-bottom: 1px solid #ddd;
     background-color:#e1e1e1;
 }
+/*table-form*/
+.table-form .title {
+    text-align:right;
+    padding-right:1em;
+}
+/*ui extend class end*/
