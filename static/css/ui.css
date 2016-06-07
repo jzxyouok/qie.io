@@ -6,7 +6,7 @@ html,body {
 }
 body {
     text-align:center;
-    background-color: #f8f8f8;
+    background-color: #f1f1f1;
     color: #333;
     line-height:1.5;
 }
@@ -125,400 +125,37 @@ form button[type=submit], form input[type=submit] {
     height:0;
 }
 /*class end*/
-/*form*/
-form .split-line {
-    height:17px;
-    line-height: 34px;
-    border-bottom: 1px dotted #ccc;
-    margin-bottom: 17px;
-    text-align:center;
-}
-form .split-line .text {
-    background-color:white;
-    padding:0 .5em;
-}
-.field-group {
-    -webkit-transition: height linear .2s;
-    -o-transition: height linear .2s;
-    transition: height linear .2s;
-    overflow: hidden;
-}
-.field-group.hide {
-    display:block;
-    height: 0;
-    margin-bottom: 15px;
-}
-.input-group {
-    margin-bottom: 15px;
-    font-size: 0;
-    line-height: 34px;
-}
-.input-group input[type=text], .input-group input[type=password], .input-group select {
-    height: 34px;
-}
-.input-group input[type=text], .input-group input[type=password], .input-group select, .input-group textarea {
-    width: 100%;
-    min-height:34px;
-    line-height: 1.5;
-    color: #555;
-    background: #fff;
-    border-color: #ccc;
-    border-radius: 4px;
-    vertical-align: top;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-}
-.input-group.has-img img {
-    position: absolute;
-    right:1px;
-    top: 1px;
-    /*transform: translateY(-50%);*/
-    border-radius: 0 4px 4px 0;
-}
-.input-group input:focus {
-    border-color: #66afe9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-}
-.input-group input[type=checkbox]:focus, .input-group input[type=radio]:focus {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-.input-group.has-img, .input-group.has-img label {
-    position: relative;
-}
-.form-button button, .form-button .button, .form-button input[type=submit], .form-button input[type=reset], .form-button input[type=button] {
-    height: 34px;
-    border-radius: 4px;
-}
-/*带icon组件*/
-.has-addon .input-addon {
-    width:15%;
-    display: inline-block;
-    font-size: 14px;
-    box-sizing:border-box;
-    height: 34px;
-    vertical-align: top;
-    text-align: center;
-    border-radius: 4px 0 0 4px;
-    border: 1px solid #ccc;
-    border-right:none;
-    background-color:#eee;
-}
-.has-addon .input-addon .icon {
-    vertical-align: middle;
-}
-.has-addon input[type=text], .has-addon input[type=password], .has-addon select, .has-addon textarea {
-    border-top-left-radius:0;
-    border-bottom-left-radius:0;
-    width:85%;
-}
-/*2列结构*/
-.input-group .title, .input-group .control {
-    font-size: 14px;
-}
-.input-group .title {
-    vertical-align: top;
-}
-.input-group .control {
-    position: relative;
-}
-.two-collumn .title, .two-collumn .control {
-    display: inline-block;
-    vertical-align: top;
-}
-.two-collumn .title {
-    width:25%;
-}
-.two-collumn .control {
-    width:75%;
-}
-/*normal class*/
-.wrap {
-    margin:0 auto;
-    text-align: left;
-}
-.middle {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-/*ui layout*/
 .header, .footer {
     width: 100%;
 }
 .footer {
     padding-top: 60px;
 }
+.wrap {
+    margin:0 auto;
+    text-align: left;
+}
+/*panel*/
 .panel {
-    border-radius: 4px;
     border: 1px solid transparent;
-    border-color:rgb(204,204,204);
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
     box-sizing: border-box;
+    background-color:white;
+    margin: .75em 0;
 }
 .panel>.head {
-    padding: 10px 15px;
-    border-bottom: 1px solid transparent;
-    font-size:16px;
-    border-radius:3px 3px 0 0;
+    padding: .625em .9em;
+    font-size:1.25em;
     line-height: 1;
-    width: auto;
-}
-.panel>.head a {
-    float:right;
 }
 .panel>.body {
-    padding: 15px;
-    background-color:white;
-    border-radius: 0 0 3px 3px;
-}
-.panel table {
-    width: 100%;
-    line-height: 1.5;
-}
-.panel table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #ddd;
-}
-.panel table tbody td {
-    padding: 8px;
-    vertical-align: middle;
-    border-bottom: 1px solid #ddd;
-}
-.panel table tbody td.edit input {
-    display: inline;
-    background: transparent;
-    border: none;
-    font-size: 14px;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-}
-.panel table tbody tr:nth-of-type(odd) {
-    background-color: #f9f9f9;
-}
-.panel .center {
-    text-align: center;
-}
-.panel .pagination .info {
-    float: left;
-}
-.panel .pagination .info a {
-    margin:0 5px;
-}
-.panel .pagination {
-    margin-top: 20px;
-}
-.panel .pagination .paging {
-    float:right;
-    font-family: Verdana,sans-serif, Arial;
-}
-.panel .pagination::after {
-    content:" ";
-    display: inline-block;
-    height: 0;
-    clear: both;
-}
-.panel .pagination .paging a, .panel .pagination .paging span {
-    padding:6px 12px;
-    border: 1px solid #ddd;
-    border-left: none;
-}
-.panel .pagination .paging a:hover {
-    background-color: #337ab7;
-    border-color: #337ab7;
-    color: white;
-}
-.panel .pagination .paging .start {
-    border-left: 1px solid #ddd;
-    border-radius: 4px 0 0 4px;
-}
-.panel .pagination .paging .end {
-    border-radius: 0 4px 4px 0;
+    padding: 1.125em;
 }
 /*default-panel*/
 .default-panel {
-    border-color:#ddd;
+    border:1px solid #ddd;
+    border-radius:3px;
 }
-/*default-form panel*/
-.default-panel,.default-form {
-    border-color:#ddd;
+.default-panel>.head {
+    border-bottom: 1px solid #ddd;
+    background-color:#e1e1e1;
 }
-.default-panel>.head, .default-form>.head {
-    color: #333;
-    background-color: #f5f5f5;
-    border-color: #ddd;
-}
-.default-form .tips {
-    margin-bottom:10px;
-    line-height: 1.5;
-}
-/*inline form*/
-.inline-form {
-    display: inline-block;
-}
-.inline-form .input-group {
-    font-size: 14px;
-    display: inline-block;
-    margin-right: 10px;
-}
-.inline-form fieldset,.inline-form .form-button {
-    display: inline-block;
-}
-.inline-form .input-group input[type=text], .inline-form .input-group input[type=password], .inline-form .input-group select, .inline-form .input-group textarea {
-    width: auto;
-}
-.mce-panel {
-    border-radius: 4px;
-}
-/*manage ui*/
-body.manage a {
-    color:#337ab7;
-}
-body.manage>.header, body.manage>.sidebar {
-    position: absolute;
-    background-color:#f8f8f8;
-    left: 0;
-    top: 0;
-}
-body.manage>.header {
-    height:50px;
-    line-height: 50px;
-    border-bottom:1px solid #e7e7e7;
-    z-index: 3;
-}
-body.manage>.header::after {
-    content:" ";
-    display: inline-block;
-    clear: both;
-}
-body.manage>.header>.title {
-    float:left;
-    padding-left: 20px;
-}
-body.manage>.header>.title a {
-    font-size: 18px;
-    margin:0 10px;
-}
-body.manage>.header>.control-panel {
-    float:right;
-    padding-right: 20px;
-}
-body.manage>.header>.control-panel .fa {
-    vertical-align: middle;
-    font-size: 1.5em;
-}
-body.manage>.header>.control-panel a, body.manage>.header>.control-panel span {
-    margin-right: 10px;
-}
-body.manage>.sidebar {
-    width:300px;
-    height: 100%;
-    z-index: 2;
-}
-body.manage>.sidebar>.wrap, body.manage>.content>.wrap {
-    padding-top:71px;
-}
-body.manage>.sidebar .user-info {
-    text-align:center;
-    line-height: 40px;
-    height: 40px;
-    padding:0 20px;
-}
-body.manage>.sidebar .user-info span {
-    max-width: 210px;
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-}
-body.manage>.sidebar .user-info sup {
-    line-height: 1;
-}
-body.manage>.sidebar .user-info i, body.manage>.sidebar .user-info span, body.manage>.sidebar .user-info a {
-    margin-right:.5em;
-}
-body.manage>.sidebar .nav li {
-    float:none;
-    width: 100%;
-    line-height: 40px;
-    border-bottom:1px solid #e7e7e7;
-    transition: height .2s linear;
-    height:40px;
-    overflow: hidden;
-}
-body.manage>.sidebar .nav li.active {
-
-}
-body.manage>.sidebar .nav li a {
-    display: block;
-    padding:0 20px;
-}
-body.manage>.sidebar .nav li.active>a {
-    background-color:#eee;
-}
-body.manage>.sidebar .nav li a:hover {
-    background-color:#eee;
-}
-body.manage>.sidebar .nav li a i {
-    margin-right:6px;
-    width: 14px;
-}
-body.manage>.sidebar .nav li a .arrow {
-    float:right;
-    line-height: 40px;
-    transition: transform .2s linear;
-}
-body.manage>.sidebar .nav li a .arrow::before {
-    content: "\f104";
-}
-body.manage>.sidebar .nav li.active a .arrow {
-    transform: rotate(-90deg);
-}
-body.manage>.sidebar .nav li.parent li {
-    border: none;
-    height: 40px;
-}
-body.manage>.sidebar .nav li.parent li a {
-    padding-left: 40px;
-}
-body.manage>.sidebar .nav li.parent li:last-child {
-    border-bottom: none;
-}
-body.manage>.content {
-    background-color:white;
-    min-height: 100%;
-    margin-left: 300px;
-    border-left:1px solid #e7e7e7;
-}
-body.manage>.content>.wrap {
-    text-align: center;
-    padding-left:20px;
-    padding-right:20px;
-    padding-bottom: 20px;
-}
-body.manage>.content .panel {
-    border-color:#ddd;
-    text-align: left;
-    margin:0 auto 20px;
-}
-body.manage td.manage a {
-    margin:0 5px;
-}
-/*page*/
-/*login page,reg page, user-center page*/
-body.user .default-form, body.manage .default-form {
-    width:400px;
-    margin:0 auto;
-}
-/*error page*/
-body.error .panel {width:758px;}
-body.error .msg {margin-bottom:15px;}
-body.error .footer {position:fixed; bottom:0;}
