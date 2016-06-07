@@ -19,6 +19,9 @@ body {
 a {
     color:#08c;
 }
+p {
+    margin:.714em 0; /*10px*/
+}
 /*form*/
 form {
     text-align: center;
@@ -30,15 +33,15 @@ input, select, textarea, button, .button {
     box-sizing: border-box;
     border: 1px solid transparent;
     outline:none;
-}
-input[type=checkbox], input[type=radio] {
-    padding: 0;
+    font-size: 1em;
+    margin:0;
 }
 input[disabled], select[disabled], textarea[disabled], button[disabed], .disabled {
     cursor: not-allowed;
 }
 button, .button, input[type=submit], input[type=reset], input[type=button] {
     color: #333;
+    border-color: rgb(204, 204, 204);
     padding: .429em 1.714em; /*6px 24px*/
     cursor: pointer;
     text-align: center;
@@ -53,7 +56,6 @@ button, .button, input[type=submit], input[type=reset], input[type=button] {
     user-select: none;
 }
 button, input[type=submit], input[type=reset], input[type=button] {
-    font-size: 1em;
     line-height: 1.4;
 }
 form button[type=submit], form input[type=submit] {
@@ -154,12 +156,18 @@ form button[type=submit], form input[type=submit] {
 .panel>.body {
     padding: 1.125em;
 }
+.panel p:last-child {
+    margin-bottom: 0;
+}
 /*default form*/
 .default-form input, .default-form select, .default-form textarea, .default-form button, .default-form .button {
     border-radius: .25em;/*4px*/
     border-color: rgb(204, 204, 204);
 }
 .default-form fieldset input, .default-form fieldset select, .default-form fieldset textarea {
+    height:2.4em;/*34px*/
+    width:100%;
+    line-height:1.5;
     padding:.357em .857em; /*5px 12px*/
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
@@ -177,16 +185,56 @@ form button[type=submit], form input[type=submit] {
     -ms-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
 }
-.default-form fieldset input[type=checkbox], .default-form fieldset input[type=radio] {
+.default-form button:hover, .default-form input[type=submit]:hover, .default-form input[type=reset]:hover, .default-form input[type=button]:hover, .default-form .button:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+.default-form fieldset textarea {
+    min-height:7.5em; /*5行*/
+}
+.default-form fieldset select {
+    line-height:1.6em;
+}
+.default-form input[type=checkbox], .default-form input[type=radio] {
+    width:auto;
+    height:auto;
+    padding:0;
     border:none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     -ms-box-shadow: none;
     box-shadow: none;
 }
-.default-form button:hover, .default-form input[type=submit]:hover, .default-form input[type=reset]:hover, .default-form input[type=button]:hover, .default-form .button:hover {
-    background-color: #e6e6e6;
-    border-color: #adadad;
+.default-form .row {
+    margin:.714em 0; /*10px 0*/
+}
+.default-form .title {
+    font-weight: bold;
+}
+.default-form .tips {
+    color:#737373;
+}
+.default-form .error {
+    color:red;
+}
+.default-form .control {
+    margin-bottom:.357em; /*5px*/
+}
+.default-form .img-control {
+    position: relative;
+}
+.default-form .img-control .control {
+    margin:0;
+}
+.default-form .img-control img {
+    position: absolute;
+    right:1px;
+    top: 50%;
+    border-radius: 0 .25em .25em 0;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 /*ui basic class end*/
 /*ui extend class*/
@@ -203,5 +251,24 @@ form button[type=submit], form input[type=submit] {
 .table-form .title {
     text-align:right;
     padding-right:1em;
+    width:40%;
+}
+.table-form td {
+    padding: .714em 0;
+}
+/*mini-form*/
+.mini-form {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.inline-form .control {
+    display:inline;
+    width:auto;
+    margin:0 .357em 0 0; /*0 5px 0 0*/
 }
 /*ui extend class end*/

@@ -33,25 +33,25 @@
           <fieldset>
             <div>
               <label>
-              <div class="title">input text:</div>
+              <div class="control">input text:</div>
               <input type="text" name="user_name" value="" placeholder="请输入用户名" required>
               </label>
             </div>
             <div>
               <label>
-              <div class="title">input password:</div>
+              <div class="control">input password:</div>
               <input type="password" name="pwd" placeholder="请输入密码" required>
               </label>
             </div>
             <div>
               <label>
-              <div class="title">input img:</div>
+              <div class="control">input img:</div>
               <input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
               </label>
               <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
             <div>
               <label>
-              <div class="title">select:</div>
+              <div class="control">select:</div>
               <select>
                 <option>option1</option>
                 <option>option2</option>
@@ -60,7 +60,7 @@
               </label>
             </div>
             <div>
-              <div class="title">input checkbox:</div>
+              <div class="control">input checkbox:</div>
               <div class="control">
                 <label>
                   <input type="checkbox" name="checkbox">
@@ -74,7 +74,7 @@
               </div>
             </div>
             <div>
-              <div class="title">input radio:</div>
+              <div class="control">input radio:</div>
               <div class="control">
                 <label>
                   <input type="radio" name="radio">
@@ -89,8 +89,8 @@
             </div>
             <div>
               <label>
-              <div class="title">textarea:</div>
-              <textarea>textarea</textarea>
+              <div class="control">textarea:</div>
+              <textarea class="control">textarea</textarea></label>
             </div>
           </fieldset>
           <button type="submit">submit</button>
@@ -98,41 +98,47 @@
           <a class="button" href="#" title="button">button</a>
         </form>
       </div>
-      
       <div class="panel default-panel">
         <div class="head">default form</div>
-        <form class="body default-form">
+        <div class="body"><form class="default-form">
           <fieldset>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">input text:</div>
-              <input type="text" name="user_name" value="" placeholder="请输入用户名" required>
+              <div class="control title">input text:</div>
+              <input class="control" type="text" name="user_name" value="" placeholder="请输入用户名" required>
               </label>
+              <div class="control tips">请输入用户名</div>
             </div>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">input password:</div>
-              <input type="password" name="pwd" placeholder="请输入密码" required>
+              <div class="control">input password:</div>
+              <input class="control" type="password" name="pwd" placeholder="请输入密码" required>
               </label>
+              <div class="control tips error">密码输入错误</div>
             </div>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">input img:</div>
-              <input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
+              <div class="control title">input img:</div>
+              <input class="control" type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
               </label>
-              <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
-            <div>
+              <img class="control" src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
+            <div class="row">
               <label>
-              <div class="title">select:</div>
-              <select>
+              <div class="control title">input img:</div>
+              <div class="control img-control"><input class="control" type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required><img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"></div>
+              </label></div>
+            <div class="row">
+              <label>
+              <div class="control">select:</div>
+              <select class="control">
                 <option>option1</option>
                 <option>option2</option>
                 <option>option3</option>
               </select>
               </label>
             </div>
-            <div>
-              <div class="title">input checkbox:</div>
+            <div class="row">
+              <div class="control title">input checkbox:</div>
               <div class="control">
                 <label>
                   <input type="checkbox" name="checkbox">
@@ -145,8 +151,8 @@
                   checkbox3 </label>
               </div>
             </div>
-            <div>
-              <div class="title">input radio:</div>
+            <div class="row">
+              <div class="control">input radio:</div>
               <div class="control">
                 <label>
                   <input type="radio" name="radio">
@@ -159,51 +165,53 @@
                   radio3 </label>
               </div>
             </div>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">textarea:</div>
-              <textarea>textarea</textarea>
+              <div class="control title">textarea:</div>
+              <textarea class="control">textarea</textarea></label>
             </div>
           </fieldset>
           <button type="submit">submit</button>
           <input type="reset" value="reset">
           <a class="button" href="#" title="button">button</a>
         </form>
+        <p>这是一个带外观的默认form表单</p>
+        <p>这是表单附带的一些描述性文字。哈哈哈哈哈哈哈</p></div>
       </div>
       <div class="panel default-panel">
         <div class="head">mini form</div>
         <form class="body mini-form default-form">
           <fieldset>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">input text:</div>
-              <input type="text" name="user_name" value="" placeholder="请输入用户名" required>
+              <div class="control">input text:</div>
+              <input class="control" type="text" name="user_name" value="" placeholder="请输入用户名" required>
               </label>
             </div>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">input password:</div>
-              <input type="password" name="pwd" placeholder="请输入密码" required>
+              <div class="control">input password:</div>
+              <input class="control" type="password" name="pwd" placeholder="请输入密码" required>
               </label>
             </div>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">input img:</div>
-              <input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
+              <div class="control">input img:</div>
+              <div class="control img-control"><input class="control" type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
               </label>
-              <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
-            <div>
+              <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"></div></div>
+            <div class="row">
               <label>
-              <div class="title">select:</div>
-              <select>
+              <div class="control">select:</div>
+              <select class="control">
                 <option>option1</option>
                 <option>option2</option>
                 <option>option3</option>
               </select>
               </label>
             </div>
-            <div>
-              <div class="title">input checkbox:</div>
+            <div class="row">
+              <div class="control">input checkbox:</div>
               <div class="control">
                 <label>
                   <input type="checkbox" name="checkbox">
@@ -216,8 +224,8 @@
                   checkbox3 </label>
               </div>
             </div>
-            <div>
-              <div class="title">input radio:</div>
+            <div class="row">
+              <div class="control">input radio:</div>
               <div class="control">
                 <label>
                   <input type="radio" name="radio">
@@ -230,10 +238,10 @@
                   radio3 </label>
               </div>
             </div>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">textarea:</div>
-              <textarea>textarea</textarea>
+              <div class="control">textarea:</div>
+              <textarea class="control">textarea</textarea></label>
             </div>
           </fieldset>
           <button type="submit">submit</button>
@@ -243,78 +251,29 @@
       </div>
       <div class="panel default-panel">
         <div class="head">inline form</div>
-        <form class="body default-form">
+        <form class="body default-form inline-form">
           <fieldset>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">input text:</div>
-              <input type="text" name="user_name" value="" placeholder="请输入用户名" required>
+              <div class="control">input text:</div>
+              <input class="control" type="text" name="user_name" value="" placeholder="请输入用户名" required>
               </label>
+              <button class="control" type="submit">submit</button><div class="control tips">这里是一些tips</div>
             </div>
-            <div>
+            <div class="row">
               <label>
-              <div class="title">input password:</div>
-              <input type="password" name="pwd" placeholder="请输入密码" required>
+              <div class="control title">input password:</div>
+              <input class="control" type="password" name="pwd" placeholder="请输入密码" required>
               </label>
-            </div>
-            <div>
-              <label>
-              <div class="title">input img:</div>
-              <input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
-              </label>
-              <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"> </div>
-            <div>
-              <label>
-              <div class="title">select:</div>
-              <select>
-                <option>option1</option>
-                <option>option2</option>
-                <option>option3</option>
-              </select>
-              </label>
-            </div>
-            <div>
-              <div class="title">input checkbox:</div>
-              <div class="control">
-                <label>
-                  <input type="checkbox" name="checkbox">
-                  checkbox1 </label>
-                <label>
-                  <input type="checkbox" name="checkbox">
-                  checkbox2 </label>
-                <label>
-                  <input type="checkbox" name="checkbox">
-                  checkbox3 </label>
-              </div>
-            </div>
-            <div>
-              <div class="title">input radio:</div>
-              <div class="control">
-                <label>
-                  <input type="radio" name="radio">
-                  radio1 </label>
-                <label>
-                  <input type="radio" name="radio">
-                  radio2 </label>
-                <label>
-                  <input type="radio" name="radio">
-                  radio3 </label>
-              </div>
-            </div>
-            <div>
-              <label>
-              <div class="title">textarea:</div>
-              <textarea>textarea</textarea>
+              <div class="control tips">这里是一些tips</div>
+              <a class="button" href="#" title="button">button</a>
             </div>
           </fieldset>
-          <button type="submit">submit</button>
-          <input type="reset" value="reset">
-          <a class="button" href="#" title="button">button</a>
         </form>
       </div>
       <div class="panel default-panel">
         <div class="head">table form</div>
-        <form class="body table-form default-form">
+        <form class="body default-form table-form mini-form">
           <fieldset>
             <table>
               <tr>
@@ -327,7 +286,7 @@
               <tr>
               <tr>
                 <td class="title"><label> input img:</label></td>
-                <td class="control"><input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
+                <td class="control img-control"><input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
                   <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"></td>
               <tr>
                 <td class="title"><label>select:</label></td>
