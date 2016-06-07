@@ -149,8 +149,9 @@
             <textarea>textarea</textarea>
           </div>
         </fieldset>
-        <div class="form-button"><button type="submit">登录</button>
-        <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
+        <div class="form-button">
+          <button type="submit">登录</button>
+          <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
       </form>
     </div>
     <div class="panel default-form">
@@ -219,8 +220,9 @@
             <textarea>textarea</textarea>
           </div>
         </fieldset>
-        <div class="form-button"><button type="submit">登录</button>
-        <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
+        <div class="form-button">
+          <button type="submit">登录</button>
+          <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
       </form>
     </div>
     <div class="panel default-form">
@@ -299,8 +301,9 @@
             </div>
           </div>
         </fieldset>
-        <div class="form-button"><button type="submit">登录</button>
-        <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
+        <div class="form-button">
+          <button type="submit">登录</button>
+          <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
       </form>
     </div>
     <div class="panel default-form">
@@ -365,8 +368,9 @@
             <textarea>textarea</textarea>
           </div>
         </fieldset>
-        <div class="form-button"><button type="submit">登录</button>
-        <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
+        <div class="form-button">
+          <button type="submit">登录</button>
+          <a class="button" href="/index.php/user/reg/" title="注册">注册</a></div>
       </form>
     </div>
   </div>

@@ -1,7 +1,6 @@
 <?php
 /*
  * 控制器
- * Controller class
  * 
  * 作者：billchen
  * 邮箱：48838096@qq.com
@@ -18,7 +17,7 @@ class Controller {
 	protected $profile = array(); //config/profile
 	protected $autoload = array(); //自动执行,array('this'=>'isAdmin','Passport'=>'isAdmin');
 	protected $autoloadResult = array();
-	public $processStart = ''; //控制器加载开始时间
+	public $startTime = ''; //控制器加载开始时间
 	public $dir = '';
 	public $paramPos = 1; //自动调用方法的参数uri位置
 	public $segments = array();
@@ -87,8 +86,8 @@ class Controller {
 			$view->assign($k, $v);
 		
 		$view->assign('memory_usage', round(memory_get_usage()/1048576, 3)); //运行时间
-		if($this->processStart) {
-			list($msec1, $sec1) = explode(' ', $this->processStart);
+		if($this->startTime) {
+			list($msec1, $sec1) = explode(' ', $this->startTime);
 			list($msec2, $sec2) = explode(' ', microtime());
 			$view->assign('elapsed_time', round(((float)$msec2 + (float)$sec2) - ((float)$msec1 + (float)$sec1), 3));
 		}

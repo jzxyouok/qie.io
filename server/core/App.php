@@ -1,6 +1,6 @@
 <?php
 /*
- * 程序入口/初始化/设定环境变量
+ * 程序入口/初始化/环境变量设定
  * app init
  *
  * 作者：billchen
@@ -10,11 +10,14 @@
 class App {
 	/*
 	 *
-	 * @param int $process_start 系统开始时间
+	 * @param int $startTime 系统开始时间
 	 *
 	 */
-	function __construct($process_start = 0) {
+	function __construct($startTime = 0) {
 		try {
+			/*
+			 * 加载器
+			 */
 			if(!class_exists('Loader')) {
 				if(!file_exists(APP_PATH.'/core/Loader.php'))
 					exit('App::__construct(): Loader not exists');
@@ -46,7 +49,6 @@ class App {
 			/*
 			 * 实现路由
 			 */
-			//处理管理后台目录
 			$route = array('dir'=>array('regexp'=>array('#^'.$profile['admin_dir'].'#i' //管理后台目录
 																									),
 																	'replace'=>array('/admin')
@@ -63,7 +65,7 @@ class App {
 			//处理物理目录dir
 			$info = pathinfo($_SERVER['SCRIPT_NAME']);
 			$dir = $info['dirname'];
-			//管理目录不允许关闭网站
+			//管理目录下不允许关闭网站
 			if($dir == $profile['admin_dir'])
 				$isClosed = false;
 			//物理目录转虚拟目录
@@ -73,6 +75,7 @@ class App {
 				$path = substr($_SERVER['PATH_INFO'], 1);
 			else {
 				$path = substr($_SERVER['QUERY_STRING']?str_replace('?'.$_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']):$_SERVER['REQUEST_URI'], strlen($_SERVER['SCRIPT_NAME'])+1);
+				//查询模式
 				if(empty($path))
 					$path = $_GET['c'].'/'.$_GET['m'].'/'.$_GET['p']; //controller,method,param
 			}
@@ -93,20 +96,17 @@ class App {
 				$method = 'index';
 				$param = -1;
 			}
+			
 			//关闭网站
 			if($isClosed && !in_array($ctrlName, array('user','captcha'))) {
 				self::closed();
 			}
 			
 			$ctrlName{0} = strtoupper($ctrlName{0});
-			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl', array(), false);
+			$controller = Loader::load('controller'.$dir.'/'.$ctrlName.'Ctrl');
 			//控制器不存在
 			if(!$controller)
 				self::error('App::__construct: controller not found');
-			
-			$controller->processStart = $process_start;
-			$controller->dir = $dir;
-			$controller->segments = $segments;
 			
 			if(empty($method) && !($method = $segments[$position+1])) {
 				$method = 'index'; //尝试加载默认方法
@@ -114,6 +114,7 @@ class App {
 			}
 			
 			if(!is_callable(array($controller, $method))) {
+				//方法不存在
 				if($param == -1 || !is_callable(array($controller, 'index')))
 					self::error('App::__construct: method not found'); //错误处理，找不到对象方法。
 				
@@ -121,7 +122,11 @@ class App {
 				$param = $position + 1;
 			}
 			
+			$controller->startTime = $startTime;
+			$controller->dir = $dir;
+			$controller->segments = $segments;
 			$controller->paramPos = $param;
+			
 			if($param != -1 && NULL !== ($param = $segments[$param]))
 				$controller->$method($param);
 			else
