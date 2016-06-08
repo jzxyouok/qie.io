@@ -4,8 +4,9 @@
  */
 /*element*/
 /*
-html,body
+html {
 font-size:14px;
+}
 */
 html,body {
     height: 100%
@@ -34,29 +35,28 @@ input, select, textarea, button, .button {
     border: 1px solid transparent;
     outline:none;
     font-size: 1em;
+    line-height:1.5;
     margin:0;
 }
-input[disabled], select[disabled], textarea[disabled], button[disabed], .disabled {
+input[disabled], select[disabled], textarea[disabled], button[disabled], .disabled {
     cursor: not-allowed;
 }
-button, .button, input[type=submit], input[type=reset], input[type=button] {
+input[type=submit], input[type=reset], input[type=button], button, .button {
     color: #333;
     border-color: rgb(204, 204, 204);
-    padding: .429em 1.714em; /*6px 24px*/
-    cursor: pointer;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
     background-color:white;
+    cursor: pointer;
+    display:inline-block;
+    padding: .429em 1.714em; /*6px 24px*/
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
     -ms-touch-action: manipulation;
     touch-action: manipulation;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-button, input[type=submit], input[type=reset], input[type=button] {
-    line-height: 1.4;
 }
 form button[type=submit], form input[type=submit] {
     padding:.429em 2em; /*6px 28px*/
@@ -150,11 +150,14 @@ form button[type=submit], form input[type=submit] {
 }
 .panel>.head {
     padding: .625em .9em; /*10px 15px*/
-    font-size:1.25em;
+    font-size:1.25em; /*18px*/
     line-height: 1;
 }
 .panel>.body {
     padding: 1.125em;
+}
+.panel p:first-child {
+    margin-top: 0;
 }
 .panel p:last-child {
     margin-bottom: 0;
@@ -185,7 +188,7 @@ form button[type=submit], form input[type=submit] {
     -ms-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
 }
-.default-form button:hover, .default-form input[type=submit]:hover, .default-form input[type=reset]:hover, .default-form input[type=button]:hover, .default-form .button:hover {
+.default-form button:not([disabled]):hover, .default-form input[type=submit]:not([disabled]):hover, .default-form input[type=reset]:not([disabled]):hover, .default-form input[type=button]:not([disabled]):hover, .default-form .button:not(.disabled):hover {
     background-color: #e6e6e6;
     border-color: #adadad;
 }
@@ -205,6 +208,10 @@ form button[type=submit], form input[type=submit] {
     -ms-box-shadow: none;
     box-shadow: none;
 }
+.default-form input[type=submit][disabled], .default-form input[type=reset][disabled], .default-form button[disabled], .default-form .disabled {
+    cursor: not-allowed;
+    background-color:rgb(235, 235, 228);
+}
 .default-form .row {
     margin:.714em 0; /*10px 0*/
 }
@@ -212,7 +219,7 @@ form button[type=submit], form input[type=submit] {
     font-weight: bold;
 }
 .default-form .tips {
-    color:#737373;
+    color:#aaa;
 }
 .default-form .error {
     color:red;
@@ -227,14 +234,60 @@ form button[type=submit], form input[type=submit] {
     margin:0;
 }
 .default-form .img-control img {
+    box-sizing: border-box;
+    border:1px solid transparent;
+    height: 100%;
     position: absolute;
-    right:1px;
-    top: 50%;
+    right:0;
+    top: 0;
     border-radius: 0 .25em .25em 0;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+}
+.default-form .input-group {
+    display: table;
+    border-collapse: separate;
+}
+.default-form .input-group input {
+    display:table-cell;
+    min-height:34px;
+    border-left:1px solid transparent;
+    border-right:1px solid transparent;
+    border-radius:0;
+}
+.default-form .input-group input:focus {
+    border-left:1px solid #66afe9;
+}
+.default-form .input-group input:first-child {
+    border-top-left-radius:.25em;
+    border-bottom-left-radius:.25em;
+    border-left:1px solid rgb(204,204,204);
+}
+.default-form .input-group input:first-child:focus {
+    border-left:1px solid #66afe9;
+}
+.default-form .input-group input:last-child {
+    border-top-right-radius:.25em;
+    border-bottom-right-radius:.25em;
+    border-right:1px solid rgb(204,204,204);
+}
+.default-form .input-group input:last-child:focus {
+    border-right:1px solid #66afe9;
+}
+.default-form .input-addon {
+    box-sizing: border-box;
+    display: table-cell;
+    border: 1px solid rgb(204, 204, 204);
+    background-color: #eee;
+    padding: 0 .857em;
+    vertical-align: middle;
+    width:1%;
+}
+.default-form .input-addon:first-child {
+    border-radius: .25em 0 0 .25em;
+    border-right:none;
+}
+.default-form .input-addon:last-child {
+    border-radius: 0 .25em .25em 0;
+    border-left:none;
 }
 /*ui basic class end*/
 /*ui extend class*/
@@ -247,14 +300,11 @@ form button[type=submit], form input[type=submit] {
     border-bottom: 1px solid #ddd;
     background-color:#e1e1e1;
 }
-/*table-form*/
-.table-form .title {
-    text-align:right;
-    padding-right:1em;
-    width:40%;
-}
-.table-form td {
-    padding: .714em 0;
+/*inline-form*/
+.inline-form .control {
+    display:inline;
+    width:auto;
+    margin:0 .357em 0 0; /*0 5px 0 0*/
 }
 /*mini-form*/
 .mini-form {
@@ -266,9 +316,30 @@ form button[type=submit], form input[type=submit] {
     -ms-transform: translateX(-50%);
     transform: translateX(-50%);
 }
-.inline-form .control {
-    display:inline;
-    width:auto;
-    margin:0 .357em 0 0; /*0 5px 0 0*/
+/*column-form*/
+.column-form .control {
+    float:left;
+    margin-bottom:0;
+    line-height:2.5em;
+}
+.column-form .control:first-child {
+    padding-right:1em;
+}
+.column-form .row::after {
+    content:" ";
+    display:block;
+    clear:both;
+    height:0;
+}
+.column-form fieldset input:not([type=checkbox],[type=radio]), .column-form fieldset select {
+    vertical-align:top;
+}
+/*table-form*/
+.table-form td {
+    padding: .714em 0;
+}
+.table-form tr td:first-child {
+    text-align:right;
+    padding-right:1em;
 }
 /*ui extend class end*/
