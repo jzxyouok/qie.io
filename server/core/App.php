@@ -3,8 +3,12 @@
  * 程序入口/初始化/环境变量设定
  * app init
  *
+ * 
  * 作者：billchen
  * 邮箱：48838096@qq.com
+ * 网站：http://qie.io/
+ *
+ * 创建时间：2016/04/01
  */
  
 class App {

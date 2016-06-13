@@ -5,9 +5,9 @@
  * 
  * 作者：billchen
  * 邮箱：48838096@qq.com
+ * 网站：http://qie.io/
  *
  * 更新时间：2016/03/21
- *
  */
 class Model {
 	protected $error = array('code'=>0, 'msg'=>''); //错误代码和信息

@@ -5,16 +5,16 @@
  * 
  * 作者：billchen
  * 邮箱：48838096@qq.com
+ * 网站：http://qie.io/
  *
  * 更新时间：2016/03/21
- *
  */
 require(APP_PATH . '/third_party/smarty/Smarty.class.php');
 
 class View extends Smarty {
 	function __construct() {//构造函数
 		parent::__construct();
-		$this->template_dir = DOCUMENT_ROOT;
+		$this->template_dir = APP_PATH . '/view';
 		$this->compile_dir = DOCUMENT_ROOT . '/user_files/template_c';
 		$this->cache_dir = DOCUMENT_ROOT . '/user_files/cache';
 		$this->caching = false;
