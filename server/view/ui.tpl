@@ -30,7 +30,7 @@
     <li><a href="#panels" title="panels">panels</a></li>
     <li><a href="#forms" title="forms">forms</a></li>
     <li><a href="#tables" title="tables">tables</a></li>
-    <li><a href="#list" title="ul/ol/dl">ul/ol/dl</a></li>
+    <li><a href="javascript:alert('come back soon');void(0);" title="pop window">pop window</a></li>
   </ul>
 </div>
 <div class="wrap">
@@ -48,6 +48,36 @@
       <div class="panel default-panel">
         <div class="head">panel title<a href="#" class="little-size more">more...</a></div>
         <div class="body">I'm a default-panel.</div>
+      </div>
+      <div class="panel">
+        <div class="head">tab panel</div>
+        <div class="body">
+          <div class="tab-panel">
+            <div class="head">
+              <div class="tab-item active"><a href="#">tab1</a></div>
+              <div class="tab-item"><a href="#">tab2</a></div>
+              <div class="tab-item"><a href="#">tab3</a></div>
+              <div class="tab-item"><a href="#">tab4</a></div>
+              <div class="tab-item"><a href="#">tab5</a></div>
+            </div>
+            <div class="body"><p>这是tab的内容</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel default-panel">
+        <div class="head">tab panel</div>
+        <div class="body">
+          <div class="tab-panel">
+            <div class="head">
+              <div class="tab-item"><a href="#">tab1</a></div>
+              <div class="tab-item active"><a href="#">tab2</a></div>
+              <div class="tab-item"><a href="#">tab3</a></div>
+              <div class="tab-item"><a href="#">tab4</a></div>
+              <div class="tab-item"><a href="#">tab5</a></div>
+            </div>
+            <div class="body"><p>这是tab的内容</p><p>这是tab的内容</p><p>这是tab的内容</p></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -144,6 +174,12 @@
                 <input class="control" type="password" name="pwd" placeholder="请输入密码" required>
                 </label>
                 <div class="control tips error">密码输入错误</div>
+              </div>
+              <div class="row">
+                <label>
+                <div class="control">input file:</div>
+                <input class="control" type="file" name="file">
+                </label>
               </div>
               <div class="row">
                 <label>
@@ -345,8 +381,8 @@
                 <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"></div>
             </div>
             <div class="row">
-            <div class="control">
-              <label>select:</label>
+              <div class="control">
+                <label>select:</label>
               </div>
               <div class="control">
                 <select>
@@ -354,7 +390,7 @@
                   <option>option2</option>
                   <option>option3</option>
                 </select>
-            </div>
+              </div>
             </div>
             <div class="row">
               <div class="control title">input checkbox:</div>
@@ -413,8 +449,9 @@
               </tr>
               <tr>
                 <td class="title"><label> input img:</label></td>
-                <td><div class="img-control"><input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
-                  <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"></div></td>
+                <td><div class="img-control">
+                    <input type="text" maxlength="4" name="captcha" placeholder="请输入验证码" required>
+                    <img src="/index.php/captcha/?w=80&h=32" alt="验证码" id="captcha_img"></div></td>
               </tr>
               <tr>
                 <td><label>select:</label></td>
@@ -466,31 +503,41 @@
             <div class="row">
               <label>
               <div class="control">input text:</div>
-              <div class="input-group control"><span class="input-addon"><i class="fa fa-user"></i></span><input type="text" name="user_name" value="" placeholder="请输入用户名" required></div>
+              <div class="input-group control"><span class="input-addon"><i class="fa fa-user"></i></span>
+                <input type="text" name="user_name" value="" placeholder="请输入用户名" required>
+              </div>
               </label>
             </div>
             <div class="row">
               <label>
               <div class="control">input password:</div>
-              <div class="input-group control"><input type="password" name="pwd" placeholder="请输入密码" required><span class="input-addon"><i class="fa fa-key"></i></span></div>
+              <div class="input-group control">
+                <input type="password" name="pwd" placeholder="请输入密码" required>
+                <span class="input-addon"><i class="fa fa-key"></i></span></div>
               </label>
             </div>
             <div class="row">
               <label>
               <div class="control">input email:</div>
-              <div class="input-group control"><span class="input-addon">@</span><input type="email" name="email" placeholder="请输入邮箱" required></div>
+              <div class="input-group control"><span class="input-addon">@</span>
+                <input type="email" name="email" placeholder="请输入邮箱" required>
+              </div>
               </label>
             </div>
             <div class="row">
               <label>
               <div class="control">input number:</div>
-              <div class="input-group control"><input type="number" name="email" placeholder="请输入数字" step="1" required><span class="input-addon">.00</span></div>
+              <div class="input-group control">
+                <input type="number" name="email" placeholder="请输入数字" step="1" required>
+                <span class="input-addon">.00</span></div>
               </label>
             </div>
             <div class="row">
               <label>
               <div class="control">input money:</div>
-              <div class="input-group control"><span class="input-addon">$</span><input type="number" name="email" placeholder="请输入数字" step="1" required><span class="input-addon">.00</span></div>
+              <div class="input-group control"><span class="input-addon">$</span>
+                <input type="number" name="email" placeholder="请输入数字" step="1" required>
+                <span class="input-addon">.00</span></div>
               </label>
             </div>
           </fieldset>
@@ -503,10 +550,6 @@
   </div>
   <div class="panel" id="tables">
     <div class="head">talbes</div>
-    <div class="body"> </div>
-  </div>
-  <div class="panel" id="list">
-    <div class="head">ul/ol/dl</div>
     <div class="body"> </div>
   </div>
 </div>

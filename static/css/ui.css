@@ -1,5 +1,5 @@
 /*
- 标准css3 UI组件
+ css3 UI组件
  bill chen(48838096@qq.com)
  http://qie.io/
  考虑的问题：耦合 解耦 命名空间 排版 外观
@@ -108,6 +108,9 @@ input[disabled], select[disabled], textarea[disabled], button[disabled], .disabl
     box-sizing: border-box;
     background-color:white;
     margin: .75em 0; /*10.5px*/
+}
+.panel .head {
+    border-bottom:1px solid #ddd;
 }
 .panel>.head {
     padding: .625em .9em; /*10px 15px*/
@@ -262,11 +265,43 @@ input[disabled], select[disabled], textarea[disabled], button[disabled], .disabl
     border-radius:.214em;/*3px*/
 }
 .default-panel>.head {
-    border-bottom: 1px solid #ddd;
     background-color:#e1e1e1;
 }
 .default-panel>.head .more {
     float:right;
+}
+/*tab-panel*/
+.tab-panel>.head::after {
+    content: " ";
+    height:0;
+    display:block;
+    clear:both;
+}
+.tab-panel .tab-item {
+    float:left;
+    display:block;
+    border:1px solid transparent;
+    margin-bottom: -1px;
+    margin-left:.5em;
+    border-radius: .25em .25em 0 0;
+}
+.tab-panel .tab-item.active {
+    border-color:#ddd;
+    border-bottom: 1px solid white;
+}
+.tab-panel .tab-item:not(.active):hover {
+    background-color:#eee;
+    border-bottom:1px solid #ddd;
+}
+.tab-panel .tab-item a {
+    display: block;
+    padding: 0.714em 1.071em; /*10px 15px*/
+}
+.tab-panel .tab-item.active a {
+    cursor: default;
+}
+.tab-panel>.body {
+    padding-top:1.125em;
 }
 /*inline-form*/
 .inline-form .control {
@@ -311,3 +346,4 @@ input[disabled], select[disabled], textarea[disabled], button[disabled], .disabl
     padding-right:1em;
 }
 /*ui extend class end*/
+/*media query*/
