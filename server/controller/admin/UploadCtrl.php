@@ -33,11 +33,11 @@ class UploadCtrl extends Controller {
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
-		$this->view('upload');
+		$this->display('upload');
 	}
 	//图片上传页
 	function add() {
-		$this->view('upload_add');
+		$this->display('upload_add');
 	}
 	/*
 	 * api

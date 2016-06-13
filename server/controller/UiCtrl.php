@@ -11,6 +11,6 @@ class UiCtrl extends Controller {
 	 */
 	//ui
 	function index() {
-		$this->view('ui');
+		$this->display('ui');
 	}
 }

@@ -42,7 +42,7 @@ class Controller {
 	 * 
 	 * @param string $tpl 视图文件地址 
 	 */
-	public function view($tpl = '', $type = 'view') {
+	public function display($tpl = '', $type = 'view') {
 		switch($type) {
 			case 'theme': {
 				//确定用户主题文件夹

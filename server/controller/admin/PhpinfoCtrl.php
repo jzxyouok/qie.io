@@ -16,7 +16,7 @@ class PhpinfoCtrl extends Controller {
 	 */
 	//phpinfo
 	function index() {
-		$this->view('phpinfo');
+		$this->display('phpinfo');
 	}
 	//iframe
 	function iframe() {

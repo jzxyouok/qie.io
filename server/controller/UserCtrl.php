@@ -15,14 +15,14 @@ class UserCtrl extends Controller {
 			header('Location: '.($this->profile['admin_relogin']?'/index.php/user/center/':$this->profile['admin_dir'].'/'));
 		}
 		
-		$this->view('user');
+		$this->display('user');
 	}
 	//注册页
 	public function reg() {
 		if(!empty($this->user))
 			header('Location: /index.php/user/center/');
 		
-		$this->view('user_reg');
+		$this->display('user_reg');
 	}
 	//个人中心
 	public function center() {
@@ -34,7 +34,7 @@ class UserCtrl extends Controller {
 		$user = Loader::load('Passport');
 		$this->vars['data'] = $user->selectOne($this->user['id']);
 		
-		$this->view('user_center');
+		$this->display('user_center');
 	}
 	/*
 	 * api

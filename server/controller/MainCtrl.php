@@ -2,6 +2,6 @@
 
 class MainCtrl extends Controller {
 	function index() {
-		$this->view('main', 'theme');
+		$this->display('main', 'theme');
 	}
 }

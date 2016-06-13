@@ -46,14 +46,14 @@ class ArticleCtrl extends Controller {
 		)));
 		$this->vars['pagination'] = $pagination->get();
 		
-		$this->view('article');
+		$this->display('article');
 	}
 	//添加文章
 	function add() {
 		$category = Loader::load('Category');
 		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`root_id` ASC'));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
-		$this->view('article_add');
+		$this->display('article_add');
 	}
 	//修改文章
 	function edit($id = 0) {
@@ -62,7 +62,7 @@ class ArticleCtrl extends Controller {
 		$category = Loader::load('Category');
 		$this->vars['category'] = $category->select(array('row'=>0, 'order'=>'`depth` ASC'));
 		$this->vars['category']['result'] = Category::makeSelectList($this->vars['category']['result'], 0);
-		$this->view('article_edit');
+		$this->display('article_edit');
 	}
 	/*
 	 * api
