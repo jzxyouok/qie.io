@@ -1,6 +1,9 @@
 /*
+ 标准css3 UI组件
  bill chen(48838096@qq.com)
- 排版 外观
+ http://qie.io/
+ 考虑的问题：耦合 解耦 命名空间 排版 外观
+ 最低兼容IE8
  */
 /*element*/
 /*
@@ -27,23 +30,20 @@ p {
 form {
     text-align: center;
 }
-form fieldset {
+fieldset {
     text-align: left;
 }
 input, select, textarea, button, .button {
     box-sizing: border-box;
     border: 1px solid transparent;
+    border-color: rgb(204, 204, 204);
     outline:none;
     font-size: 1em;
     line-height:1.5;
     margin:0;
 }
-input[disabled], select[disabled], textarea[disabled], button[disabled], .disabled {
-    cursor: not-allowed;
-}
 input[type=submit], input[type=reset], input[type=button], button, .button {
     color: #333;
-    border-color: rgb(204, 204, 204);
     background-color:white;
     cursor: pointer;
     display:inline-block;
@@ -58,63 +58,18 @@ input[type=submit], input[type=reset], input[type=button], button, .button {
     -ms-user-select: none;
     user-select: none;
 }
-form button[type=submit], form input[type=submit] {
+button[type=submit], input[type=submit] {
     padding:.429em 2em; /*6px 28px*/
+}
+input[disabled], select[disabled], textarea[disabled], button[disabled], .disabled {
+    cursor: not-allowed;
 }
 /*element end*/
 /*class*/
-.color-red {
-    color:red;
-}
-.color-green {
-    color:green;
-}
-.color-black {
-    color:black;
-}
-.color-white {
-    color:white;
-}
-.color-purple {
-    color:purple;
-}
-.color-orange {
-    color:orange;
-}
-.color-yellow {
-    color:yellow;
-}
-.color-blue {
-    color:blue;
-}
-.color-gray {
-    color:gray;
-}
 .ellipsis {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-}
-.inline-block {
-    vertical-align: middle;
-    display:inline-block;
-    *zoom:1;
-    *display:inline;
-}
-.text-left {
-    text-align:left;
-}
-.text-right {
-    text-align:right;
-}
-.text-center {
-    text-align:center;
-}
-.show {
-    display: block;
-}
-.hide {
-    display: none;
 }
 .flex {
     display: -webkit-box;
@@ -128,6 +83,12 @@ form button[type=submit], form input[type=submit] {
     display:block;
     clear: both;
     height:0;
+}
+.show {
+    display: block;
+}
+.hide {
+    display: none;
 }
 /*class end*/
 /*ui basic class*/
@@ -152,6 +113,10 @@ form button[type=submit], form input[type=submit] {
     padding: .625em .9em; /*10px 15px*/
     font-size:1.25em; /*18px*/
     line-height: 1;
+}
+.panel>.head .little-size {
+    font-size: .8em;
+    line-height: 1.5;
 }
 .panel>.body {
     padding: 1.125em;
@@ -209,7 +174,6 @@ form button[type=submit], form input[type=submit] {
     box-shadow: none;
 }
 .default-form input[type=submit][disabled], .default-form input[type=reset][disabled], .default-form button[disabled], .default-form .disabled {
-    cursor: not-allowed;
     background-color:rgb(235, 235, 228);
     color: rgb(168,168,168);
 }
@@ -300,6 +264,9 @@ form button[type=submit], form input[type=submit] {
 .default-panel>.head {
     border-bottom: 1px solid #ddd;
     background-color:#e1e1e1;
+}
+.default-panel>.head .more {
+    float:right;
 }
 /*inline-form*/
 .inline-form .control {

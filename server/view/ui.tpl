@@ -45,6 +45,10 @@
         <div class="head">panel title</div>
         <div class="body">I'm a default-panel.</div>
       </div>
+      <div class="panel default-panel">
+        <div class="head">panel title<a href="#" class="little-size more">more...</a></div>
+        <div class="body">I'm a default-panel.</div>
+      </div>
     </div>
   </div>
   <div class="panel" id="forms">
