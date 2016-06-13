@@ -19,6 +19,7 @@ body {
     background-color: #f1f1f1;
     color: #333;
     line-height:1.5; /*21px*/
+    font-size:1em;
 }
 a {
     color:#08c;
@@ -38,12 +39,12 @@ input, select, textarea, button, .button {
     border: 1px solid transparent;
     border-color: rgb(204, 204, 204);
     outline:none;
-    font-size: 1em;
     line-height:1.5;
     margin:0;
 }
 input[type=submit], input[type=reset], input[type=button], button, .button {
     color: #333;
+    font-size:1em;
     background-color:white;
     cursor: pointer;
     display:inline-block;
@@ -323,10 +324,10 @@ input[disabled], select[disabled], textarea[disabled], button[disabled], .disabl
 .column-form .control {
     float:left;
     margin-bottom:0;
-    line-height:2.5em;
 }
 .column-form .control:first-child {
     padding-right:1em;
+    line-height:2.5em;
 }
 .column-form .row::after {
     content:" ";
