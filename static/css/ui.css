@@ -65,6 +65,13 @@ button[type=submit], input[type=submit] {
 input[disabled], select[disabled], textarea[disabled], button[disabled], .disabled {
     cursor: not-allowed;
 }
+table {
+    width:100%;
+}
+th, td {
+    padding:.5em;
+    text-align:center;
+}
 /*element end*/
 /*class*/
 .ellipsis {
@@ -90,6 +97,15 @@ input[disabled], select[disabled], textarea[disabled], button[disabled], .disabl
 }
 .hide {
     display: none;
+}
+.text-left {
+    text-align:left;
+}
+.text-center {
+    text-align:center;
+}
+.text-right {
+    text-align:right;
 }
 /*class end*/
 /*ui basic class*/
@@ -257,6 +273,22 @@ input[disabled], select[disabled], textarea[disabled], button[disabled], .disabl
 .default-form .input-addon:last-child {
     border-radius: 0 .25em .25em 0;
     border-left:none;
+}
+/*default-table*/
+.default-table tr {
+    border-bottom:1px solid #ddd;
+}
+.default-table thead tr {
+    border-bottom:2px solid #ddd;
+}
+.border-table th, .border-table td {
+    border:1px solid #ddd;
+}
+.border-table td {
+    text-align:left;
+}
+.stripe-table tbody tr:nth-of-type(odd) {
+    background-color:#f9f9f9;
 }
 /*ui basic class end*/
 /*ui extend class*/

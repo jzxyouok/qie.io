@@ -85,7 +85,7 @@
     <div class="head">forms</div>
     <div class="body">
       <div class="panel default-panel">
-        <div class="head">origin form</div>
+        <div class="head">form</div>
         <form class="body">
           <fieldset>
             <div>
@@ -550,7 +550,7 @@
   </div>
   <div class="panel" id="tables">
     <div class="head">talbes</div>
-    <div class="body"> </div>
+    <div class="body"><div class="panel default-panel"><div class="head">table</div><div class="body"><table><thead><tr><th>column 1</th><th>column 2</th><th>column 3</th><th>column 4</th><th>column 5</th></tr></thead><tbody><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr></tbody></table></div></div><div class="panel default-panel"><div class="head">default table</div><div class="body"><table class="default-table"><thead><tr><th>column 1</th><th>column 2</th><th>column 3</th><th>column 4</th><th>column 5</th></tr></thead><tbody><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr></tbody></table></div></div><div class="panel default-panel"><div class="head">border table</div><div class="body"><table class="default-table border-table"><thead><tr><th>column 1</th><th>column 2</th><th>column 3</th><th>column 4</th><th>column 5</th></tr></thead><tbody><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr></tbody></table></div></div><div class="panel default-panel"><div class="head">stripe table</div><div class="body"><table class="default-table stripe-table"><thead><tr><th>column 1</th><th>column 2</th><th>column 3</th><th>column 4</th><th>column 5</th></tr></thead><tbody><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr><tr><td>column 1</td><td>column 2</td><td>column 3</td><td>column 4</td><td>column 5</td></tr></tbody></table></div></div></div>
   </div>
 </div>
 <script src="/static/js/util.js"></script>
