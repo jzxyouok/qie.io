@@ -371,12 +371,52 @@ th, td {
     vertical-align:top;
 }
 /*table-form*/
+.table-form table {
+    width:auto;
+}
 .table-form td {
     padding: .714em 0;
 }
 .table-form tr td:first-child {
     text-align:right;
     padding-right:1em;
+}
+/*pagination*/
+.pagination {
+    margin-top: 1.429em;
+}
+.pagination::after {
+    content:" ";
+    display: inline-block;
+    height: 0;
+    clear: both;
+}
+.pagination .info {
+    float: left;
+}
+.pagination .info a {
+    margin:0 5px;
+}
+.pagination .paging {
+    float:right;
+    font-family: Verdana,sans-serif, Arial;
+}
+.pagination .paging a, .pagination .paging span {
+    padding:6px 12px;
+    border: 1px solid #ddd;
+    border-left: none;
+}
+.pagination .paging strong, .pagination .paging a:hover {
+    background-color: #337ab7;
+    border-color: #337ab7;
+    color: white;
+}
+.pagination .paging .start {
+    border-left: 1px solid #ddd;
+    border-radius: .286em 0 0 .286em;
+}
+.pagination .paging .end {
+    border-radius: 0 .286em .286em 0;
 }
 /*ui extend class end*/
 /*media query*/
