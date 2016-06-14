@@ -107,6 +107,9 @@ th, td {
 .text-right {
     text-align:right;
 }
+.border-radius {
+    border-radius: .25em;/*4px*/
+}
 /*class end*/
 /*ui basic class*/
 .header, .footer {

@@ -38,15 +38,15 @@
     <div class="head">panels</div>
     <div class="body">
       <div class="panel">
-        <div class="head">panel title</div>
+        <div class="head">panel</div>
         <div class="body">Just a panel, No border, No background. etc...</div>
       </div>
       <div class="panel default-panel">
-        <div class="head">panel title</div>
+        <div class="head">default panel</div>
         <div class="body">I'm a default-panel.</div>
       </div>
       <div class="panel default-panel">
-        <div class="head">panel title<a href="#" class="little-size more">more...</a></div>
+        <div class="head">default panel<a href="#" class="little-size more">more...</a></div>
         <div class="body">I'm a default-panel.</div>
       </div>
       <div class="panel">
